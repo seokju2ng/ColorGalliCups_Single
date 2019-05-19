@@ -59,7 +59,9 @@ public class KeyControl extends JPanel {
       ///////////////////////////////////////////// DOUBLEPLAY /////////////////////////////////////////////////////////
   
       JLabel doublePlay = new JLabel(new ImageIcon("image/doubleplay.png"));
-    
+      
+	//git study
+ 
       doublePlay.setBounds(610, 10, 250, 150);
       add(doublePlay);
       
