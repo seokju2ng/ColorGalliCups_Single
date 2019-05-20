@@ -23,10 +23,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
+import javax.swing.border.LineBorder;
 
 import etc.Board;
 import etc.Cards;
 import etc.ChangePanelService;
+import etc.HandVanish;
 import etc.ImageCut;
 import etc.RoundedPanel;
 
@@ -74,13 +76,20 @@ public class DualPlayMode extends JPanel implements ActionListener {
 
    private ArrayList<JLabel> one_Deck; // 1p player가 맞춘 카드개수.
    private ArrayList<JLabel> two_Deck; // 2p player가 맞춘 카드개수.
-  // private JLabel card; // 중앙 덱에 올라갈 카드
+   // private JLabel card; // 중앙 덱에 올라갈 카드
 
    private JButton[] one_buttons; // 1p전용 키 버튼
    private JButton[] two_buttons; // 2p전용 키 버튼
 
    private JButton pauseBackground;
    private boolean pauseFlag = false; // 일시정지 여부
+
+   //////////////////////////////// 준희가 수정 //////////////////
+   private JLabel[][] hands; // 손 이미지 저장하는 라벨
+   private ImageIcon[] img; // 손 이미지
+   private int index = 3; // 손쌓는 층 나타내는 index 0,1층만 있다
+   private boolean[] handCheck; // 한사람이 연속으로 벨 못누른다 flag 역할
+   //////////////////////////////// 준희가 수정 끝//////////////////
 
    private class MouseHandler extends MouseAdapter {
       public void mouseEntered(MouseEvent e) {
@@ -120,7 +129,6 @@ public class DualPlayMode extends JPanel implements ActionListener {
             }
          }
       }
-
    }
 
    private class KeyHandler implements KeyListener {
@@ -170,12 +178,17 @@ public class DualPlayMode extends JPanel implements ActionListener {
                }
             }
             if (setCupFlag == 5 && spaceFlag2p == false) {
-               bell.setIcon(new ImageIcon("image/bell(push2).png"));
+               /////////////////////////// 손 나오는 부분 ///////////////////
+               if (index == 1 || handCheck[3] == true) {
+                  return;
+               }
+               bell.setIcon(new ImageIcon("image/bell(push_right).png"));
                playSound("audio/bell.wav");
+               new HandVanish(3, hands, handCheck).start();
+               /////////////////////////// 손 나오는 부분 끝/////////////////
                two_flag = true;
                two_x = initX; // 엔터누를때 2p 카드의 초기위치 재설정.
                tm.start();
-              
             }
          } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             int setCupFlag = 0;
@@ -185,14 +198,21 @@ public class DualPlayMode extends JPanel implements ActionListener {
                }
             }
             if (setCupFlag == 5 && spaceFlag1p == false) {
-               bell.setIcon(new ImageIcon("image/bell(push).png"));
+               /////////////////////////// 손 나오는 부분 ///////////////////
+               if (index == 1 || handCheck[2] == true) {
+                  return;
+               }
+               bell.setIcon(new ImageIcon("image/bell(push_left).png"));
                playSound("audio/bell.wav");
+               new HandVanish(2, hands, handCheck).start();
+               //bell.setIcon(new ImageIcon("image/bell.png"));
+
+               /////////////////////////// 손 나오는 부분 끝/////////////////
                one_flag = true;
                one_x = initX;
                tm.start();
             }
          }
-
       }
 
       @Override
@@ -242,6 +262,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
             }
          } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             bell.setIcon(new ImageIcon("image/bell.png"));
+            
             if (spaceFlag1p == true) {
                for (int i = 0; i < 5; i++) {
                   colorFlag1p[i] = 0;
@@ -387,7 +408,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
    private int one_x, two_x; // 1p, 2p의 카드좌표
    private int one_cnt, two_cnt; // 1p,2p의 정답개수
    private Cards systemCardDeck;
-   private int cardCnt; //현재 시스템 카드덱의 카드가 몇번째 카드인지.
+   private int cardCnt; // 현재 시스템 카드덱의 카드가 몇번째 카드인지.
    //////
 
    // 여기서부터 카드 애니메이션 0518//
@@ -396,7 +417,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 
          if (one_x > 150) {
             // velX = -velX;
-        	 systemCardDeck.card_arr.get(cardCnt).setBounds(one_x, -(one_x / 7) + 128, 154, 238);
+            systemCardDeck.card_arr.get(cardCnt).setBounds(one_x, -(one_x / 7) + 128, 154, 238);
             one_x = one_x - velX;
             // card.setBounds(610,-(610/7)+45,154,238);
 
@@ -408,8 +429,8 @@ public class DualPlayMode extends JPanel implements ActionListener {
                Thread.sleep(1000); // 카드가 1초후 사라진다.
             } catch (InterruptedException e1) {
             }
-            ImageIcon icon = (ImageIcon)  systemCardDeck.card_arr.get(cardCnt).getIcon(); // 얻은 카드의 이미지를 따온다.
-            this.remove( systemCardDeck.card_arr.get(cardCnt)); // 카드를 지우고
+            ImageIcon icon = (ImageIcon) systemCardDeck.card_arr.get(cardCnt).getIcon(); // 얻은 카드의 이미지를 따온다.
+            this.remove(systemCardDeck.card_arr.get(cardCnt)); // 카드를 지우고
             this.revalidate(); // 부모컨테이너를 새로고침한다
             this.repaint(); // 새로고침.
 
@@ -421,12 +442,12 @@ public class DualPlayMode extends JPanel implements ActionListener {
             one_cnt++; // 1p정답갯수를 늘려준다.
             one_flag = false;
             System.out.println("된다! one_cnt: " + one_cnt + ", arraylSize : " + one_Deck.size());
-            cardCnt++; //시스템카드덱을 +1한다.
+            cardCnt++; // 시스템카드덱을 +1한다.
             cardNum.setText(cardCnt + "/" + systemCardDeck.card_arr.size());
          }
       } else if (two_flag == true) {
          if (two_x < 1100) {
-        	 systemCardDeck.card_arr.get(cardCnt).setBounds(two_x, two_x / 7 - 45, 154, 238); // 원래
+            systemCardDeck.card_arr.get(cardCnt).setBounds(two_x, two_x / 7 - 45, 154, 238); // 원래
             two_x = two_x + velX;
 
          } else if (two_x > 1100) {
@@ -434,8 +455,8 @@ public class DualPlayMode extends JPanel implements ActionListener {
                Thread.sleep(1000); // 카드가 1초후 사라진다.
             } catch (InterruptedException e1) {
             }
-            ImageIcon icon = (ImageIcon)  systemCardDeck.card_arr.get(cardCnt).getIcon(); // 얻은 카드의 이미지를 따온다.
-            this.remove( systemCardDeck.card_arr.get(cardCnt)); // 카드를 지우고
+            ImageIcon icon = (ImageIcon) systemCardDeck.card_arr.get(cardCnt).getIcon(); // 얻은 카드의 이미지를 따온다.
+            this.remove(systemCardDeck.card_arr.get(cardCnt)); // 카드를 지우고
             this.revalidate(); // 부모컨테이너를 새로고침한다
             this.repaint(); // 새로고침.
 
@@ -458,9 +479,37 @@ public class DualPlayMode extends JPanel implements ActionListener {
    //////////////////////// 여기까지 카드 에니메이션/////////////
 
    public DualPlayMode() {
-
       this.setLayout(null);
+      this.setBackground(Color.white);
+      ////////////////////////////// 준희가 수정 //////////////////
+      //JPanel panel = new JPanel();
+      img = new ImageIcon[] { null, null, new ImageIcon("image/hand(2p)left.png"), new ImageIcon("image/hand(2p).png") };
+      handCheck = new boolean[] { false, false, false, false };
+
+      JLabel[] hand0 = new JLabel[] { null, null, new JLabel(img[2]), new JLabel(img[3]) };
+      JLabel[] hand1 = new JLabel[] { null, null, new JLabel(img[2]), new JLabel(img[3]) };
+      hands = new JLabel[][] { null, null, hand0, hand1 };
+
       
+      
+      /*for (int i = 2; i < 4; i++) {
+         for (int j = 2; j < 4; j++) {
+            //panel.add(hands[i][j]);
+            p2.add(hands[i][j]);
+            hands[i][j].setVisible(false);
+         }
+      }
+
+      for (int i = 2; i < 4; i++) {
+         hands[i][2].setBounds(480, 290, 300, 180);
+         hands[i][3].setBounds(600, 220, 300, 300);
+         ////////// 여기 위치 변경해야 함
+      }*/
+      
+      
+      
+      //this.add(panel);
+      //////////////////////////// 준희가 수정 끝 ////////////////////
       // setSize(WIDTH, HEIGHT);
       // ********************************************************
       // edit by minseongChoi, first
@@ -482,18 +531,18 @@ public class DualPlayMode extends JPanel implements ActionListener {
       pauseBackground.setVisible(false);
       pauseBackground.addActionListener(new ActionHandler());
       this.add(pauseBackground);
-      
+
       // 카드를 가장 먼저 붙임)(0518애니메이션)
-       systemCardDeck = new Cards();
-      
-//      this.card = new JLabel(new ImageIcon("image/dotdanbae2.png"));
-//      card.setBounds(604, 41, 154, 238);
-      for(int i = 0 ; i < systemCardDeck.card_arr.size() ; i++) {
-    	  systemCardDeck.card_arr.get(i).setBounds(604,41,154,238);
-    	  this.add(systemCardDeck.card_arr.get(i));
+      systemCardDeck = new Cards();
+
+      // this.card = new JLabel(new ImageIcon("image/dotdanbae2.png"));
+      // card.setBounds(604, 41, 154, 238);
+      for (int i = 0; i < systemCardDeck.card_arr.size(); i++) {
+         systemCardDeck.card_arr.get(i).setBounds(604, 41, 154, 238);
+         this.add(systemCardDeck.card_arr.get(i));
       }
-      //this.add(card);
-      
+      // this.add(card);
+
       showCenter();
       showWest();
       // showCenter();
@@ -533,11 +582,11 @@ public class DualPlayMode extends JPanel implements ActionListener {
       greenCup1p = new JLabel[5][5];
       yellowCup1p = new JLabel[5][5];
       blackCup1p = new JLabel[5][5];
-//            JLabel redCup2p[][] = new JLabel[5][5];
-//            JLabel blueCup2p[][] = new JLabel[5][5];
-//            JLabel greenCup2p[][] = new JLabel[5][5];
-//            JLabel yellowCup2p[][] = new JLabel[5][5];
-//            JLabel blackCup2p[][] = new JLabel[5][5];                  
+      // JLabel redCup2p[][] = new JLabel[5][5];
+      // JLabel blueCup2p[][] = new JLabel[5][5];
+      // JLabel greenCup2p[][] = new JLabel[5][5];
+      // JLabel yellowCup2p[][] = new JLabel[5][5];
+      // JLabel blackCup2p[][] = new JLabel[5][5];
       // -----------------------------------------
       for (int i = 0; i < 5; i++) {
          for (int j = 0; j < 5; j++) {
@@ -572,12 +621,15 @@ public class DualPlayMode extends JPanel implements ActionListener {
       timerText.setFont(new Font("배달의민족 한나는 열한살", Font.BOLD, 20));
       cardText.setFont(new Font("배달의민족 한나는 열한살", Font.BOLD, 20));
       this.p1 = new JPanel(); // 왼쪽 JPanel 생성
+      p1.setBackground(Color.white);
       p1.setLayout(null);
       // p1.setBorder(new LineBorder(Color.red, 5));
       p1.setBounds(0, 0, width, height);
 
       timePanel = new JPanel(); // '진행시간'라벨과 실제 진행시간을 붙일 패널
+      timePanel.setBorder(new LineBorder(Color.BLACK));
       cardPanel = new JPanel(); // '카드번호'라벨과 실제 카드번호를 붙일 패널
+      cardPanel.setBorder(new LineBorder(Color.BLACK));
       timePanel.setBackground(Color.white);
       cardPanel.setBackground(Color.white);
       timePanel.setLayout(null);
@@ -589,7 +641,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
       timer = new JLabel("00:00", SwingConstants.CENTER);
       timer.setFont(new Font("배달의민족 한나는 열한살", Font.BOLD, 20));
 
-      cardNum = new JLabel(cardCnt +"/"+systemCardDeck.card_arr.size(), SwingConstants.CENTER);
+      cardNum = new JLabel(cardCnt + "/" + systemCardDeck.card_arr.size(), SwingConstants.CENTER);
       cardNum.setFont(new Font("배달의민족 한나는 열한살", Font.BOLD, 20));
       // timer.setBorder(new LineBorder(Color.red, 5));
       // cardNum.setBorder(new LineBorder(Color.red, 5));
@@ -613,25 +665,25 @@ public class DualPlayMode extends JPanel implements ActionListener {
       cardPanel.add(cardNum);
       // 1p 덱에 카드추가(카드얻었을시)//
       one_Deck = new ArrayList<>();
-//      one_Deck.add(new JLabel(new ImageIcon("image/card(back).png")));
-//      one_Deck.add(new JLabel(new ImageIcon("image/card(back).png")));
-//      one_Deck.add(new JLabel(new ImageIcon("image/card(back).png")));
-//      one_Deck.add(new JLabel(new ImageIcon("image/card(back).png")));
-//      one_Deck.add(new JLabel(new ImageIcon("image/card(back).png")));
-//      one_Deck.get(0).setBounds(50, 190, 90, 140);
-//      one_Deck.get(1).setBounds(55, 190, 90, 140);
-//      one_Deck.get(2).setBounds(60, 190, 90, 140);
-//      one_Deck.get(3).setBounds(65, 190, 90, 140);
-//      one_Deck.get(4).setBounds(70, 190, 90, 140);
+      // one_Deck.add(new JLabel(new ImageIcon("image/card(back).png")));
+      // one_Deck.add(new JLabel(new ImageIcon("image/card(back).png")));
+      // one_Deck.add(new JLabel(new ImageIcon("image/card(back).png")));
+      // one_Deck.add(new JLabel(new ImageIcon("image/card(back).png")));
+      // one_Deck.add(new JLabel(new ImageIcon("image/card(back).png")));
+      // one_Deck.get(0).setBounds(50, 190, 90, 140);
+      // one_Deck.get(1).setBounds(55, 190, 90, 140);
+      // one_Deck.get(2).setBounds(60, 190, 90, 140);
+      // one_Deck.get(3).setBounds(65, 190, 90, 140);
+      // one_Deck.get(4).setBounds(70, 190, 90, 140);
       // p1.add(one_Deck.get(0));
       // p1.add(one_Deck.get(1));
       // p1.add(one_Deck.get(2));
       // p1.add(one_Deck.get(3));
-//      p1.add(one_Deck.get(4));
-//      p1.add(one_Deck.get(3));
-//      p1.add(one_Deck.get(2));
-//      p1.add(one_Deck.get(1));
-//      p1.add(one_Deck.get(0));
+      // p1.add(one_Deck.get(4));
+      // p1.add(one_Deck.get(3));
+      // p1.add(one_Deck.get(2));
+      // p1.add(one_Deck.get(1));
+      // p1.add(one_Deck.get(0));
       ///////////////////////////////
       this.add(p1);
    }
@@ -688,6 +740,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
       ///////////////////////////
 
       this.p3 = new JPanel();
+      p3.setBackground(Color.white);
       // p3.setBackground(Color.WHITE);
       p3.setLayout(null);
       // p3.setBorder(new LineBorder(Color.red, 5));
@@ -747,12 +800,29 @@ public class DualPlayMode extends JPanel implements ActionListener {
 
    public void showCenter() {
       this.p2 = new JPanel();
+      
+      for (int i = 2; i < 4; i++) {
+         for (int j = 2; j < 4; j++) {
+            //panel.add(hands[i][j]);
+            p2.add(hands[i][j]);
+            hands[i][j].setVisible(false);
+         }
+      }
+
+      for (int i = 2; i < 4; i++) {
+         hands[i][2].setBounds(-70, 300, 300, 180);
+         hands[i][3].setBounds(135, 235, 300, 300);
+         ////////// 여기 위치 변경해야 함
+      }
+      
+      p2.setBackground(Color.white);
       // p2.setBackground(Color.WHITE);
       p2.setLayout(null); // 가운데 패널 레이아웃을 제거
       p2.setBounds(500, 3, 360, 680);
 
       this.add(p2);
       this.cardDeck = new RoundedPanel(null, 120, Color.WHITE);
+      cardDeck.setBackground(Color.white);
 
       ImageIcon img1 = new ImageIcon("image/dotdanbae2.png");
       ImageIcon img2 = new ImageIcon("image/bell.png");
@@ -767,6 +837,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
       bell.setContentAreaFilled(false);
       bell.setFocusPainted(false);
       bell.setBorderPainted(false);
+      //bell.setOpaque(false);
 
       // this.add(card);
       cardDeck.setLayout(null);
