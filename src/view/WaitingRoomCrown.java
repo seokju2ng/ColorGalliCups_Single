@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Random;
@@ -17,7 +19,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
-import etc.ChangePanelService;
+import view.etc.ChangePanelService;
+import view.handler.FocusHandler;
 
 public class WaitingRoomCrown extends JPanel{
 	private int roomNum;
@@ -26,6 +29,7 @@ public class WaitingRoomCrown extends JPanel{
 	private JButton backButton;
 	
 	public WaitingRoomCrown() {
+		this.addComponentListener(new FocusHandler());
 		makeUI();
 	}
 	private void makeUI() {
@@ -73,7 +77,6 @@ public class WaitingRoomCrown extends JPanel{
 		});
 		
 		startButton = new JButton(new ImageIcon("image/startBtn.png"));
-//		startButton.setFont(font);
 		startButton.setBounds(580, 580, 211, 70);
 		startButton.setBorderPainted(false);
 		startButton.setContentAreaFilled(false);

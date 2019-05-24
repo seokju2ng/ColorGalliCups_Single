@@ -9,140 +9,145 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import etc.ChangePanelService;
+import view.etc.ChangePanelService;
+import view.handler.FocusHandler;
+import view.handler.KeyUpDownHandler;
+import view.handler.MouseEnteredHandler;
 
-
+/**
+ * GameStart 메뉴를 선택하면 나오는 GameMode 패널를 보여주는 GameMode 클래스이다.
+ * @author 송준희
+ */
 public class GameMode extends JPanel {
-   private JButton menuArr[];
-   private JLabel leftCursorArr[];
-   private JLabel rightCursorArr[];
-   private int cor;
-   
-   public GameMode() {
-	   setLayout(new BorderLayout());
-	   makeUI();
-	   this.setSize(1363, 714);
-   }
-   
-   private void makeUI() {
-	      menuArr = new JButton[4];
-	      menuArr[0] = new JButton("1p Mode");
-	      menuArr[1] = new JButton("2p Mode");
-	      menuArr[2] = new JButton("Network Mode");
-	      menuArr[3] = new JButton("Back");
-	      
-	      ImageIcon leftCursorImage = new ImageIcon("image/LeftCursor.png");
-	      ImageIcon rightCursorImage = new ImageIcon("image/RightCursor.png");
-	      
-	      leftCursorArr = new JLabel[] {new JLabel(leftCursorImage),new JLabel(leftCursorImage),new JLabel(leftCursorImage),new JLabel(leftCursorImage)};
-	      rightCursorArr = new JLabel[] {new JLabel(rightCursorImage),new JLabel(rightCursorImage),new JLabel(rightCursorImage),new JLabel(rightCursorImage)};
-	      
-	      for(int i = 0 ; i < 4 ; i++ ){
-	         leftCursorArr[i].setBounds(450, 340 + 60 * i, 100, 100);
-	         leftCursorArr[i].setVisible(false);
-	         add(leftCursorArr[i]);
-	      }
-	      for(int i = 0 ; i < 4 ; i++ ){
-	         rightCursorArr[i].setBounds(790, 340 + 60 * i, 100, 100);
-	         rightCursorArr[i].setVisible(false);
-	         add(rightCursorArr[i]);
-	      }
-	      Font font = new Font("Nanum Brush Script",Font.PLAIN, 60);
-	      JPanel panel = new JPanel(new GridLayout(5,0));
-	      MouseHandler ml = new MouseHandler();
-	      Handler l = new Handler();
-	      for(JButton b : menuArr) {
-				b.setBorderPainted(false);
-				b.setContentAreaFilled(false);
-				b.setFocusPainted(false);
-				b.setFont(font);
-				b.setForeground(new Color(80, 80, 180));
-				b.addActionListener(l);
-				b.addKeyListener(l);
-				b.addMouseListener(ml);
-				panel.add(b);
-	      }
-	      ImageIcon img = new ImageIcon("image/MainBackground.png");
-	      
-	      JPanel background = new JPanel() {
-	         public void paintComponent(Graphics g) {
-	            g.drawImage(img.getImage(), 0, 0, null);
-	            setOpaque(false);
-	         }
-	      };
-	      leftCursorArr[0].setVisible(true);
-	      rightCursorArr[0].setVisible(true);
-	      
-	      
-//	      for(JLabel a : labelArr) {
-//	         panel.add(a);
-//	         //a.addKeyListener(new Handler());
-//	      }
-	      panel.setOpaque(false);      
-	      background.add(panel);
-	      background.setLayout(null);
-	      panel.setBounds(500, 360, 350, 300);
-	      background.setOpaque(false);      
-	      panel.addKeyListener(new Handler());
-	      this.add(background);
-   }
-   
-   class Handler extends KeyAdapter implements ActionListener{
-	   public void actionPerformed(ActionEvent e) {
-		   ChangePanelService cps = ChangePanelService.getInstance();
-			if (cor == 0) cps.changePanel("SingleMode");
-			else if(cor == 1) cps.changePanel("DualMode");
-			else if(cor == 2) cps.changePanel("NetworkMode");
-			else if(cor == 3) cps.changePanel("MainView");
+	/**
+	 * 객체 직렬화를 위한 serialVersion의 ID이다.
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
+	 * 현재 선택한 메뉴의 양 옆의 아이콘 index를 저정하는 MyIndex 객체이다.
+	 */
+	private MyIndex cor;
+	/**
+	 * 1p Mode를 선택하면 해당 게임모드로 패널을 변경해줄 수 있도록 DaulPlayMode 객체를 저장하고 있다.
+	 */
+	private SinglePlayMode singleMode;
+	/**
+	 * 2p Mode를 선택하면 해당 게임모드로 패널을 변경해줄 수 있도록 DaulPlayMode 객체를 저장하고 있다.
+	 */
+	private DualPlayMode dualMode;
+
+	/**
+	 * null-parameter Constructor로 UI 화면을 보여준다.
+	 */
+	public GameMode() {
+		cor = new MyIndex();
+		this.addComponentListener(new FocusHandler());
+		this.setLayout(new BorderLayout());
+		this.addKeyListener(new Handler());
+		this.makeUI();
+	}
+	/**
+	 * Component들을 생성하고 JPanel에 붙여주는 메소드이다.
+	 */
+	private void makeUI() {
+		JButton[] menuArr = new JButton[4];
+		menuArr[0] = new JButton("1p Mode");
+		menuArr[1] = new JButton("2p Mode");
+		menuArr[2] = new JButton("Network Mode");
+		menuArr[3] = new JButton("Back");
+
+		ImageIcon leftCursorImage = new ImageIcon("image/LeftCursor.png");
+		ImageIcon rightCursorImage = new ImageIcon("image/RightCursor.png");
+
+		JLabel[] leftCursorArr = new JLabel[] { new JLabel(leftCursorImage), new JLabel(leftCursorImage),
+				new JLabel(leftCursorImage), new JLabel(leftCursorImage) };
+		JLabel[] rightCursorArr = new JLabel[] { new JLabel(rightCursorImage), new JLabel(rightCursorImage),
+				new JLabel(rightCursorImage), new JLabel(rightCursorImage) };
+
+		for (int i = 0; i < 4; i++) {
+			leftCursorArr[i].setBounds(450, 340 + 60 * i, 100, 100);
+			leftCursorArr[i].setVisible(false);
+			add(leftCursorArr[i]);
 		}
+		for (int i = 0; i < 4; i++) {
+			rightCursorArr[i].setBounds(790, 340 + 60 * i, 100, 100);
+			rightCursorArr[i].setVisible(false);
+			add(rightCursorArr[i]);
+		}
+		Font font = new Font("Nanum Brush Script", Font.PLAIN, 60);
+		JPanel panel = new JPanel(new GridLayout(5, 0));
+		MouseEnteredHandler ml = new MouseEnteredHandler(menuArr, leftCursorArr, rightCursorArr, cor);
+		Handler l = new Handler();
+		KeyUpDownHandler kudh = new KeyUpDownHandler(cor, 3, leftCursorArr, rightCursorArr);
+		for (JButton b : menuArr) {
+			b.setBorderPainted(false);
+			b.setContentAreaFilled(false);
+			b.setFocusPainted(false);
+			b.setFont(font);
+			b.setForeground(new Color(80, 80, 180));
+			b.addActionListener(l);
+			b.addMouseListener(ml);
+			panel.add(b);
+		}
+		ImageIcon img = new ImageIcon("image/MainBackground.png");
+		JPanel background = new JPanel() {
+			private static final long serialVersionUID = 1L;
+
+			public void paintComponent(Graphics g) {
+				g.drawImage(img.getImage(), 0, 0, null);
+				setOpaque(false);
+			}
+		};
+		leftCursorArr[0].setVisible(true);
+		rightCursorArr[0].setVisible(true);
+		
+		panel.setOpaque(false);
+		background.add(panel);
+		background.setLayout(null);
+		panel.setBounds(500, 360, 350, 300);
+		background.setOpaque(false);
+		panel.addKeyListener(kudh);
+		this.add(background);
+		this.addKeyListener(new KeyUpDownHandler(cor, 3, leftCursorArr, rightCursorArr));
+	}
+	/**
+	 * 선택한 메뉴에 따라 패널을 바꿔주는 Handler 클래스이다.
+	 * @author 송준희
+	 */
+	class Handler extends KeyAdapter implements ActionListener {
+		/**
+		 * 이벤트가 발생 했을 때 현재 패널을 지우고 선택한 메뉴에 해당하는 객체를 생성하고 그 객체의 패널로 바꿔준다.
+		 */
+		public void actionPerformed(ActionEvent e) {
+			ChangePanelService cps = ChangePanelService.getInstance();
+			if (cor.getIndex() == 0) {
+				cps.removePanel(singleMode);
+				singleMode = new SinglePlayMode();
+				cps.addPanel("SingleMode", singleMode);
+				cps.changePanel("SingleMode");
+			} else if (cor.getIndex() == 1) {
+				cps.removePanel(singleMode);
+				dualMode = new DualPlayMode();
+				cps.addPanel("DualMode", dualMode);
+				cps.changePanel("DualMode");
+			} else if (cor.getIndex() == 2)
+				cps.changePanel("NetworkMode");
+			else if (cor.getIndex() == 3)
+				cps.changePanel("MainView");
+		}
+		/**
+		 * 엔터키를 눌렀을 때  이벤트를 발생시킨다.
+		 */
 		public void keyPressed(KeyEvent e) {
-			if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-				System.out.println("down");
-				if(cor != 3) {
-					leftCursorArr[cor].setVisible(false);
-					rightCursorArr[cor].setVisible(false);
-					cor = cor+1;
-					leftCursorArr[cor].setVisible(true);
-					rightCursorArr[cor].setVisible(true);
-				}
-			} else if(e.getKeyCode() == KeyEvent.VK_UP) {
-				System.out.println("up");
-				if(cor != 0) {
-					leftCursorArr[cor].setVisible(false);
-					rightCursorArr[cor].setVisible(false);
-					cor = cor-1;
-					leftCursorArr[cor].setVisible(true);
-					rightCursorArr[cor].setVisible(true);
-				}
-			} else if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				actionPerformed(new ActionEvent(e.getSource(), e.getID(), Character.toString(e.getKeyChar())));
 			}
 		}
-   }
-   
-   class MouseHandler extends MouseAdapter{
-	   public void mouseEntered(MouseEvent e) {
-		   for(int i = 0; i < 5; i++) {
-				if(e.getSource() == menuArr[i]) {
-					leftCursorArr[cor].setVisible(false);
-					rightCursorArr[cor].setVisible(false);
-					leftCursorArr[i].setVisible(true);
-					rightCursorArr[i].setVisible(true);
-					cor = i;
-					break;
-				}
-			}
-	   }
-   }
-   
-   
+	}
 }

@@ -6,15 +6,9 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -23,136 +17,63 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
-import etc.ChangePanelService;
-import etc.RoundedPanel;
+import view.etc.Board;
+import view.etc.ChangePanelService;
+import view.etc.HandVanish;
+import view.etc.KeyImage;
+import view.etc.RoundedPanel;
+import view.etc.Sound;
+import view.handler.FocusBtnHandler;
+import view.handler.FocusHandler;
+import view.handler.MouseBtnHandler;
 
 public class NetworkPlayMode extends JPanel {
 	private JPanel panel;
 	private JPanel[] everyPanelArr;
 	private JPanel[] panelArr;
 	private JLabel[] userId;
-	private JButton[] keyBoard;
+	private JLabel[] keyBoard;
 	private JLabel bell;
-	private int pointIndex = 0;
 	private JLabel[] currentPointArr;
 	private JButton exitButton;
 	private JButton pauseButton;
 	private JButton pauseBackground;
-	//***********************************************************
-	//choims
-	   private int[] colorFlag;//
-	   private int gamePanelIndex;
-	   private int gamePanelY;
-	   private boolean spaceFlag;
-	   //컵
-	   private JLabel redCup[][];
-	   private JLabel blueCup[][];
-	   private JLabel greenCup[][];
-	   private JLabel yellowCup[][];
-	   private JLabel blackCup[][];
-	   
-	   private JPanel mainPanel;
-	   private JPanel[] mainPanelArr;
-	  //**************************************************
+
+	// ***********************************************************
+	// choims
+	private int[] colorFlag;//
+	private int gamePanelIndex;
+	private int gamePanelY;
+	private boolean spaceFlag;
+	// 컵
+	private Board mainBoard;
+	// **************************************************
 	/////////////////////// 추가 ////////////////////
 	private JLabel[][] hands;
 	private ImageIcon[] img;
 	private int index = 3;
 	private boolean[] handCheck;
+	JLabel problemCard;
 
-	class HandVanish0 extends Thread {
-		public void run() {
-			int zero = index;
-			hands[index--][0].setVisible(true);
-			handCheck[0] = true;
-			try {
-				System.out.println("0번 1초 휴식중..");
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			hands[zero][0].setVisible(false);
-			index++;
-			handCheck[0] = false;
-			System.out.println("0번 끝");
-		}
-	}
-	class HandVanish1 extends Thread {
-		public void run() {
-			int one = index;
-			hands[index--][1].setVisible(true);
-			handCheck[1] = true;
-			try {
-				System.out.println("1번 1초 휴식중..");
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			hands[one][1].setVisible(false);
-			index++;
-			handCheck[1] = false;
-			System.out.println("1번 끝");
-		}
-	}
-	class HandVanish2 extends Thread {
-		public void run() {
-			int two = index;
-			hands[index--][2].setVisible(true);
-			handCheck[2] = true;
-			try {
-				System.out.println("2번 1초 휴식중..");
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			hands[two][2].setVisible(false);
-			index++;
-			handCheck[2] = false;
-			System.out.println("2번 끝");
-		}
-	}
-	class HandVanish3 extends Thread {
-		public void run() {
-			int three = index;
-			hands[index--][3].setVisible(true);
-			handCheck[3] = true;
-			try {
-				System.out.println("3번 1초 휴식중..");
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			hands[three][3].setVisible(false);
-			index++;
-			handCheck[3] = false;
-			System.out.println("3번 끝");
-		}
-	}
-	
-	
-	
 	public NetworkPlayMode() {
+		this.setFocusTraversalKeysEnabled(false);
 		panel = new JPanel();
-		
-		
-		
-		//**********************************
-		//cms,start
+		this.addComponentListener(new FocusHandler());
+
+		// hello
+
+		// **********************************
+		// cms,start
 		colorFlag = new int[5];
-		  spaceFlag = false;
-		  for(int i = 0; i < 5; i++) {
-			  colorFlag[i] = 0;
-		  }
-		  gamePanelIndex = 0;
-		  gamePanelY = 0;
-		//cms,end
-		//**********************************
-		  
-		  
+		spaceFlag = false;
+		for (int i = 0; i < 5; i++) {
+			colorFlag[i] = 0;
+		}
+		gamePanelIndex = 0;
+		gamePanelY = 0;
+		// cms,end
+		// **********************************
+
 		/////////////////////// 추가 ////////////////////
 		img = new ImageIcon[] { new ImageIcon("image/hand0.png"), new ImageIcon("image/hand1.png"),
 				new ImageIcon("image/hand2.png"), new ImageIcon("image/hand3.png") };
@@ -197,6 +118,7 @@ public class NetworkPlayMode extends JPanel {
 		pauseBackground.setBorderPainted(false);
 		pauseBackground.setVisible(false);
 		pauseBackground.addActionListener(new ButtonHandler());
+		pauseBackground.addActionListener(new FocusBtnHandler(this));
 		panel.add(pauseBackground);
 
 		panel.setBorder(new LineBorder(Color.BLACK));
@@ -260,18 +182,17 @@ public class NetworkPlayMode extends JPanel {
 		exitButton.setFocusPainted(false);
 		exitButton.addKeyListener(new KeyHandler());
 		exitButton.addActionListener(new ButtonHandler());
-		exitButton.addMouseListener(new MouseHandler());
-
+		MouseBtnHandler mbh = new MouseBtnHandler(exitButton, pauseButton);
+		exitButton.addMouseListener(mbh);
+		pauseButton.addMouseListener(mbh);
+		exitButton.addActionListener(new FocusBtnHandler(this));
 		pauseButton.setBounds(700, 10, 80, 80);
 		pauseButton.setBorderPainted(false);
 		pauseButton.setContentAreaFilled(false);
 		pauseButton.setFocusPainted(false);
-		pauseButton.addKeyListener(new KeyHandler());
 		pauseButton.addActionListener(new ButtonHandler());
-		pauseButton.addMouseListener(new MouseHandler());
-		
-		
-		
+		pauseButton.addActionListener(new FocusBtnHandler(this));
+
 		panel.add(exitButton);
 		panel.add(pauseButton);
 		// 여기까지가 전원, 일시정지 버튼
@@ -287,7 +208,7 @@ public class NetworkPlayMode extends JPanel {
 		problemCardPanel.setBounds(900, 10, 250, 250);
 		problemCardPanel.setBackground(Color.white);
 
-		JLabel problemCard = new JLabel(new ImageIcon("image/sampleCard.png"));
+		problemCard = new JLabel(new ImageIcon("image/sampleCard.png"));
 		problemCard.setBounds(50, 5, 154, 238);
 
 		problemCardPanel.add(problemCard);
@@ -324,18 +245,21 @@ public class NetworkPlayMode extends JPanel {
 
 		panel.add(cardNumPanel);
 		// 카드번호
-
-		mainPanel = new JPanel(new GridLayout(0, 5));
-		mainPanelArr = new JPanel[5];
-
-		for (int i = 0; i < 5; i++) {
-			mainPanelArr[i] = new JPanel(null);
-			mainPanelArr[i].setBorder(lineBorder);
-			mainPanelArr[i].setBackground(Color.WHITE);
-			mainPanel.add(mainPanelArr[i]);
-		}
-		mainPanel.setBounds(900, 350, 420, 270);
-		panel.add(mainPanel);
+		// ************************************************
+		// cms,start
+		mainBoard = new Board(5, 5);
+		mainBoard.setBounds(900, 350, 420, 270);
+		mainBoard.setBackground(Color.white);
+		mainBoard.setCupsBounds(7, 130, 70, 80, 15);
+		mainBoard.setCupsImg(0, "image/cup(red)_dual.png");
+		mainBoard.setCupsImg(1, "image/cup(yellow)_dual.png");
+		mainBoard.setCupsImg(2, "image/cup(green)_dual.png");
+		mainBoard.setCupsImg(3, "image/cup(blue)_dual.png");
+		mainBoard.setCupsImg(4, "image/cup(black)_dual.png");
+		mainBoard.setCups();
+		panel.add(mainBoard);
+		// cms,end
+		// ************************************************
 		// 사용자의 게임화면
 		currentPointArr = new JLabel[5];
 
@@ -349,24 +273,23 @@ public class NetworkPlayMode extends JPanel {
 		// Point
 
 		// JLabel[]
-		keyBoard = new JButton[] { new JButton(new ImageIcon("image/red(q).png")),
-				new JButton(new ImageIcon("image/yellow(w).png")), new JButton(new ImageIcon("image/green(e).png")),
-				new JButton(new ImageIcon("image/blue(a).png")), new JButton(new ImageIcon("image/black(s).png")) };
-		for(int i = 0; i < 5; i ++) {
-			keyBoard[i].addKeyListener(new KeyHandler());
-			keyBoard[i].setBorderPainted(false);
-			keyBoard[i].setContentAreaFilled(false);
-			keyBoard[i].setFocusPainted(false);
-			
-		}
+		keyBoard = KeyImage.getKey("1P", 80, 80);
+
 		for (int i = 0; i < 3; i++) {
 			keyBoard[i].setBounds(550 + i * 95, 480, 80, 80);
+			keyBoard[i + 5].setBounds(550 + i * 95, 480, 80, 80);
 			panel.add(keyBoard[i]);
+			panel.add(keyBoard[i + 5]);
 		}
+
 		for (int i = 3; i < 5; i++) {
 			keyBoard[i].setBounds(600 + 90 * (i - 3), 570, 80, 80);
+			keyBoard[i + 5].setBounds(600 + 90 * (i - 3), 570, 80, 80);
 			panel.add(keyBoard[i]);
+			panel.add(keyBoard[i + 5]);
 		}
+
+		addKeyListener(new Key1pHandler(keyBoard));
 
 		// 색상에 해당하는 키
 
@@ -382,45 +305,8 @@ public class NetworkPlayMode extends JPanel {
 		abtainCard[2].setBounds(1245, 250, 63, 98);
 		abtainCard[3].setBounds(1250, 250, 63, 98);
 		// 자신이 딴 카드 덱
-		
-		
-		
-/////////////////////// 추가 끝 ////////////////////
-//************************************************
-//cms,start
-redCup = new JLabel[5][5];
-blackCup = new JLabel[5][5];
-greenCup = new JLabel[5][5];
-blueCup = new JLabel[5][5];
-yellowCup = new JLabel[5][5];
-for(int i = 0; i < 5; i++) {
-for(int j = 0; j < 5; j++) {
-	  redCup[i][j] = new JLabel(new ImageIcon("image/cup(red)_dual.png"));
-	  blackCup[i][j] = new JLabel(new ImageIcon("image/cup(black)_dual.png"));
-	  greenCup[i][j] = new JLabel(new ImageIcon("image/cup(green)_dual.png"));
-	  blueCup[i][j] = new JLabel(new ImageIcon("image/cup(blue)_dual.png"));
-    yellowCup[i][j] = new JLabel(new ImageIcon("image/cup(yellow)_dual.png"));
-	  redCup[i][j].setBounds(7,130 + j*15,70,80);
-	  blackCup[i][j].setBounds(7,130 + j*15,70,80);
-	  greenCup[i][j].setBounds(7,130 + j*15,70,80);
-	  blueCup[i][j].setBounds(7,130 + j*15,70,80);
-	  yellowCup[i][j].setBounds(7,130 + j*15,70,80);
-	  redCup[i][j].setVisible(false);
-	  blackCup[i][j].setVisible(false);
-	  greenCup[i][j].setVisible(false);
-	  yellowCup[i][j].setVisible(false);
-	  blueCup[i][j].setVisible(false);
-	  System.out.println(mainPanelArr[i]);
-	  mainPanelArr[i].add(redCup[i][j]);
-	  mainPanelArr[i].add(blackCup[i][j]);
-	  mainPanelArr[i].add(greenCup[i][j]);
-	  mainPanelArr[i].add(blueCup[i][j]);
-	  mainPanelArr[i].add(yellowCup[i][j]);
-}
-}
-//cms,end
-//************************************************
-		
+
+		/////////////////////// 추가 끝 ////////////////////
 
 		panel.setLayout(null);
 		this.addKeyListener(new KeyHandler());
@@ -430,18 +316,6 @@ for(int j = 0; j < 5; j++) {
 		this.setFocusable(true);
 		// this.setResizable(false);
 		// this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-
-	public void playSound(String fileName) {
-		try {
-			AudioInputStream ais = AudioSystem.getAudioInputStream(new File(fileName));
-			Clip clip = AudioSystem.getClip();
-			clip.stop();
-			clip.open(ais);
-			clip.start();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	private class ButtonHandler implements ActionListener {
@@ -455,98 +329,77 @@ for(int j = 0; j < 5; j++) {
 				}
 			} else if (e.getSource().equals(pauseButton)) {
 				pauseBackground.setVisible(true);
+				pauseButton.setVisible(false);
+				exitButton.setVisible(false);
+				for (int i = 0; i < 10; i++)
+					keyBoard[i].setVisible(false);
+				problemCard.setVisible(false);
+
 			} else if (e.getSource().equals(pauseBackground)) {
 				pauseBackground.setVisible(false);
+				pauseButton.setVisible(true);
+				exitButton.setVisible(true);
+				for (int i = 0; i < 10; i++)
+					keyBoard[i].setVisible(true);
+				problemCard.setVisible(true);
 			}
 		}
 	}
 
-	private class MouseHandler extends MouseAdapter {
-		public void mouseEntered(MouseEvent e) {
-			if (e.getSource().equals(exitButton)) {
-				exitButton.setIcon(new ImageIcon("image/exit(click).png"));
-			} else if (e.getSource().equals(pauseButton)) {
-				pauseButton.setIcon(new ImageIcon("image/pause(click).png"));
-			}
-		}
+	private class KeyHandler extends KeyAdapter {
 
-		public void mouseExited(MouseEvent e) {
-			if (e.getSource().equals(exitButton)) {
-				exitButton.setIcon(new ImageIcon("image/exit.png"));
-			} else if (e.getSource().equals(pauseButton)) {
-				pauseButton.setIcon(new ImageIcon("image/pause.png"));
-			}
-		}
-	}
-
-	private class KeyHandler implements KeyListener {
-		@Override
-		public void keyTyped(KeyEvent e) {
-		}
-
-		@Override
 		public void keyPressed(KeyEvent e) {
-			// TODO Auto-generated method stub
-			System.out.println(e.getKeyChar());
 
 			if (e.getKeyCode() == KeyEvent.VK_Q) {
-				keyBoard[0].setIcon(new ImageIcon("image/red(q)_press.png"));
 				spaceFlag = false;
 			} else if (e.getKeyCode() == KeyEvent.VK_W) {
-				keyBoard[1].setIcon(new ImageIcon("image/yellow(w)_press.png"));
 				spaceFlag = false;
-			} else if (e.getKeyCode()  == KeyEvent.VK_E) {
-				keyBoard[2].setIcon(new ImageIcon("image/green(e)_press.png"));
+			} else if (e.getKeyCode() == KeyEvent.VK_E) {
 				spaceFlag = false;
-			} else if (e.getKeyCode()  == KeyEvent.VK_A) {
-				keyBoard[3].setIcon(new ImageIcon("image/blue(a)_press.png"));
+			} else if (e.getKeyCode() == KeyEvent.VK_A) {
 				spaceFlag = false;
-			} else if (e.getKeyCode()  == KeyEvent.VK_S) {
-				keyBoard[4].setIcon(new ImageIcon("image/black(s)_press.png"));
+			} else if (e.getKeyCode() == KeyEvent.VK_S) {
 				spaceFlag = false;
 			} else if (e.getKeyChar() == KeyEvent.VK_SPACE) {
 				////////////////////////// 추가 //////////////////////
-				 int setCupFlag=0;
-	             for(int i = 0; i< 5; i++) {
-	             	if(colorFlag[i] > 0) {
-	             		setCupFlag++;
-	             	}
-	             }
-	        	 if( setCupFlag == 5 && spaceFlag == false) {
-	        		 Thread zero=new HandVanish0();
-	 				zero.start();
-	             	bell.setIcon(new ImageIcon("image/bell(Network).png"));
-	             	playSound("audio/bell.wav");
-	             }
-				if (index == -1 || handCheck[0] == true) {
-					return;
+				int setCupFlag = 0;
+				for (int i = 0; i < 5; i++) {
+					if (colorFlag[i] > 0) {
+						setCupFlag++;
+					}
+				}
+				if (setCupFlag == 5 && spaceFlag == false) {
+					if (index == -1 || handCheck[0] == true) {
+						return;
+					}
+					bell.setIcon(new ImageIcon("image/bell(Network).png"));
+					Sound.playSound("audio/bell.wav");
+					new HandVanish(0, hands, handCheck).start();
 				}
 			}
-			
-			else if (e.getKeyChar() == '1') {
+
+			//// 없어도 되는 부분. 이건 손 나오는지 확인만 하는 용도(송준희)
+			else if (e.getKeyChar() == KeyEvent.VK_1) {
 				if (index == -1 || handCheck[1] == true) {
 					return;
 				}
 				bell.setIcon(new ImageIcon("image/bell(Network).png"));
-				playSound("audio/bell.wav");
-				Thread one=new HandVanish1();
-				one.start();
-			} else if (e.getKeyChar() == '2') {
+				Sound.playSound("audio/bell.wav");
+				new HandVanish(1, hands, handCheck).start();
+			} else if (e.getKeyChar() == KeyEvent.VK_2) {
 				if (index == -1 || handCheck[2] == true) {
 					return;
 				}
 				bell.setIcon(new ImageIcon("image/bell(Network).png"));
-				playSound("audio/bell.wav");
-				Thread two=new HandVanish2();
-				two.start();
-			} else if (e.getKeyChar() == '3') {
+				Sound.playSound("audio/bell.wav");
+				new HandVanish(2, hands, handCheck).start();
+			} else if (e.getKeyChar() == KeyEvent.VK_3) {
 				if (index == -1 || handCheck[3] == true) {
 					return;
 				}
 				bell.setIcon(new ImageIcon("image/bell(Network).png"));
-				playSound("audio/bell.wav");
-				Thread three=new HandVanish3();
-				three.start();
+				Sound.playSound("audio/bell.wav");
+				new HandVanish(3, hands, handCheck).start();
 			}
 			/////////////////////// 추가 끝 ////////////////////
 		}
@@ -554,106 +407,94 @@ for(int j = 0; j < 5; j++) {
 		@Override
 		public void keyReleased(KeyEvent e) {
 			// TODO Auto-generated method stub
-	         if (e.getKeyCode() == KeyEvent.VK_Q) {
-	            keyBoard[0].setIcon(new ImageIcon("image/red(q).png"));
-	            if(colorFlag[0] == 0) {
-	            	colorFlag[0] = gamePanelIndex+1;
-	            	redCup[gamePanelIndex][4-gamePanelY].setVisible(true);
-	            	if(gamePanelY < 4)
-	            		gamePanelY++;
-	            }
-	         }
-	         else if(e.getKeyCode() == KeyEvent.VK_W) {
-	            keyBoard[1].setIcon(new ImageIcon("image/yellow(w).png"));
-	            if(colorFlag[1] == 0) {
-	            	colorFlag[1] = gamePanelIndex+1;
-	            	yellowCup[gamePanelIndex][4-gamePanelY].setVisible(true);
-	            	if(gamePanelY < 4)
-	            		gamePanelY++;
-	            }
-	         }
-	         else if(e.getKeyCode() == KeyEvent.VK_E) {
-	            keyBoard[2].setIcon(new ImageIcon("image/green(e).png"));
-	            if(colorFlag[2] == 0) {
-	            	colorFlag[2] = gamePanelIndex+1;
-	            	greenCup[gamePanelIndex][4-gamePanelY].setVisible(true);
-	            	if(gamePanelY < 4)
-	            		gamePanelY++;
-	            }
-	         }
-	         else if(e.getKeyCode() == KeyEvent.VK_A) {
-	            keyBoard[3].setIcon(new ImageIcon("image/blue(a).png"));
-	            if(colorFlag[3] == 0) {
-	            	colorFlag[3] = gamePanelIndex+1;
-	            	blueCup[gamePanelIndex][4-gamePanelY].setVisible(true);
-	            	if(gamePanelY < 4)
-	            		gamePanelY++;
-	            }
-	         }
-	         else if(e.getKeyCode() == KeyEvent.VK_S) {
-	            keyBoard[4].setIcon(new ImageIcon("image/black(s).png"));
-	            if(colorFlag[4] == 0) {
-	            	colorFlag[4] = gamePanelIndex+1;
-	            	blackCup[gamePanelIndex][4-gamePanelY].setVisible(true);
-	            	if(gamePanelY < 4)
-	            		gamePanelY++;
-	            }
-	         }
-	         else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-	            bell.setIcon(new ImageIcon("image/bell(Network).png"));
-	            if(spaceFlag == true) {
-	            	for(int i = 0; i < 5; i++) {
-	            		colorFlag[i] = 0;
-	            		currentPointArr[i].setVisible(false);
-	            		for(int j = 0; j <5; j++) {
-	            			redCup[i][j].setVisible(false);
-	            			blackCup[i][j].setVisible(false);
-	            			greenCup[i][j].setVisible(false);
-	            			yellowCup[i][j].setVisible(false);
-	              		  	blueCup[i][j].setVisible(false);
-	            		}
-	            	}
-	            	gamePanelIndex = 0;
-	            	gamePanelY = 0;
-	            	currentPointArr[0].setVisible(true);
-	            	return;
-	            }
-	            int setCupFlag=0;
-	            for(int i = 0; i< 5; i++) {
-	            	if(colorFlag[i] > 0) {
-	            		setCupFlag++;
-	            	}
-	            }
-	            if(setCupFlag < 5) {
-	            	boolean isEmptyPanel = true;
-	            	for(int i = 0; i < 5; i++) {
-	            		if(colorFlag[i] == gamePanelIndex + 1 ) {
-	            			isEmptyPanel = false;
-	            		}
-	            	}
-	            	if( gamePanelIndex < 4 && isEmptyPanel == false) {
-	                	gamePanelIndex++;
-	                    gamePanelY = 0;
-	                    if(gamePanelIndex < 5) {
-	                    	for(int i = 0; i <5; i++)
-	                    		currentPointArr[i].setVisible(false);   
-	                    	currentPointArr[gamePanelIndex].setVisible(true);
-	                    }
-	                    
-	                }
-	            }  
-	           
-			else if (e.getKeyChar() == '1') {
+			if (e.getKeyCode() == KeyEvent.VK_Q) {
+				if (colorFlag[0] == 0) {
+					colorFlag[0] = gamePanelIndex + 1;
+					mainBoard.getCups(0, gamePanelIndex, 4 - gamePanelY).setVisible(true);
+					if (gamePanelY < 4)
+						gamePanelY++;
+				}
+			} else if (e.getKeyCode() == KeyEvent.VK_W) {
+				if (colorFlag[1] == 0) {
+					colorFlag[1] = gamePanelIndex + 1;
+					mainBoard.getCups(1, gamePanelIndex, 4 - gamePanelY).setVisible(true);
+					if (gamePanelY < 4)
+						gamePanelY++;
+				}
+			} else if (e.getKeyCode() == KeyEvent.VK_E) {
+				if (colorFlag[2] == 0) {
+					colorFlag[2] = gamePanelIndex + 1;
+					mainBoard.getCups(2, gamePanelIndex, 4 - gamePanelY).setVisible(true);
+					if (gamePanelY < 4)
+						gamePanelY++;
+				}
+			} else if (e.getKeyCode() == KeyEvent.VK_A) {
+				if (colorFlag[3] == 0) {
+					colorFlag[3] = gamePanelIndex + 1;
+					mainBoard.getCups(3, gamePanelIndex, 4 - gamePanelY).setVisible(true);
+					if (gamePanelY < 4)
+						gamePanelY++;
+				}
+			} else if (e.getKeyCode() == KeyEvent.VK_S) {
+				if (colorFlag[4] == 0) {
+					colorFlag[4] = gamePanelIndex + 1;
+					mainBoard.getCups(4, gamePanelIndex, 4 - gamePanelY).setVisible(true);
+					if (gamePanelY < 4)
+						gamePanelY++;
+				}
+			} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 				bell.setIcon(new ImageIcon("image/bell(Network).png"));
+				if (spaceFlag == true) {
+					for (int i = 0; i < 5; i++) {
+						colorFlag[i] = 0;
+						currentPointArr[i].setVisible(false);
+						for (int j = 0; j < 5; j++) {
+							mainBoard.getCups(0, i, j).setVisible(false);
+							mainBoard.getCups(1, i, j).setVisible(false);
+							mainBoard.getCups(2, i, j).setVisible(false);
+							mainBoard.getCups(3, i, j).setVisible(false);
+							mainBoard.getCups(4, i, j).setVisible(false);
+						}
+					}
+					gamePanelIndex = 0;
+					gamePanelY = 0;
+					currentPointArr[0].setVisible(true);
+					return;
+				}
+				int setCupFlag = 0;
+				for (int i = 0; i < 5; i++) {
+					if (colorFlag[i] > 0) {
+						setCupFlag++;
+					}
+				}
+				if (setCupFlag < 5) {
+					boolean isEmptyPanel = true;
+					for (int i = 0; i < 5; i++) {
+						if (colorFlag[i] == gamePanelIndex + 1) {
+							isEmptyPanel = false;
+						}
+					}
+					if (gamePanelIndex < 4 && isEmptyPanel == false) {
+						gamePanelIndex++;
+						gamePanelY = 0;
+						if (gamePanelIndex < 5) {
+							for (int i = 0; i < 5; i++)
+								currentPointArr[i].setVisible(false);
+							currentPointArr[gamePanelIndex].setVisible(true);
+						}
+
+					}
+				}
+
+				else if (e.getKeyChar() == '1') {
+					bell.setIcon(new ImageIcon("image/bell(Network).png"));
+				} else if (e.getKeyChar() == '2') {
+					bell.setIcon(new ImageIcon("image/bell(Network).png"));
+				} else if (e.getKeyChar() == '3') {
+					bell.setIcon(new ImageIcon("image/bell(Network).png"));
+				}
+				spaceFlag = true;
 			}
-			else if (e.getKeyChar() == '2') {
-				bell.setIcon(new ImageIcon("image/bell(Network).png"));
-			}
-			else if (e.getKeyChar() == '3') {
-				bell.setIcon(new ImageIcon("image/bell(Network).png"));
-			}
-	        spaceFlag = true;
 		}
-		}
-		}
+	}
 }
