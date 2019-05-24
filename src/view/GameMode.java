@@ -20,33 +20,47 @@ import view.handler.FocusHandler;
 import view.handler.KeyUpDownHandler;
 import view.handler.MouseEnteredHandler;
 
+/**
+ * GameStart 메뉴를 선택하면 나오는 GameMode 패널를 보여주는 GameMode 클래스이다.
+ * @author 송준희
+ */
 public class GameMode extends JPanel {
+	/**
+	 * 객체 직렬화를 위한 serialVersion의 ID이다.
+	 */
 	private static final long serialVersionUID = 1L;
-//	private JButton menuArr[];
-//	private JLabel leftCursorArr[];
-//	private JLabel rightCursorArr[];
+	/**
+	 * 현재 선택한 메뉴의 양 옆의 아이콘 index를 저정하는 MyIndex 객체이다.
+	 */
 	private MyIndex cor;
+	/**
+	 * 1p Mode를 선택하면 해당 게임모드로 패널을 변경해줄 수 있도록 DaulPlayMode 객체를 저장하고 있다.
+	 */
 	private SinglePlayMode singleMode;
+	/**
+	 * 2p Mode를 선택하면 해당 게임모드로 패널을 변경해줄 수 있도록 DaulPlayMode 객체를 저장하고 있다.
+	 */
 	private DualPlayMode dualMode;
 
+	/**
+	 * null-parameter Constructor로 UI 화면을 보여준다.
+	 */
 	public GameMode() {
 		cor = new MyIndex();
 		this.addComponentListener(new FocusHandler());
 		this.setLayout(new BorderLayout());
 		this.addKeyListener(new Handler());
 		this.makeUI();
-//		this.setSize(1363, 714);
 	}
-
+	/**
+	 * Component들을 생성하고 JPanel에 붙여주는 메소드이다.
+	 */
 	private void makeUI() {
 		JButton[] menuArr = new JButton[4];
 		menuArr[0] = new JButton("1p Mode");
 		menuArr[1] = new JButton("2p Mode");
 		menuArr[2] = new JButton("Network Mode");
 		menuArr[3] = new JButton("Back");
-
-		// singleMode = new SinglePlayMode();
-		// ChangePanelService.getInstance().addPanel("SingleMode", singleMode);
 
 		ImageIcon leftCursorImage = new ImageIcon("image/LeftCursor.png");
 		ImageIcon rightCursorImage = new ImageIcon("image/RightCursor.png");
@@ -78,13 +92,10 @@ public class GameMode extends JPanel {
 			b.setFont(font);
 			b.setForeground(new Color(80, 80, 180));
 			b.addActionListener(l);
-//			b.addKeyListener(l);
-//			b.addKeyListener(kudh);
 			b.addMouseListener(ml);
 			panel.add(b);
 		}
 		ImageIcon img = new ImageIcon("image/MainBackground.png");
-
 		JPanel background = new JPanel() {
 			private static final long serialVersionUID = 1L;
 
@@ -95,25 +106,25 @@ public class GameMode extends JPanel {
 		};
 		leftCursorArr[0].setVisible(true);
 		rightCursorArr[0].setVisible(true);
-
-		// for(JLabel a : labelArr) {
-		// panel.add(a);
-		// //a.addKeyListener(new Handler());
-		// }
+		
 		panel.setOpaque(false);
 		background.add(panel);
 		background.setLayout(null);
 		panel.setBounds(500, 360, 350, 300);
 		background.setOpaque(false);
-		//panel.addKeyListener(new Handler());
 		panel.addKeyListener(kudh);
 		this.add(background);
 		this.addKeyListener(new KeyUpDownHandler(cor, 3, leftCursorArr, rightCursorArr));
 	}
-
+	/**
+	 * 선택한 메뉴에 따라 패널을 바꿔주는 Handler 클래스이다.
+	 * @author 송준희
+	 */
 	class Handler extends KeyAdapter implements ActionListener {
+		/**
+		 * 이벤트가 발생 했을 때 현재 패널을 지우고 선택한 메뉴에 해당하는 객체를 생성하고 그 객체의 패널로 바꿔준다.
+		 */
 		public void actionPerformed(ActionEvent e) {
-
 			ChangePanelService cps = ChangePanelService.getInstance();
 			if (cor.getIndex() == 0) {
 				cps.removePanel(singleMode);
@@ -130,7 +141,9 @@ public class GameMode extends JPanel {
 			else if (cor.getIndex() == 3)
 				cps.changePanel("MainView");
 		}
-
+		/**
+		 * 엔터키를 눌렀을 때  이벤트를 발생시킨다.
+		 */
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				actionPerformed(new ActionEvent(e.getSource(), e.getID(), Character.toString(e.getKeyChar())));
