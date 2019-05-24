@@ -187,7 +187,6 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 	private void eastPaint() {
 		// w:545.2, w/2:272.6,
 		// 컴포넌트 생성 --------------------------------------------------------------
-		ClickHandler ch = new ClickHandler();
 		east = new JPanel();
 		east.setLayout(null);
 		// 카드 덱 -----------
@@ -199,6 +198,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 		cardDeck.setBounds(50, 20, 300, 300);
 		east.add(cardDeck);
 
+		ClickHandler ch = new ClickHandler();
 		// 종 버튼 --------------------------------------------------------------
 		bellBtn = new JLabel(new ImageIcon("image/bell.png"));
 		bellBtn.setBounds(192, 380, 165, 140);
@@ -448,8 +448,6 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 					systemCardDeck.card_arr.get(cardCnt).setBounds(73, y, 154, 238);
 					y = y - velY;
 				} else if (y < -300) {
-					// System.out.println("뭐가");
-
 					ImageIcon icon = (ImageIcon) systemCardDeck.card_arr.get(cardCnt).getIcon();
 					one_Deck.add(new JLabel(KeyImage.resizeIcon(icon, 90, 140)));
 					one_Deck.get(cnt).setBounds(549 + cnt * 30, 15, 90, 150);
@@ -457,7 +455,6 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 					for (int i = one_Deck.size() - 1; i >= 0; i--) {
 						west.add(one_Deck.get(i));
 					}
-
 					cnt++;
 					flag = false;
 					cardCnt++;
