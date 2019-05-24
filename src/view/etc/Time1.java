@@ -32,13 +32,13 @@ public class Time1 extends JPanel implements ActionListener {
 		this.setLayout(null);
 		
 		time = new JLabel("남은시간", SwingConstants.CENTER);
-		timeflow = new JLabel("00:30", SwingConstants.CENTER);
+		timeflow = new JLabel("00:"+sec, SwingConstants.CENTER);
 		this.setBounds(x, y, width, height);
 
 		time.setFont(new Font("배달의민족 한나는 열한살", Font.BOLD, 30));
 		timeflow.setFont(new Font("배달의민족 한나는 열한살", Font.BOLD, 36));
 
-		timer = new Timer(10, this);
+		timer = new Timer(1000, this);
 		this.add(time);
 		this.add(timeflow);
 		
