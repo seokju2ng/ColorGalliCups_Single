@@ -22,8 +22,8 @@ import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
+import view.bean.CardDeck;
 import view.etc.Board;
-import view.etc.Cards;
 import view.etc.ChangePanelService;
 import view.etc.KeyImage;
 import view.etc.RoundedPanel;
@@ -90,7 +90,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 	 * 카드가 움직이는 애니메이션을 구현하기 위한 멤버이다. 첫번째 인자로 ms단위의 수를 입력받아 해당 시간에 1번씩
 	 * actionPerformed를 발생시킨다.
 	 */
-	private Timer tm = new Timer(1000, this);
+	private Timer tm = new Timer(10, this);
 	/** 초기 카드의 위치와 카드 에니메이션이 움직이는 속도를 나타내기 위한 멤버이다. */
 	private int initY = 31, velY = 10; // 초기 카드위치와 카드가 움직이는 속도
 	/** 사용자가 제출한 답이 정답인지 오답인지 나타내기 위한 멤버이다.(정답일 경우:true,오답일경우:false) */
@@ -100,24 +100,36 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 	/** 사용자가 현재까지 맞힌 정답의 갯수이다. */
 	private int cnt; // 사용자의 정답개수
 	/** 시스템 카드덱에 카드를 깔아주기 위한 멤버이다. */
-	private Cards systemCardDeck;
+	private CardDeck cardDeck;
 	/** 사용자 카드덱을 나타낸다. 정답을 맞출때마다 사용자 카드덱에 시스템 카드덱의 카드가 추가된다. */
 	private ArrayList<JLabel> one_Deck;
 	/** 현재 플레이어에게 보여지는 카드가 시스템 카드덱의 몇 번째 카드인지 알려주기 위한 멤버이다. */
 	private int cardCnt; // 현재 시스템 카드덱의 카드가 몇번째 카드인지
+	///// 0525추가 Edit By DK//
+	private StringBuilder answer; // 사용자가 입력하는 정답이다
+	private ArrayList<JLabel> card_arr;
+
 
 	/**
 	 * 1인용 플레이 모드가 시작될때 처음 시작되는 생성자이다. 남은 시간 카운트다운을 시작하며, 시스템 카드덱과 사용자 카드덱을 생성해주며,게임
 	 * 화면에 {@link Component}를 표기하기 위한 Panel들을 생성해준다
 	 */
 	public SinglePlayMode() {
+		answer = new StringBuilder();
+		int cardNumber = 30; // 임시
 		tm.start(); // Timer를 가장 먼저 실행시켜준다. (0522)
 		this.setFocusTraversalKeysEnabled(false);
 		this.addComponentListener(new FocusHandler());
 		// 카드를 가장 먼저 붙음 Edit by DK KIM//
-		systemCardDeck = new Cards();
+		cardDeck = new CardDeck(cardNumber);
 		one_Deck = new ArrayList<>();
-		
+
+		card_arr = new ArrayList<>();
+		for (int i = 0; i < cardNumber; i++) {
+			card_arr.add(new JLabel(new ImageIcon(cardDeck.getImagePath(i))));
+			// System.out.println(cardDeck.getImagePath(i));
+		}
+
 		colorFlag = new int[5];
 		spaceFlag = false;
 		for (int i = 0; i < 5; i++) {
@@ -190,13 +202,13 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 		east = new JPanel();
 		east.setLayout(null);
 		// 카드 덱 -----------
-		JPanel cardDeck = new RoundedPanel(null, 120, Color.WHITE);
-		for (int i = 0; i < systemCardDeck.card_arr.size(); i++) {
-			systemCardDeck.card_arr.get(i).setBounds(73, 31, 154, 238);
-			cardDeck.add(systemCardDeck.card_arr.get(i));
+		JPanel cardPanel = new RoundedPanel(null, 120, Color.WHITE);
+		for (int i = 0; i < card_arr.size(); i++) {
+			card_arr.get(i).setBounds(73, 31, 154, 238);
+			cardPanel.add(card_arr.get(i));
 		}
-		cardDeck.setBounds(50, 20, 300, 300);
-		east.add(cardDeck);
+		cardPanel.setBounds(50, 20, 300, 300);
+		east.add(cardPanel);
 
 		ClickHandler ch = new ClickHandler();
 		// 종 버튼 --------------------------------------------------------------
@@ -267,7 +279,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 		point[0].setVisible(true);
 
 		// --------------------------------------------------------------
-		timePanel = new Time1(30, 15, 15, 252, 150);
+		timePanel = new Time1(60, 15, 15, 252, 150);
 		timePanel.setBorder(new LineBorder(Color.gray, 1));
 		west.add(timePanel);
 
@@ -343,9 +355,12 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 				if (setCupFlag == 5 && spaceFlag == false) {
 					bellBtn.setIcon(new ImageIcon("image/bell(push).png"));
 					Sound.playSound("audio/bell.wav");
-					flag = true;
-					y = initY;
-					tm.start();
+					if (cardDeck.isCorrect(cardCnt, new String(answer)) == true) {
+						System.out.println("정답!");
+						flag = true;
+						y = initY;
+						// tm.start();
+					}
 				}
 			}
 		}
@@ -360,6 +375,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 					board.getCups(0, gamePanelIndex, 4 - gamePanelY).setVisible(true);
 					if (gamePanelY < 4)
 						gamePanelY++;
+					answer.append("1");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_W) {
 				if (colorFlag[1] == 0) {
@@ -367,6 +383,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 					board.getCups(1, gamePanelIndex, 4 - gamePanelY).setVisible(true);
 					if (gamePanelY < 4)
 						gamePanelY++;
+					answer.append("2");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_E) {
 				if (colorFlag[2] == 0) {
@@ -374,6 +391,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 					board.getCups(2, gamePanelIndex, 4 - gamePanelY).setVisible(true);
 					if (gamePanelY < 4)
 						gamePanelY++;
+					answer.append("3");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_A) {
 				if (colorFlag[3] == 0) {
@@ -381,6 +399,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 					board.getCups(3, gamePanelIndex, 4 - gamePanelY).setVisible(true);
 					if (gamePanelY < 4)
 						gamePanelY++;
+					answer.append("4");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_S) {
 				if (colorFlag[4] == 0) {
@@ -388,8 +407,10 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 					board.getCups(4, gamePanelIndex, 4 - gamePanelY).setVisible(true);
 					if (gamePanelY < 4)
 						gamePanelY++;
+					answer.append("5");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+				answer.append("/");
 				bellBtn.setIcon(new ImageIcon("image/bell.png"));
 				if (spaceFlag == true) {
 					for (int i = 0; i < 5; i++) {
@@ -406,6 +427,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 					gamePanelIndex = 0;
 					gamePanelY = 0;
 					point[0].setVisible(true);
+					answer.delete(0, answer.length()); // 스페이스 2번 누를 시 정답 스트링 초기화.
 					return;
 				}
 				int setCupFlag = 0;
@@ -441,14 +463,15 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 	 * 남은시간이 0초가 되면 팝업을 띄워 정답 갯수를 알려준다. 상위 5위안에 들었을 시 닉네임을 입력 받아 랭킹 등록을 할 수 있다.
 	 */
 	public void actionPerformed(ActionEvent e) {
+		System.out.println(answer);
 		// 카드갯수가 시스템 카드덱의 카드개수보다 작을때만 실행.
-		if (cardCnt < systemCardDeck.card_arr.size()) {
+		if (cardCnt < card_arr.size()) {
 			if (flag == true) {
 				if (y > -300) {
-					systemCardDeck.card_arr.get(cardCnt).setBounds(73, y, 154, 238);
+					card_arr.get(cardCnt).setBounds(73, y, 154, 238);
 					y = y - velY;
 				} else if (y < -300) {
-					ImageIcon icon = (ImageIcon) systemCardDeck.card_arr.get(cardCnt).getIcon();
+					ImageIcon icon = (ImageIcon) card_arr.get(cardCnt).getIcon();
 					one_Deck.add(new JLabel(KeyImage.resizeIcon(icon, 90, 140)));
 					one_Deck.get(cnt).setBounds(549 + cnt * 30, 15, 90, 150);
 					west.setBorder(new LineBorder(Color.gray, 0));
@@ -462,10 +485,12 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 				}
 			}
 		}
-		if (!timePanel.getTimer().isRunning()) {
+		if (timePanel.getSec() == 0) {
 			tm.stop();
 			JOptionPane.showMessageDialog(null, cnt + "개 맞춤", "게임 종료", JOptionPane.CANCEL_OPTION);
 			ChangePanelService.getInstance().changePanel("MainView", SinglePlayMode.this);
 		}
 	}
+	
+
 }
