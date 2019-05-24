@@ -16,7 +16,7 @@ public class MyIndex {
 		return index;
 	}
 	/**index를 parameter로 전해지는 index로 설정해주는 설정자이다.
-	 * @param 멤버 index를 설정하기 위한 변수이다*/
+	 * @param index 멤버 index를 설정하기 위한 변수이다*/
 	public void setIndex(int index) {
 		this.index = index;
 	}
