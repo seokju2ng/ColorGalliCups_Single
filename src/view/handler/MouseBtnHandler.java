@@ -4,10 +4,10 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-/**@author cms</br>
+/**
  * 게임 플레이 UI(SinglePlayMode, DualPlayMode, NetworkPlayMode)에서 일시정지, 게임종료 버튼에 마우스 진입 시 
  * 버튼의 이미지를 어둡게 변경하고 진출 시 이미지를 원상태로 변경한다.
- * */
+ * @author cms<br>*/
 public class MouseBtnHandler extends MouseAdapter {
 		/**게임 플레이 UI에서 게임종료 버튼에 대한 정보이다.*/
 		private JButton exitBtn;
