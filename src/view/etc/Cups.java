@@ -3,9 +3,9 @@ package view.etc;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-/**@author cms 
+/**
  * 게임 플레이 UI(SinglePlayMode, DualPlayMode, NetworkPlayMode)에 있는 Board에 사용되는 컵의 이미지,개수를 정해주어 Board에 cup의 이미지를 배치해준다.
- * */
+ * @author cms<br>*/
 public class Cups {
 	//ColorCups
 	/**게임에 사용될 컵들에 대한 정보이다.*/
