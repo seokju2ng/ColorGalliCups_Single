@@ -7,8 +7,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
-/**@author 김도균 <br></br>
- * 입력받는 제한시간 만큼 시간을 재주는 SinglePlayMode 전용 타이머이다. */
+/**입력받는 제한시간 만큼 시간을 재주는 SinglePlayMode 전용 타이머이다.<br>
+ * @author 김도균 
+ *  */
 public class Time1 extends JPanel implements ActionListener {
 	/**객체 직렬화를 위한 UID이다.*/
 	private static final long serialVersionUID = 1L;
