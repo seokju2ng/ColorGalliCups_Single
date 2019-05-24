@@ -6,9 +6,9 @@ import java.awt.event.KeyEvent;
 import javax.swing.JLabel;
 
 import view.MyIndex;
-/**@author cms</br>
+/**
  * 메뉴 선택 UI(MainView, GameMode, NetworkMode, Help)에서 키보드의 위, 아래 키 입력 시 화면에서 현재 메뉴를 표시하는 아이콘의 위치를 위, 아래로 변경한다.
- * */
+ * @author cms<br>*/
 public class KeyUpDownHandler extends KeyAdapter
 {
 	/**메뉴 선택 UI의 메뉴 인덱스 정보를 저장한다.*/
