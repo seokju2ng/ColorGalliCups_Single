@@ -3,8 +3,7 @@ package model;
 import java.util.ArrayList;
 
 /**
- * Rank의 정보들을 Collection 타입으로 관리하는 클래스이다. CRUD 메소드를 가지고 있으며 Rank에 관련된
- * Service에서 사용할 랭크정보들을 저장하는 클래스이다. 객체 생성을 한번만 해주기 위해 SingleTone으로 만들었다.
+ * Rank의 정보들을 Collection 타입으로 관리하는 클래스이다. CRUD 메소드를 가지고 있으며 Rank에 관련된 Service에서 사용할 랭크정보들을 저장하는 클래스이다. 객체 생성을 한번만 해주기 위해 SingleTone으로 만들었다.
  * @author 송준희
  */
 public class RankDao {
