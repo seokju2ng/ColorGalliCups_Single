@@ -3,6 +3,7 @@ package controller;
 import java.util.ArrayList;
 
 import model.CardSelectService;
+import model.CardServiceManager;
 import view.bean.CardBean;
 /**
  * CardSelectService 혹은 CardCorrectService 로부터 정보를 받아 CardDeck이 원하는 정보로 변경하여 전달한다.
@@ -12,12 +13,12 @@ public class CardController {
 	/**
 	 * CardSelectService 타입으로 Card의 service 클래스를 가지고 있다.
 	 */
-	private CardSelectService cardService;
+	private CardServiceManager cardServiceManager;
 	/**
 	 * CardController의 Null Parameter Contructor 이다.
 	 */
 	public CardController() {
-		
+		cardServiceManager = new CardServiceManager();
 	}
 	/**
 	 * CardDeck으로부터 요청을 받아 num만큼의 카드를 CardSelectService에 요청하여 전달 받은 정보를 가공하여 CardDeck으로 리턴한다.
@@ -25,7 +26,16 @@ public class CardController {
 	 * @return  CardSelectService로 부터 전달 받은 정보를 가공하여 CardDeck으로 리턴한다.
 	 */
 	public ArrayList<CardBean> getCards(int num){
-		return null;
+		if(num < 0 || cardServiceManager == null) return null;
+		
+		ArrayList<CardBean> cards = new ArrayList<CardBean>();
+		ArrayList<String[]> originalCards = cardServiceManager.selectCards(num);
+		for(int i = 0; i < originalCards.size(); i++) {
+			String[] str = originalCards.get(i);
+			cards.add(new CardBean(Integer.valueOf(str[0]),str[1],str[2]));
+		}
+		
+		return cards;
 	}
 	/**
 	 * CardDeck으로부터 요청을 받아 num과 같은 카드번호값을 가진 카드의 정답과 answer이 일치하는지 CardCorrectService에 요청하여 
@@ -42,6 +52,10 @@ public class CardController {
 	 * @return CardSelectService로 부터 전달 받은 정보를 가공하여 CardDeck으로 리턴한다.
 	 */
 	public CardBean getGoldCard() {
-		return null;
+		if(cardServiceManager == null) return null;
+		String[] str = cardServiceManager.getGoldCard();
+		CardBean card = new CardBean(Integer.valueOf(str[0]),str[1],str[2]);
+		
+		return card;
 	}
 }
