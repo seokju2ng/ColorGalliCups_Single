@@ -35,7 +35,7 @@ public class CardDeck {
 	public CardDeck(int cardNum) {
 		CardController controller = new CardController();
 		cards = controller.getCards(cardNum);
-		goldCard = controller.getGoldCard();
+		//goldCard = controller.getGoldCard();
 
 	}
 
@@ -72,6 +72,7 @@ public class CardDeck {
 	 * @return index에 해당하는 카드의 그림 경로를 리턴한다.
 	 */
 	public String getImagePath(int index) {
+		System.out.println(cards.get(index).getPath());
 		return cards.get(index).getPath();
 	}
 
