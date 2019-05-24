@@ -35,8 +35,7 @@ import view.handler.FocusHandler;
 import view.handler.MouseBtnHandler;
 
 /**
- *   1인용 게임모드를 제공하는 클래스이다.
- *
+ * 1인용 게임모드를 제공하는 클래스이다.
  */
 public class SinglePlayMode extends JPanel implements ActionListener {
 	/** 객체직렬화를 위한 serialVersion의 ID이다. */
@@ -91,7 +90,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 	 * 카드가 움직이는 애니메이션을 구현하기 위한 멤버이다. 첫번째 인자로 ms단위의 수를 입력받아 해당 시간에 1번씩
 	 * actionPerformed를 발생시킨다.
 	 */
-	private Timer tm = new Timer(1, this);
+	private Timer tm = new Timer(1000, this);
 	/** 초기 카드의 위치와 카드 에니메이션이 움직이는 속도를 나타내기 위한 멤버이다. */
 	private int initY = 31, velY = 10; // 초기 카드위치와 카드가 움직이는 속도
 	/** 사용자가 제출한 답이 정답인지 오답인지 나타내기 위한 멤버이다.(정답일 경우:true,오답일경우:false) */
@@ -107,7 +106,6 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 	/** 현재 플레이어에게 보여지는 카드가 시스템 카드덱의 몇 번째 카드인지 알려주기 위한 멤버이다. */
 	private int cardCnt; // 현재 시스템 카드덱의 카드가 몇번째 카드인지
 
-	// *************여기까지 에니메이션**********************////////
 	/**
 	 * 1인용 플레이 모드가 시작될때 처음 시작되는 생성자이다. 남은 시간 카운트다운을 시작하며, 시스템 카드덱과 사용자 카드덱을 생성해주며,게임
 	 * 화면에 {@link Component}를 표기하기 위한 Panel들을 생성해준다
@@ -119,8 +117,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 		// 카드를 가장 먼저 붙음 Edit by DK KIM//
 		systemCardDeck = new Cards();
 		one_Deck = new ArrayList<>();
-		////////////////////////////////////
-
+		
 		colorFlag = new int[5];
 		spaceFlag = false;
 		for (int i = 0; i < 5; i++) {
@@ -142,22 +139,28 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 		addKeyListener(new KeyHandler());// listener
 		addKeyListener(new Key1pHandler(controllKey));
 		MouseBtnHandler mbh = new MouseBtnHandler(exitBtn, pauseBtn);
+		FocusBtnHandler fbh = new FocusBtnHandler(this);
 		exitBtn.addMouseListener(mbh);
-		exitBtn.addActionListener(new FocusBtnHandler(this));
+		exitBtn.addActionListener(fbh);
 		pauseBtn.addMouseListener(mbh);
 		pauseBackground.addActionListener(new ClickHandler());
-		pauseBackground.addActionListener(new FocusBtnHandler(this));
-		// this.setSize(1363, 714);
-		// this.setVisible(true);
-
+		pauseBackground.addActionListener(fbh);
 	}
 
-	/** 게임 화면을 구성하는 {@link Component}들을 지정된 비율대로 배치하기 위한 메서드이다.
-	 * @param c 싱글플레이 화면에 부착할 Component이다.
-	 * @param x 부착할 Component의 x좌표이다.
-	 * @param y 부착할 Component의 y좌표이다.
-	 * @param w 부착할 Component의 폭이다.
-	 * @param h 부착할 Component의 높이이다. */
+	/**
+	 * 게임 화면을 구성하는 {@link Component}들을 지정된 비율대로 배치하기 위한 메서드이다.
+	 * 
+	 * @param c
+	 *            싱글플레이 화면에 부착할 Component이다.
+	 * @param x
+	 *            부착할 Component의 x좌표이다.
+	 * @param y
+	 *            부착할 Component의 y좌표이다.
+	 * @param w
+	 *            부착할 Component의 폭이다.
+	 * @param h
+	 *            부착할 Component의 높이이다.
+	 */
 	private void make(JComponent c, int x, int y, int w, int h) {
 		gbc.gridx = x;
 		gbc.gridy = y;
@@ -184,18 +187,16 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 	private void eastPaint() {
 		// w:545.2, w/2:272.6,
 		// 컴포넌트 생성 --------------------------------------------------------------
+		ClickHandler ch = new ClickHandler();
 		east = new JPanel();
 		east.setLayout(null);
-
 		// 카드 덱 -----------
 		JPanel cardDeck = new RoundedPanel(null, 120, Color.WHITE);
 		for (int i = 0; i < systemCardDeck.card_arr.size(); i++) {
 			systemCardDeck.card_arr.get(i).setBounds(73, 31, 154, 238);
 			cardDeck.add(systemCardDeck.card_arr.get(i));
-
 		}
 		cardDeck.setBounds(50, 20, 300, 300);
-
 		east.add(cardDeck);
 
 		// 종 버튼 --------------------------------------------------------------
@@ -209,7 +210,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 		exitBtn.setContentAreaFilled(false);
 		exitBtn.setFocusPainted(false);
 		exitBtn.setBorderPainted(false);
-		exitBtn.addActionListener(new ClickHandler());
+		exitBtn.addActionListener(ch);
 		exitBtn.addActionListener(new ExitBtnHandler(this, this.tm, this.timePanel.getTimer()));
 		east.add(exitBtn);
 
@@ -219,20 +220,17 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 		pauseBtn.setContentAreaFilled(false);
 		pauseBtn.setFocusPainted(false);
 		pauseBtn.setBorderPainted(false);
-		pauseBtn.addActionListener(new ClickHandler());
-
+		pauseBtn.addActionListener(ch);
 		east.add(pauseBtn);
 
 		// 키보드 아이콘 --------------------------------------------------------------
 		controllKey = KeyImage.getKey("1P", 75, 75);
-
 		for (int i = 0; i < 5; i++) {
 			controllKey[i].setBounds(65 + i * 85, 550, 75, 75);
 			controllKey[i + 5].setBounds(65 + i * 85, 550, 75, 75);
 			east.add(controllKey[i]);
 			east.add(controllKey[i + 5]);
 		}
-
 		gbc.weightx = 0.4;
 		make(east, 1, 0, 1, 1);
 	}
@@ -294,16 +292,14 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 
 		gbc.weightx = 0.6;
 		make(west, 0, 0, 1, 1);
-
 	}
 
 	/**
-	 * 일시정지 버튼을 클릭하고 다시 화면을 클릭했을 때의 효과를 발생시기 위한 InnerClass 이다. 1. 일시정지 버튼을
-	 * 클릭한 경우:일시정지 화면으로 전환, Timer1을 통한 남은시간 정지, 조작키 비활성화한다. 2. 일시정지 화면을 클릭한 경우-
-	 * 게임화면으로 전환, Timer1을 통한 남은시간 재개, 조작키 활성화한다.
+	 * 일시정지 버튼을 클릭하고 다시 화면을 클릭했을 때의 효과를 발생시기 위한 InnerClass 이다. 1. 일시정지 버튼을 클릭한
+	 * 경우:일시정지 화면으로 전환, Timer1을 통한 남은시간 정지, 조작키 비활성화한다. 2. 일시정지 화면을 클릭한 경우- 게임화면으로
+	 * 전환, Timer1을 통한 남은시간 재개, 조작키 활성화한다.
 	 */
 	private class ClickHandler implements ActionListener {
-
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(pauseBtn)) {
 				pauseBackground.setVisible(true);
@@ -318,13 +314,13 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * 키를 누르고 뗐을 때, 각각의 조건에 따른 효과를 발생시키위한  InnerClass이다. 1. 색상키를 누르면 board에 해당 색상 컵을 쌓는다. 2-1. 컵이
-	 * 5개 쌓이기 전 기능키를 한번 누른 경우: 다음 칸으로 이동한다. 2-2 컵이 5개 쌓이기 전 기능키를2번 연속 누른 경우: 배치된 컵을
-	 * 초기화한다. 3. 컵이 5개가 쌓인 뒤 기능키를 누른 경우 정답을 제출하고 Sound 클래스의 playSound() 메서드를 통해 벨소리를
-	 * 울린다. 4. 제출한 답이 정답인 경우 문제카드를 맞힌 사용자에게 이동하고 맞힌 문제 수를 증가시킨다.
+	 * 키를 누르고 뗐을 때, 각각의 조건에 따른 효과를 발생시키위한 InnerClass이다. 1. 색상키를 누르면 board에 해당 색상 컵을
+	 * 쌓는다. 2-1. 컵이 5개 쌓이기 전 기능키를 한번 누른 경우: 다음 칸으로 이동한다. 2-2 컵이 5개 쌓이기 전 기능키를2번 연속
+	 * 누른 경우: 배치된 컵을 초기화한다. 3. 컵이 5개가 쌓인 뒤 기능키를 누른 경우 정답을 제출하고 Sound 클래스의
+	 * playSound() 메서드를 통해 벨소리를 울린다. 4. 제출한 답이 정답인 경우 문제카드를 맞힌 사용자에게 이동하고 맞힌 문제 수를
+	 * 증가시킨다.
 	 */
 	private class KeyHandler extends KeyAdapter {
-
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_Q) {
 				spaceFlag = false;
@@ -351,9 +347,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 					y = initY;
 					tm.start();
 				}
-
 			}
-
 		}
 
 		@Override
@@ -435,18 +429,17 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 								point[i].setVisible(false);
 							point[gamePanelIndex].setVisible(true);
 						}
-
 					}
 				}
 				spaceFlag = true;
 			}
-
 		}
-
 	}
 
-	/**싱글플레이화면의 Timer가 start()될 때 주어진 시간마다 한 번씩 실행되는 메서드이다. 카드가 움직이는 애니메이션을 표현하고, 남은시간이 0초가 되면 팝업을 띄워 정답 갯수를
-	 * 알려준다. 상위 5위안에 들었을 시 닉네임을 입력 받아 랭킹 등록을 할 수 있다.*/
+	/**
+	 * 싱글플레이화면의 Timer가 start()될 때 주어진 시간마다 한 번씩 실행되는 메서드이다. 카드가 움직이는 애니메이션을 표현하고,
+	 * 남은시간이 0초가 되면 팝업을 띄워 정답 갯수를 알려준다. 상위 5위안에 들었을 시 닉네임을 입력 받아 랭킹 등록을 할 수 있다.
+	 */
 	public void actionPerformed(ActionEvent e) {
 		// 카드갯수가 시스템 카드덱의 카드개수보다 작을때만 실행.
 		if (cardCnt < systemCardDeck.card_arr.size()) {
@@ -455,7 +448,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 					systemCardDeck.card_arr.get(cardCnt).setBounds(73, y, 154, 238);
 					y = y - velY;
 				} else if (y < -300) {
-					System.out.println("뭐가");
+					// System.out.println("뭐가");
 
 					ImageIcon icon = (ImageIcon) systemCardDeck.card_arr.get(cardCnt).getIcon();
 					one_Deck.add(new JLabel(KeyImage.resizeIcon(icon, 90, 140)));
@@ -472,13 +465,10 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 				}
 			}
 		}
-		// System.out.println(timePanel.getTimer().isRunning());
-		// 시간이 다되면 JDialog띄우고 종료
 		if (!timePanel.getTimer().isRunning()) {
 			tm.stop();
 			JOptionPane.showMessageDialog(null, cnt + "개 맞춤", "게임 종료", JOptionPane.CANCEL_OPTION);
 			ChangePanelService.getInstance().changePanel("MainView", SinglePlayMode.this);
-
 		}
 	}
 }
