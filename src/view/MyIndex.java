@@ -2,8 +2,8 @@ package view;
 
 
 /**
- * @author 김도균 <br></br>
- * primitive type인 int를 reference type처럼 쓸 수 있게 하는 custom wrapper class이다.*/
+ * primitive type인 int를 reference type처럼 쓸 수 있게 하는 custom wrapper class이다.<br>
+ * @author 김도균 */
 public class MyIndex {
 	/**인덱스를 나타내는 멤버이다.*/
 	private int index;
