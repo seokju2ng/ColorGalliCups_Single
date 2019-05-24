@@ -2,7 +2,7 @@ package view.bean;
 
 import java.util.ArrayList;
 
-import Controller.RankController;
+import controller.RankController;
 
 /**
  * RankBean의 정보들을 Collection 타입으로 관리하는 클래스이다. CRUD 메소드를 가지고 있으며 RankBean에 관련된 Service에서 사용할 랭크정보들을 저장하는 클래스이다.
