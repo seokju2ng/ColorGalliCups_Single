@@ -14,13 +14,16 @@ public class RankClearService {
 	 * null-parameter Constructor
 	 */
 	public RankClearService() {
-		
+		rankDao=RankDao.getInstance();
 	}
 	/**
 	 * RankDao에서 모든 Rank정보를 초기화해주는 메소드이다.
 	 * @return 초기화에 성공하면 true, 아니면 false를 리턴한다.
 	 */
-	public boolean clear(){
+	public boolean clear() {
+		if(rankDao==null)
+			return false;
+		rankDao.clear();
 		return true;
 	}
 }

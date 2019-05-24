@@ -11,19 +11,28 @@ public class RankGetService {
 	 * RankController에 넘겨줄 RankDao를 저장하고 있다.
 	 */
 	private RankDao rankDao;
-	
+
 	/**
 	 * null-parameter Constructor
 	 */
 	public RankGetService() {
-		
+		rankDao = RankDao.getInstance();
 	}
+
 	/**
 	 * RankDao를 String[] 타입으로 변환해서 Controller에 넘겨주는 메소드이다.
 	 * @return RankDao의 참조값을 리턴한다.
 	 */
-	public ArrayList<String[]> getRanks(){
-		return null;
+	public ArrayList<String[]> getRanks() {
+		if(rankDao==null)
+			return null;
+		ArrayList<String[]> ranks = new ArrayList<>();
+
+		for (int i = 0; i < rankDao.getRanks().size(); i++) {
+			String[] rank = new String[] { "" + rankDao.getRanks().get(i).getRanking(),
+					rankDao.getRanks().get(i).getName(), "" + rankDao.getRanks().get(i).getScore() };
+			ranks.add(rank);
+		}
+		return ranks;
 	}
 }
-	
