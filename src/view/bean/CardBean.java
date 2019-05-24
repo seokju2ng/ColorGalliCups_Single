@@ -1,10 +1,8 @@
 package view.bean;
 /**
- * 
- * @author 김용희
  * view에서 사용되는 CardDeck 중 하나의 카드에 대한 정보를 저장하는 역할을 한다.
  * 카드의 정보로는 카드 번호, 카드그림 경로, 카드 정답이 있다.
- *
+ * @author 김용희
  */
 public class CardBean {
 	/**
