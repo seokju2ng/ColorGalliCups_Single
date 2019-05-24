@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import model.CardSelectService;
 import view.bean.CardBean;
 /**
- * 
- * @author 김용희
  * CardSelectService 혹은 CardCorrectService 로부터 정보를 받아 CardDeck이 원하는 정보로 변경하여 전달한다.
+ * @author 김용희
  */
 public class CardController {
 	/**
