@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class RankIO {
 	/**
-	 * 읽고 쓸 파일의 위치를 저장하고 있다.
+	 * 읽고 쓸 파일의 경로를 저장하고 있다.
 	 */
 	private final String rankPath = "data/ranks.txt";
 	
@@ -49,9 +49,9 @@ public class RankIO {
 			while((str = br.readLine()) != null) {
 				load.add(str);
 			}
-		} catch(FileNotFoundException e) { System.err.println(e);
-		} catch(IOException e) { System.err.println(e);
-		} catch(Exception e) { System.err.println(e);
+		} catch(FileNotFoundException e) { System.err.println(e); return null;
+		} catch(IOException e) { System.err.println(e); return null;
+		} catch(Exception e) { System.err.println(e); return null;
 		}
 		return load;
 	}

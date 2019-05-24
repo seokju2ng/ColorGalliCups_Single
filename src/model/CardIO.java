@@ -48,9 +48,9 @@ public class CardIO {
 			while((str = br.readLine()) != null) {
 				load.add(str);
 			}
-		} catch(FileNotFoundException e) { System.err.println(e);
-		} catch(IOException e) { System.err.println(e);
-		} catch(Exception e) { System.err.println(e);
+		} catch(FileNotFoundException e) { System.err.println(e); return null;
+		} catch(IOException e) { System.err.println(e); return null;
+		} catch(Exception e) { System.err.println(e); return null;
 		}
 		return load;
 	}
