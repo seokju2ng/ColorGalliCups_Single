@@ -2,9 +2,8 @@ package model;
 
 import java.util.ArrayList;
 /**
- * 
- * @author 김용희
  * CardDao에게 요청한 카드 개수만큼 카드덱을 받아 CardController에게 전달해준다.
+ * @author 김용희
  */
 public class CardSelectService {
 	/**

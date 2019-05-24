@@ -2,9 +2,8 @@ package model;
 
 import java.util.ArrayList;
 /**
- * 
- * @author 김용희
  * parameter로 받은 num만큼 카드를 뽑아 리턴 할 때, goldCard 한장을 뽑아 리턴할 때 implements하여 구현하여 사용 할 수 있다.
+ * @author 김용희
  */
 public interface CardSelectable {
 	/**

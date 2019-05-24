@@ -6,10 +6,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 /**
- * 
- * @author 김용희
  * 저장된 파일로부터 카드정보를 읽어와 CardDao에 전달해준다.
  * 카드에 대한 번호, 그림, 정답이 변경되었을 때 CardDao의 정보를 파일에 쓰기작업을 한다. 
+ * @author 김용희
  */
 public class CardIO {
 	/**

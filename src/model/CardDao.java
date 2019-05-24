@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.StringTokenizer;
 /**
- * 
- * @author 김용희
  * model에서 사용되는 카드들에 대한 정보를 관리하는 역할을 한다.
  * 카드의 정보로는 카드 번호, 카드그림 경로, 카드 정답이 있다.
  * 여러개의 카드에 대한 정보를 저장한다.
  * 싱글톤 패턴으로 되어 있어 객체를 하나만 생성하고 그 객체를 사용한다.
+ * @author 김용희
  */
 public class CardDao implements CardSelectable{
 	/**
