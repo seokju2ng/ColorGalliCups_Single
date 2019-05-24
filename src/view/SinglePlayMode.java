@@ -22,9 +22,6 @@ import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
-import com.sun.org.apache.bcel.internal.classfile.InnerClass;
-
-import view.bean.CardDeck;
 import view.etc.Board;
 import view.etc.Cards;
 import view.etc.ChangePanelService;
@@ -76,7 +73,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 
 	// ***********************************************************
 	// 버튼
-	/** 벨 모양을 나타내기 위한 버튼이다. */
+	/** 벨 모양을 나타내기 위한 라벨이다. */
 	private JLabel bellBtn;
 	/** 게임을 종료시키는 버튼이다. */
 	private JButton exitBtn;
@@ -301,7 +298,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * 일시정지 버튼을 클릭하고 다시 화면을 클릭했을 때의 효과를 발생시기 위한 {@link InnerClass}이다. 1. 일시정지 버튼을
+	 * 일시정지 버튼을 클릭하고 다시 화면을 클릭했을 때의 효과를 발생시기 위한 InnerClass 이다. 1. 일시정지 버튼을
 	 * 클릭한 경우:일시정지 화면으로 전환, Timer1을 통한 남은시간 정지, 조작키 비활성화한다. 2. 일시정지 화면을 클릭한 경우-
 	 * 게임화면으로 전환, Timer1을 통한 남은시간 재개, 조작키 활성화한다.
 	 */
@@ -321,7 +318,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * 키를 누르고 뗐을 때, 각각의 조건에 따른 효과를 발생시키위한 {@link InnerClass}이다. 1. 색상키를 누르면 board에 해당 색상 컵을 쌓는다. 2-1. 컵이
+	 * 키를 누르고 뗐을 때, 각각의 조건에 따른 효과를 발생시키위한  InnerClass이다. 1. 색상키를 누르면 board에 해당 색상 컵을 쌓는다. 2-1. 컵이
 	 * 5개 쌓이기 전 기능키를 한번 누른 경우: 다음 칸으로 이동한다. 2-2 컵이 5개 쌓이기 전 기능키를2번 연속 누른 경우: 배치된 컵을
 	 * 초기화한다. 3. 컵이 5개가 쌓인 뒤 기능키를 누른 경우 정답을 제출하고 Sound 클래스의 playSound() 메서드를 통해 벨소리를
 	 * 울린다. 4. 제출한 답이 정답인 경우 문제카드를 맞힌 사용자에게 이동하고 맞힌 문제 수를 증가시킨다.
