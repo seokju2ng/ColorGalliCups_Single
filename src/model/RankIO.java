@@ -1,5 +1,11 @@
 package model;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
@@ -14,9 +20,22 @@ public class RankIO {
 	
 	/**
 	 * 파일로부터 Rank정보를 저장하는 메소드이다.
+	 * @param rankInfo 파일에 저장 할 랭킹정보이다.
 	 * @return 파일로부터 Rank정보를 저장하면 true, 아니면 false를 리턴한다.
 	 */
-	public boolean saveRank() {
+	public boolean saveRank(ArrayList<String> rankInfo) {
+		try(PrintWriter pw = new PrintWriter(new File(rankPath));) {
+			for(int i = 0; i < rankInfo.size(); i++) {
+				pw.println(rankInfo.get(i));
+			}
+		} catch (FileNotFoundException e) {
+			System.err.println(e);
+			return false;
+		}catch(Exception e) {
+			System.err.println(e);
+			return false;
+		}
+
 		return true;
 	}
 	/**
@@ -24,6 +43,16 @@ public class RankIO {
 	 * @return 파일에 Rank정보를 쓰면 true, 아니면 false를 리턴한다.
 	 */
 	public ArrayList<String> loadRank() {
-		return null;
+		ArrayList<String> load = new ArrayList<String>();
+		try(BufferedReader br = new BufferedReader(new FileReader(rankPath))){
+			String str;
+			while((str = br.readLine()) != null) {
+				load.add(str);
+			}
+		} catch(FileNotFoundException e) { System.err.println(e);
+		} catch(IOException e) { System.err.println(e);
+		} catch(Exception e) { System.err.println(e);
+		}
+		return load;
 	}
 }
