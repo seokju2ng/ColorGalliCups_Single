@@ -8,8 +8,9 @@ import java.awt.LayoutManager;
 import java.awt.RenderingHints;
 
 import javax.swing.JPanel;
-/**@author cms </br>
- * 모서리가 둥근 Panel을 생성하게 해준다. 이외의 역할은 JPanel과 동일하다.*/
+/**
+ * 모서리가 둥근 Panel을 생성하게 해준다. 이외의 역할은 JPanel과 동일하다.
+ * @author cms<br>*/
 public class RoundedPanel extends JPanel {
 	/**panel의 배경색에 대한 정보이다.*/
    private Color backgroundColor;
