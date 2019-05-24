@@ -22,38 +22,36 @@ import view.handler.MouseEnteredHandler;
 
 public class MainView extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private JButton menuArr[];
-	private JLabel leftCursorArr[];
-	private JLabel rightCursorArr[];
+	//private JButton menuArr[];
+	//private JLabel leftCursorArr[];
+	//private JLabel rightCursorArr[];
 	private MyIndex cor;
-	private RankView rank;
+	//private RankView rank;
 
 	public MainView() {
 		cor = new MyIndex();
 		this.addComponentListener(new FocusHandler());
 		this.addKeyListener(new Handler());
 		setLayout(new BorderLayout());
-
 		makeUI();
-		this.addKeyListener(new KeyUpDownHandler(cor, 4, leftCursorArr, rightCursorArr));
-		this.setSize(1363, 714);
+		//this.setSize(1363, 714);
 	}
 
 	private void makeUI() {
-		menuArr = new JButton[5];
+		JButton[] menuArr = new JButton[5];
 		menuArr[0] = new JButton("Game Start");
 		menuArr[1] = new JButton("Single Rank");
 		menuArr[2] = new JButton("Option");
 		menuArr[3] = new JButton("Help");
 		menuArr[4] = new JButton("Exit");
-		rank = new RankView();
+		//RankView rank = new RankView();
 
 		ImageIcon leftCursorImage = new ImageIcon("image/LeftCursor.png");
 		ImageIcon rightCursorImage = new ImageIcon("image/RightCursor.png");
 
-		leftCursorArr = new JLabel[] { new JLabel(leftCursorImage), new JLabel(leftCursorImage),
+		JLabel[] leftCursorArr = new JLabel[] { new JLabel(leftCursorImage), new JLabel(leftCursorImage),
 				new JLabel(leftCursorImage), new JLabel(leftCursorImage), new JLabel(leftCursorImage) };
-		rightCursorArr = new JLabel[] { new JLabel(rightCursorImage), new JLabel(rightCursorImage),
+		JLabel[] rightCursorArr = new JLabel[] { new JLabel(rightCursorImage), new JLabel(rightCursorImage),
 				new JLabel(rightCursorImage), new JLabel(rightCursorImage), new JLabel(rightCursorImage) };
 
 		for (int i = 0; i < 5; i++) {
@@ -104,8 +102,9 @@ public class MainView extends JPanel {
 		background.setLayout(null);
 		panel.setBounds(500, 300, 350, 300);
 		background.setOpaque(false);
-		panel.addKeyListener(new Handler());
-		panel.addKeyListener(new KeyUpDownHandler(cor, 4, leftCursorArr, rightCursorArr));
+		//panel.addKeyListener(new Handler());
+		//panel.addKeyListener(new KeyUpDownHandler(cor, 4, leftCursorArr, rightCursorArr));
+		this.addKeyListener(new KeyUpDownHandler(cor, 4, leftCursorArr, rightCursorArr));
 		this.add(background);
 	}
 
@@ -115,7 +114,8 @@ public class MainView extends JPanel {
 			if (cor.getIndex() == 0)
 				cps.changePanel("GameMode");
 			else if (cor.getIndex() == 1)
-				rank.setVisible(true);
+				//rank.setVisible(true);
+				new RankView();
 			else if (cor.getIndex() == 2)
 				cps.changePanel("Option");
 			else if (cor.getIndex() == 3)
