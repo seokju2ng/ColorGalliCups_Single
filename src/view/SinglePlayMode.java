@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -21,6 +22,9 @@ import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
+import com.sun.org.apache.bcel.internal.classfile.InnerClass;
+
+import view.bean.CardDeck;
 import view.etc.Board;
 import view.etc.Cards;
 import view.etc.ChangePanelService;
@@ -33,49 +37,84 @@ import view.handler.FocusBtnHandler;
 import view.handler.FocusHandler;
 import view.handler.MouseBtnHandler;
 
+/**
+ *   1인용 게임모드를 제공하는 클래스이다.
+ *
+ */
 public class SinglePlayMode extends JPanel implements ActionListener {
+	/** 객체직렬화를 위한 serialVersion의 ID이다. */
 	private static final long serialVersionUID = 1L;
+	/** GridBagConstraints를 적용하기 위한 멤버이다. */
 	private GridBagConstraints gbc;
+	/** {@link GridBagLayout}을 적용하기 위한 멤버이다. */
 	private GridBagLayout gbl;
 	// Panel
+	/** 게임화면의 왼쪽 부분을 구성하는 패널이다. */
 	private JPanel east;
+	/** 게임화면의 오른쪽 부분을 구성하는 패널이다. */
 	private JPanel west;
+	/** 일시정지 버튼 클릭시 화면을 가득 채울 일시정지 화면 버튼이다. */
 	private JButton pauseBackground;
 	// 5개의 키 버튼
+	/** 조작키(색상키)를 화면에 나타내기 위한 {@link JLabel}이다. 5개를 배열로 묶었다. */
 	private JLabel[] controllKey;
 	// ***********************************************************
+	/** 컵을 쌓을때 특정 색깔의 컵이 이미 쌓였는지 판별하기 위한 flag이다. */
 	private int[] colorFlag;//
+	/** 게임 보드에 컵을 쌓을때 몇번 째 칸에 쌓이는지를 저장하는 멤버이다. */
 	private int gamePanelIndex;
+	/** 컵의 쌓여진 높이를 나타내는 멤버이다. */
 	private int gamePanelY;
+	/** 기능키(spacebar)가 연속 2번 이상 눌렸는지 판별하기 위한 flag이다. */
 	private boolean spaceFlag;
 	// 컵
+	/** 컵이 쌓이는 게임 보드를 참조하기 위한 멤버이다. */
 	private Board board;
 	// 포인트
+	/** 컵이 쌓이는 위치를 아이콘으로 표기하기 위한 JLabel이다. */
 	private JLabel[] point;
 
 	// ***********************************************************
 	// 버튼
+	/** 벨 모양을 나타내기 위한 버튼이다. */
 	private JLabel bellBtn;
+	/** 게임을 종료시키는 버튼이다. */
 	private JButton exitBtn;
+	/** 게임을 일시정지 시키는 버튼이다. */
 	private JButton pauseBtn;
 	// ***********시간을 나타내는 패널(Edit by DK KIM)
+	/** 게임시간이 얼마나 남았는지 나타내기 위한 타이머이다. */
 	private Time1 timePanel;
 
 	// *******************************************************
 	// edit by DK Kim, first
+	/** 플레이어가 맞춘 정답의 갯수를 표시해주는 JLabel이다. */
 	private JLabel correctCnt; // west에 있던거 멤버로 뺌.
+	/**
+	 * 카드가 움직이는 애니메이션을 구현하기 위한 멤버이다. 첫번째 인자로 ms단위의 수를 입력받아 해당 시간에 1번씩
+	 * actionPerformed를 발생시킨다.
+	 */
 	private Timer tm = new Timer(1, this);
+	/** 초기 카드의 위치와 카드 에니메이션이 움직이는 속도를 나타내기 위한 멤버이다. */
 	private int initY = 31, velY = 10; // 초기 카드위치와 카드가 움직이는 속도
+	/** 사용자가 제출한 답이 정답인지 오답인지 나타내기 위한 멤버이다.(정답일 경우:true,오답일경우:false) */
 	private boolean flag; // 사용자의 정답여부
+	/** 시간에 따라 변화하는 카드의 좌표이다. */
 	private int y; // 사용자의 카드 좌표
-	int newY = -200;
+	/** 사용자가 현재까지 맞힌 정답의 갯수이다. */
 	private int cnt; // 사용자의 정답개수
+	/** 시스템 카드덱에 카드를 깔아주기 위한 멤버이다. */
 	private Cards systemCardDeck;
+	/** 사용자 카드덱을 나타낸다. 정답을 맞출때마다 사용자 카드덱에 시스템 카드덱의 카드가 추가된다. */
 	private ArrayList<JLabel> one_Deck;
+	/** 현재 플레이어에게 보여지는 카드가 시스템 카드덱의 몇 번째 카드인지 알려주기 위한 멤버이다. */
 	private int cardCnt; // 현재 시스템 카드덱의 카드가 몇번째 카드인지
 
 	// *************여기까지 에니메이션**********************////////
-
+	/**
+	 * 1인용 플레이 모드가 시작될때 처음 시작되는 생성자이다. 남은 시간 카운트다운을 시작하며, 시스템 카드덱과 사용자 카드덱을 생성해주며,게임
+	 * 화면에 {@link Component}를 표기하기 위한 Panel들을 생성해준다
+	 */
 	public SinglePlayMode() {
 		tm.start(); // Timer를 가장 먼저 실행시켜준다. (0522)
 		this.setFocusTraversalKeysEnabled(false);
@@ -116,6 +155,12 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 
 	}
 
+	/** 게임 화면을 구성하는 {@link Component}들을 지정된 비율대로 배치하기 위한 메서드이다.
+	 * @param c 싱글플레이 화면에 부착할 Component이다.
+	 * @param x 부착할 Component의 x좌표이다.
+	 * @param y 부착할 Component의 y좌표이다.
+	 * @param w 부착할 Component의 폭이다.
+	 * @param h 부착할 Component의 높이이다. */
 	private void make(JComponent c, int x, int y, int w, int h) {
 		gbc.gridx = x;
 		gbc.gridy = y;
@@ -125,6 +170,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 		add(c, gbc);
 	}
 
+	/** 일시정지 버튼 클릭시 나타날 일시정지 화면 버튼과 왼쪽패널,오른쪽 패널을 화면에 나타내주기 위한 메서드이다. */
 	private void paint() {
 		pauseBackground = new JButton(new ImageIcon("image/pauseBackground.png"));
 		pauseBackground.setBounds(0, 0, 1363, 714);
@@ -137,6 +183,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 		eastPaint();
 	}
 
+	/** 게임화면 왼쪽부분을 나타내주기 위한 메서드이다. */
 	private void eastPaint() {
 		// w:545.2, w/2:272.6,
 		// 컴포넌트 생성 --------------------------------------------------------------
@@ -193,6 +240,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 		make(east, 1, 0, 1, 1);
 	}
 
+	/** 게임화면 오른쪽 부분을 나타내주기 위한 메서드이다. */
 	private void westPaint() {
 		// w:817.8 , w/2:408.9, h:714
 
@@ -252,6 +300,11 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 
 	}
 
+	/**
+	 * 일시정지 버튼을 클릭하고 다시 화면을 클릭했을 때의 효과를 발생시기 위한 {@link InnerClass}이다. 1. 일시정지 버튼을
+	 * 클릭한 경우:일시정지 화면으로 전환, Timer1을 통한 남은시간 정지, 조작키 비활성화한다. 2. 일시정지 화면을 클릭한 경우-
+	 * 게임화면으로 전환, Timer1을 통한 남은시간 재개, 조작키 활성화한다.
+	 */
 	private class ClickHandler implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
@@ -267,6 +320,12 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 		}
 	}
 
+	/**
+	 * 키를 누르고 뗐을 때, 각각의 조건에 따른 효과를 발생시키위한 {@link InnerClass}이다. 1. 색상키를 누르면 board에 해당 색상 컵을 쌓는다. 2-1. 컵이
+	 * 5개 쌓이기 전 기능키를 한번 누른 경우: 다음 칸으로 이동한다. 2-2 컵이 5개 쌓이기 전 기능키를2번 연속 누른 경우: 배치된 컵을
+	 * 초기화한다. 3. 컵이 5개가 쌓인 뒤 기능키를 누른 경우 정답을 제출하고 Sound 클래스의 playSound() 메서드를 통해 벨소리를
+	 * 울린다. 4. 제출한 답이 정답인 경우 문제카드를 맞힌 사용자에게 이동하고 맞힌 문제 수를 증가시킨다.
+	 */
 	private class KeyHandler extends KeyAdapter {
 
 		public void keyPressed(KeyEvent e) {
@@ -389,6 +448,8 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 
 	}
 
+	/**싱글플레이화면의 Timer가 start()될 때 주어진 시간마다 한 번씩 실행되는 메서드이다. 카드가 움직이는 애니메이션을 표현하고, 남은시간이 0초가 되면 팝업을 띄워 정답 갯수를
+	 * 알려준다. 상위 5위안에 들었을 시 닉네임을 입력 받아 랭킹 등록을 할 수 있다.*/
 	public void actionPerformed(ActionEvent e) {
 		// 카드갯수가 시스템 카드덱의 카드개수보다 작을때만 실행.
 		if (cardCnt < systemCardDeck.card_arr.size()) {
