@@ -2,6 +2,8 @@ package view.bean;
 
 import java.util.ArrayList;
 
+import controller.CardController;
+
 /**
  * view에서 사용되는 카드들에 대한 정보를 저장하는 역할을 한다. 카드의 정보로는 카드 번호, 카드그림 경로, 카드   정답이 있다. 여러개의 카드에 대한 정보를 저장한다.
  * @author 김용희 
@@ -31,6 +33,9 @@ public class CardDeck {
 	 *            원하는 카드의 개수 만큼 parameter로 전하여 사용할 수 있다.
 	 */
 	public CardDeck(int cardNum) {
+		CardController controller = new CardController();
+		cards = controller.getCards(cardNum);
+		goldCard = controller.getGoldCard();
 
 	}
 
@@ -44,7 +49,10 @@ public class CardDeck {
 	 * @return 카드정답과 parameter의 answer를 비교하여 같다면 true, 다르다면 false를 리턴한다.
 	 */
 	public boolean isCorrect(int num, String answer) {
-		return true;
+		if(cards.get(num).getAnswer().equals(answer))
+			return true;
+		else 
+			return false;
 	}
 
 	/**
