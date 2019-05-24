@@ -4,10 +4,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JLabel;
-/**@author cms</br>
+/**
  *2P 색상키에 적용된다.
  * 색상키를 보여주는 UI(KeyControll, SinglePlayMode, DualPlayMode, NetworkPlayMode)에서 색상키에 해당하는 키(I, O, P, K, L) Press시 색상 키 이미지를 눌린 이미지로 변경하고 키 release시 색상 키 이미지를 원상태로 변경한다.
- */
+ *@author cms</br>/
 public class Key2pHandler extends KeyAdapter{
 	/**색상키를 보여주는 UI에서 색상키에 해당하는 정보이다.*/
 	private JLabel[] labels;
