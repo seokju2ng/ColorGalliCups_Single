@@ -3,8 +3,9 @@ package view.etc;
 import java.awt.CardLayout;
 
 import javax.swing.JPanel;
-/**@author 김도균<br></br>
- * (Singleton)한 화면에서 다른 화면으로 전환할 수 있게 해주는 클래스이다. */
+/**
+ * (Singleton)한 화면에서 다른 화면으로 전환할 수 있게 해주는 클래스이다. <br>
+ * @author 김도균*/
 public class ChangePanelService {
 	/**단 한번만 생성되는 ChangePanelService 객체를 참조하기위한 멤버이다.*/
 	static private ChangePanelService obj;
