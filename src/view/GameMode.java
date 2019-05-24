@@ -22,9 +22,9 @@ import view.handler.MouseEnteredHandler;
 
 public class GameMode extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private JButton menuArr[];
-	private JLabel leftCursorArr[];
-	private JLabel rightCursorArr[];
+//	private JButton menuArr[];
+//	private JLabel leftCursorArr[];
+//	private JLabel rightCursorArr[];
 	private MyIndex cor;
 	private SinglePlayMode singleMode;
 	private DualPlayMode dualMode;
@@ -35,13 +35,11 @@ public class GameMode extends JPanel {
 		this.setLayout(new BorderLayout());
 		this.addKeyListener(new Handler());
 		this.makeUI();
-		this.addKeyListener(new KeyUpDownHandler(cor, 3, leftCursorArr, rightCursorArr));
-
-		this.setSize(1363, 714);
+//		this.setSize(1363, 714);
 	}
 
 	private void makeUI() {
-		menuArr = new JButton[4];
+		JButton[] menuArr = new JButton[4];
 		menuArr[0] = new JButton("1p Mode");
 		menuArr[1] = new JButton("2p Mode");
 		menuArr[2] = new JButton("Network Mode");
@@ -53,9 +51,9 @@ public class GameMode extends JPanel {
 		ImageIcon leftCursorImage = new ImageIcon("image/LeftCursor.png");
 		ImageIcon rightCursorImage = new ImageIcon("image/RightCursor.png");
 
-		leftCursorArr = new JLabel[] { new JLabel(leftCursorImage), new JLabel(leftCursorImage),
+		JLabel[] leftCursorArr = new JLabel[] { new JLabel(leftCursorImage), new JLabel(leftCursorImage),
 				new JLabel(leftCursorImage), new JLabel(leftCursorImage) };
-		rightCursorArr = new JLabel[] { new JLabel(rightCursorImage), new JLabel(rightCursorImage),
+		JLabel[] rightCursorArr = new JLabel[] { new JLabel(rightCursorImage), new JLabel(rightCursorImage),
 				new JLabel(rightCursorImage), new JLabel(rightCursorImage) };
 
 		for (int i = 0; i < 4; i++) {
@@ -80,8 +78,8 @@ public class GameMode extends JPanel {
 			b.setFont(font);
 			b.setForeground(new Color(80, 80, 180));
 			b.addActionListener(l);
-			b.addKeyListener(l);
-			b.addKeyListener(kudh);
+//			b.addKeyListener(l);
+//			b.addKeyListener(kudh);
 			b.addMouseListener(ml);
 			panel.add(b);
 		}
@@ -107,9 +105,10 @@ public class GameMode extends JPanel {
 		background.setLayout(null);
 		panel.setBounds(500, 360, 350, 300);
 		background.setOpaque(false);
-		panel.addKeyListener(new Handler());
+		//panel.addKeyListener(new Handler());
 		panel.addKeyListener(kudh);
 		this.add(background);
+		this.addKeyListener(new KeyUpDownHandler(cor, 3, leftCursorArr, rightCursorArr));
 	}
 
 	class Handler extends KeyAdapter implements ActionListener {
@@ -117,12 +116,12 @@ public class GameMode extends JPanel {
 
 			ChangePanelService cps = ChangePanelService.getInstance();
 			if (cor.getIndex() == 0) {
-				// cps.removePanel(singleMode);
+				cps.removePanel(singleMode);
 				singleMode = new SinglePlayMode();
 				cps.addPanel("SingleMode", singleMode);
 				cps.changePanel("SingleMode");
 			} else if (cor.getIndex() == 1) {
-				// cps.removePanel(singleMode);
+				cps.removePanel(singleMode);
 				dualMode = new DualPlayMode();
 				cps.addPanel("DualMode", dualMode);
 				cps.changePanel("DualMode");
