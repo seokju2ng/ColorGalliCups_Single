@@ -35,7 +35,7 @@ public class ChangePanelService {
 	}
 
 	/**전달받은 매개변수로 모든 게임화면을 부착할 최 상단 패널을 설정해주는 설정자이다.
-	 * @param  모든 게임화면을 부착할 최 상단 패널이다.*/
+	 * @param mainPanel 모든 게임화면을 부착할 최 상단 패널이다.*/
 	public void setMainPanel(JPanel mainPanel) {
 		this.mainPanel = mainPanel;
 	}
