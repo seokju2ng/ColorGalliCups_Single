@@ -4,9 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
-/**@author cms</br>
+/**
  * 게임 플레이 UI(SinglePlayMode, DualPlayMode, NetworkPlayMode)에서 버튼 클릭 시 버튼으로 옮겨진 포커스를 현재 패널로 옮겨준다.
- * */
+ * @author cms<br>*/
 public class FocusBtnHandler implements ActionListener{
 	/**게임 플레이 UI(SinglePlayMode, DualPlayMode, NetworkPlayMode) 중 하나의 JPanel이다.*/
 	private JPanel panel;
