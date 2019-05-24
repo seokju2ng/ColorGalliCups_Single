@@ -23,6 +23,7 @@ import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
 import view.bean.CardDeck;
+import view.bean.Ranks;
 import view.etc.Board;
 import view.etc.ChangePanelService;
 import view.etc.KeyImage;
@@ -487,7 +488,12 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 		}
 		if (timePanel.getSec() == 0) {
 			tm.stop();
-			JOptionPane.showMessageDialog(null, cnt + "개 맞춤", "게임 종료", JOptionPane.CANCEL_OPTION);
+			if(new Ranks().isRanker(cnt)) {
+				String name = JOptionPane.showInputDialog(cnt+"개 맞췄습니다. 이름을 입력하세요 : ");
+				new RankView(name, cnt);
+			} else {
+				JOptionPane.showMessageDialog(null, cnt + "개 맞췄습니다. 분발하세요.", "게임 종료", JOptionPane.CANCEL_OPTION);
+			}
 			ChangePanelService.getInstance().changePanel("MainView", SinglePlayMode.this);
 		}
 	}
