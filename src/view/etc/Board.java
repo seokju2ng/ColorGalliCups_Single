@@ -7,9 +7,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
-/**@author cms</br>
+/**
  * 게임 플레이 UI(SinglePlayMode, DualPlayMode, NetworkPlayMode)에서 사용되는 게임판에 대한 정보를 관리한다.
- * */
+ *@author cms<br> */
 public class Board extends JPanel {
 	//<<Member>>
 	/**게임플레이 UI에서 사용되는 게임판이다.*/
