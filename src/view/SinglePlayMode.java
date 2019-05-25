@@ -371,6 +371,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 		public void keyReleased(KeyEvent e) {
 			// TODO Auto-generated method stub
 			if (e.getKeyCode() == KeyEvent.VK_Q) {
+				spaceFlag = false;
 				if (colorFlag[0] == 0) {
 					colorFlag[0] = gamePanelIndex + 1;
 					board.getCups(0, gamePanelIndex, 4 - gamePanelY).setVisible(true);
@@ -379,6 +380,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 					answer.append("1");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_W) {
+				spaceFlag = false;
 				if (colorFlag[1] == 0) {
 					colorFlag[1] = gamePanelIndex + 1;
 					board.getCups(1, gamePanelIndex, 4 - gamePanelY).setVisible(true);
@@ -387,6 +389,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 					answer.append("2");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_E) {
+				spaceFlag = false;
 				if (colorFlag[2] == 0) {
 					colorFlag[2] = gamePanelIndex + 1;
 					board.getCups(2, gamePanelIndex, 4 - gamePanelY).setVisible(true);
@@ -395,6 +398,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 					answer.append("3");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_A) {
+				spaceFlag = false;
 				if (colorFlag[3] == 0) {
 					colorFlag[3] = gamePanelIndex + 1;
 					board.getCups(3, gamePanelIndex, 4 - gamePanelY).setVisible(true);
@@ -403,6 +407,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 					answer.append("4");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_S) {
+				spaceFlag = false;
 				if (colorFlag[4] == 0) {
 					colorFlag[4] = gamePanelIndex + 1;
 					board.getCups(4, gamePanelIndex, 4 - gamePanelY).setVisible(true);
@@ -411,7 +416,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 					answer.append("5");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-				
+				//answer.append("/");
 				bellBtn.setIcon(new ImageIcon("image/bell.png"));
 				if (spaceFlag == true) {
 					for (int i = 0; i < 5; i++) {
@@ -429,7 +434,6 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 					gamePanelY = 0;
 					point[0].setVisible(true);
 					answer.delete(0, answer.length()); // 스페이스 2번 누를 시 정답 스트링 초기화.
-					spaceFlag = false;
 					return;
 				}
 				int setCupFlag = 0;
@@ -438,7 +442,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 						setCupFlag++;
 					}
 				}
-				if(setCupFlag > 0) answer.append("/");
+				if(setCupFlag > 0 && setCupFlag < 5) answer.append("/");
 				if (setCupFlag < 5) {
 					boolean isEmptyPanel = true;
 					for (int i = 0; i < 5; i++) {
@@ -456,8 +460,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 						}
 					}
 				}
-				if(spaceFlag == false)
-					spaceFlag = true;
+				spaceFlag = true;
 			}
 		}
 	}
@@ -497,7 +500,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 			} else {
 				JOptionPane.showMessageDialog(null, cnt + "개 맞췄습니다. 분발하세요.", "게임 종료", JOptionPane.CANCEL_OPTION);
 			}
-			ChangePanelService.getInstance().changePanel("MainView", SinglePlayMode.this);
+			//ChangePanelService.getInstance().changePanel("MainView", SinglePlayMode.this);
 		}
 	}
 	
