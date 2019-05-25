@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -110,6 +112,12 @@ public class RankView extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 				ChangePanelService.getInstance().changePanel("MainView"); //확인 버튼 누르면 메인뷰로 돌아간다.
+			}
+		});
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+//				System.out.println("2");
+				ChangePanelService.getInstance().changePanel("MainView"); //X 버튼 누르면 메인뷰로 돌아간다.
 			}
 		});
 
