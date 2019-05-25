@@ -46,6 +46,7 @@ public class RankDao {
    		if(name == null) return false;
    		int ranking = this.getRanking(score);
 	    int index = this.searchInsertIndex(score);
+	    System.out.println("ranking:"+ranking+", index:"+index);
 	    if(ranking == -1 || index == -1) return false;
 	    ranks.add(index, new Rank(ranking, name, score));
 	    if(ranks.size() == 6) ranks.remove(5);
@@ -77,9 +78,13 @@ public class RankDao {
     * @return index 파라메터로 전달 받은 점수가 몇번 인덱스에 삽입되어야 하는지 리턴해준다.
     */
    private int searchInsertIndex(int score) {
+	   if(ranks == null) return -1;
+	   if(ranks.size() == 0) return 0;
 	   for(int i = 0; i < ranks.size(); i++) {
 		   if (score == ranks.get(i).getScore()) {
-			   if(score != ranks.get(i+1).getScore()) {
+			   if(i+1 == ranks.size()) {
+				   return i+1;
+			   }else if(score != ranks.get(i+1).getScore()){
 				   return i+1;
 			   }
 		   }
@@ -159,12 +164,14 @@ public class RankDao {
     * @return 사용자로부터 입력받은 score에 해당하는 순위를 반환한다.
     */
    public int getRanking(int score) {
-      for (int i = 0; i < ranks.size(); i++) {
-         if (score >= ranks.get(i).getScore()) {
-            return ranks.get(i).getRanking();
-         }
-      }
-      return -1;
+	   if(ranks == null) return -1;
+	   if(ranks.size() == 0) return 1;
+	   for (int i = 0; i < ranks.size(); i++) {
+		   if (score >= ranks.get(i).getScore()) {
+			   return ranks.get(i).getRanking();
+		   }
+	   }
+	   return -1;
    }
 
    /**
