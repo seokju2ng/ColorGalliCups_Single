@@ -7,7 +7,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -43,20 +42,26 @@ public class RankView extends JDialog {
 		JLabel[] cols = new JLabel[] { new JLabel("순위", SwingConstants.CENTER), new JLabel("이름", SwingConstants.CENTER),
 				new JLabel("점수", SwingConstants.CENTER) };
 		
-		ranks = new JLabel[r.getRanks().size()][3];
+		ranks = new JLabel[5][3];
 		
 		panel.add(cols[0]);	panel.add(cols[1]);	panel.add(cols[2]);
-		
 		for(int i = 0; i < ranks.length; i++) {
-			ranks[i] = new JLabel[3];
-			RankBean rank = r.getRanks().get(i);
-			ranks[i][0] = new JLabel(rank.getRanking()+"", SwingConstants.CENTER);
-			ranks[i][1] = new JLabel(rank.getName()+"", SwingConstants.CENTER);
-			ranks[i][2] = new JLabel(rank.getScore()+"", SwingConstants.CENTER);
+			ranks[i][0] = new JLabel("", SwingConstants.CENTER);
+			ranks[i][1] = new JLabel("", SwingConstants.CENTER);
+			ranks[i][2] = new JLabel("", SwingConstants.CENTER);
 			for(int j = 0; j < 3; j++) {
 				ranks[i][j].setFont(font);
 				panel.add(ranks[i][j]);
 			}
+		}
+		
+		for(int i = 0; i < r.getRanks().size(); i++) {
+//			ranks[i] = new JLabel[3];
+			RankBean rank = r.getRanks().get(i);
+			ranks[i][0].setText(rank.getRanking()+"");
+			ranks[i][1].setText(rank.getName());
+			ranks[i][2].setText(rank.getScore()+"");
+			
 		}
 		panel.setBounds(40, 25, 600, 300);
 		add(panel, BorderLayout.CENTER);
@@ -110,7 +115,7 @@ public class RankView extends JDialog {
 		if(r.insert(name, score)) {
 			r = new Ranks();
 		}
-		for(int i = 0; i < ranks.length; i++) {
+		for(int i = 0; i < r.getRanks().size(); i++) {
 			RankBean rank = r.getRanks().get(i);
 			ranks[i][0].setText(rank.getRanking()+"");
 			ranks[i][1].setText(rank.getName());
