@@ -280,7 +280,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 		point[0].setVisible(true);
 
 		// --------------------------------------------------------------
-		timePanel = new Time1(15, 15, 15, 252, 150);
+		timePanel = new Time1(5, 15, 15, 252, 150);
 		timePanel.setBorder(new LineBorder(Color.gray, 1));
 		west.add(timePanel);
 
@@ -496,7 +496,11 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 		}
 		if (timePanel.getSec() == 0) {
 			tm.stop();
-			if(new Ranks().isRanker(cnt)) {
+			if(cnt == 0) {
+				JOptionPane.showMessageDialog(null, "0개 실화데스까?", "게임 종료", JOptionPane.CANCEL_OPTION);
+				ChangePanelService.getInstance().changePanel("MainView", SinglePlayMode.this);
+			}
+			else if(new Ranks().isRanker(cnt)) {
 				String name = JOptionPane.showInputDialog(cnt+"개 맞췄습니다. 이름을 입력하세요 : \n(이름 유효조건 : 1~10글자)");
 				if(name != null) {
 					while (name.length() < 1 || name.length() >= 11) {
