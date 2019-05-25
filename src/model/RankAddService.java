@@ -28,7 +28,6 @@ public class RankAddService {
 		if(name==null||score<0) {
 			return false;
 		}
-		rankDao.insert(name, score);
-		return true;
+		return rankDao.insert(name, score);
 	}
 }
