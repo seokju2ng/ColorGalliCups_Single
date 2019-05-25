@@ -354,13 +354,15 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 				}
 				// (gamePanelIndex >= 4 &&setCupFlag == 5) ||
 				if (setCupFlag == 5 && spaceFlag == false) {
-					bellBtn.setIcon(new ImageIcon("image/bell(push).png"));
-					Sound.playSound("audio/bell.wav");
-					if (cardDeck.isCorrect(cardCnt, new String(answer)) == true) {
-						System.out.println("정답!");
-						flag = true;
-						y = initY;
-						// tm.start();
+					if(cardCnt < card_arr.size()) {
+						bellBtn.setIcon(new ImageIcon("image/bell(push).png"));
+						Sound.playSound("audio/bell.wav");
+						if (cardDeck.isCorrect(cardCnt, new String(answer)) == true) {
+							System.out.println("정답!");
+							flag = true;
+							y = initY;
+							// tm.start();
+						}
 					}
 				}
 			}
