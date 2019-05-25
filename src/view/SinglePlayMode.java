@@ -411,7 +411,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 					answer.append("5");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-				answer.append("/");
+				
 				bellBtn.setIcon(new ImageIcon("image/bell.png"));
 				if (spaceFlag == true) {
 					for (int i = 0; i < 5; i++) {
@@ -438,6 +438,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 						setCupFlag++;
 					}
 				}
+				if(setCupFlag > 0) answer.append("/");
 				if (setCupFlag < 5) {
 					boolean isEmptyPanel = true;
 					for (int i = 0; i < 5; i++) {
@@ -455,7 +456,8 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 						}
 					}
 				}
-				spaceFlag = true;
+				if(spaceFlag == false)
+					spaceFlag = true;
 			}
 		}
 	}
