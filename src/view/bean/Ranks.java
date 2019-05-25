@@ -45,11 +45,11 @@ public class Ranks {
 		// RankBean rank = new RankBean(6,name,score);
 
 		//if (ranks.size() < 5) {
-			boolean res = false;
-			res = rankController.insert(name, score);
+			boolean res = rankController.insert(name, score);
 			// if(res == true) {
 			// ranks.add(new RankBean(6,name,score));
 			// }
+			System.out.println("Ranks res ="+res);
 			if (res == true) {
 				ranks = rankController.getRanks();
 			}
@@ -96,6 +96,7 @@ public class Ranks {
 	 * @return Ranks필드의 참조값을 리턴해준다.
 	 */
 	public ArrayList<RankBean> getRanks() {
+		ranks = rankController.getRanks();
 		return ranks;
 	}
 
