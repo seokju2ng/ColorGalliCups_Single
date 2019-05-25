@@ -34,7 +34,7 @@ public class RankController {
 			return false;
 		}
 		
-		return rankServiceManager.getAddService(name, score);
+		return rankServiceManager.insert(name, score);
 	}
 	/**
 	 * Ranks의 모든 RankBean를 초기화하는 메소드이다.
@@ -42,7 +42,7 @@ public class RankController {
 	 */
 	public boolean clearRanking() {
 		if(rankServiceManager == null) return false;
-		return rankServiceManager.getClearService();
+		return rankServiceManager.clear();
 	}
 	/**
 	 * RankDao의 Rank 모든 정보를 가공하여 Ranks에 전달해주는 메소드이다.
@@ -50,7 +50,7 @@ public class RankController {
 	 */
 	public ArrayList<RankBean> getRanks(){
 		if(rankServiceManager == null) return null;
-		ArrayList<String[]> serviceRank = rankServiceManager.getGetService();
+		ArrayList<String[]> serviceRank = rankServiceManager.getRanks();
 		ArrayList<RankBean> ranks= new ArrayList<RankBean>();
 		
 		for(int i = 0; i < serviceRank.size(); i++) {		
