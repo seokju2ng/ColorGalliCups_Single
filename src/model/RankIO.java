@@ -16,7 +16,7 @@ public class RankIO {
 	/**
 	 * 읽고 쓸 파일의 경로를 저장하고 있다.
 	 */
-	private final String rankPath = "data/ranks.txt";
+	private final String rankPath = "data/ranks.dat";
 	
 	/**
 	 * 파일로부터 Rank정보를 저장하는 메소드이다.

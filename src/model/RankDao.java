@@ -185,7 +185,7 @@ public class RankDao {
 	   if (load == null || load.size() == 0) return false;
 	   int n = Integer.parseInt(load.get(0));
 	   for(int i = 1; i <= n; i++) {
-		   StringTokenizer st = new StringTokenizer(load.get(i), " ");
+		   StringTokenizer st = new StringTokenizer(load.get(i), "\t");
 		   int rank = Integer.parseInt(st.nextToken());
 		   String name = st.nextToken();
 		   int score = Integer.parseInt(st.nextToken());
@@ -205,8 +205,8 @@ public class RankDao {
 	   save.add(n+"");
 	   for(int i = 0; i < n; i++) {
 		   StringBuilder sb = new StringBuilder();
-		   sb.append(ranks.get(i).getRanking()+" ");
-		   sb.append(ranks.get(i).getName()+" ");
+		   sb.append(ranks.get(i).getRanking()+"\t");
+		   sb.append(ranks.get(i).getName()+"\t");
 		   sb.append(ranks.get(i).getScore());
 		   save.add(sb.toString());
 	   }
