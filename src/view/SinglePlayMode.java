@@ -429,6 +429,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 					gamePanelY = 0;
 					point[0].setVisible(true);
 					answer.delete(0, answer.length()); // 스페이스 2번 누를 시 정답 스트링 초기화.
+					spaceFlag = false;
 					return;
 				}
 				int setCupFlag = 0;
