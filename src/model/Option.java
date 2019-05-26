@@ -6,7 +6,17 @@ public class Option {
 	private int cardNum;
 	
 	public Option() {
-		setBgm(true); setSound(true); setCardNum(10);
+		bgm = true; sound = true; cardNum = 20;
+	}
+	public Option(Option op) {
+		bgm = op.isBgm();
+		sound = op.isSound();
+		cardNum = op.getCardNum();
+	}
+	public Option(boolean bgm, boolean sound, int cardNum) {
+		this.bgm = bgm;
+		this.sound = sound;
+		this.cardNum = cardNum;
 	}
 
 	public boolean isBgm() {

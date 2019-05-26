@@ -81,18 +81,21 @@ public class RankDao {
 	   if(ranks == null) return -1;
 	   if(ranks.size() == 0) return 0;
 	   for(int i = 0; i < ranks.size(); i++) {
-		   if (score == ranks.get(i).getScore()) {
-			   if(i+1 == ranks.size()) {
-				   return i+1;
-			   }else if(score != ranks.get(i+1).getScore()){
+		   if (score == ranks.get(i).getScore()) {	// 넣을 점수가 현재 인덱스의 점수와 같다면, 
+			   if (i+1 == ranks.size()) {	// 현재 인덱스가 마지막 인덱스라면 그 다음 인덱스에 insert한다.
 				   return i+1;
 			   }
+//			   else if (score != ranks.get(i+1).getScore()) {
+//				   return i+1;
+//			   }
 		   }
 		   if (score > ranks.get(i).getScore()) {
 			   return i;
 		   }
-	   }
-	   return -1;
+	   }		// 반복문이 끝나면 랭킹에 있는 점수보다 score가 낮은 상태이다.
+	   if(ranks.size() < 5)	// 랭크가 5개보다 작을 때는 마지막 랭크로 삽입한다.
+		   return ranks.size(); 
+	   else return -1;
    }
 
    /**
@@ -159,8 +162,7 @@ public class RankDao {
    /**
     * RankDao의 ArrayList에 있는 Rank 객체들 사이에서 사용자가 입력한 score의 순위가 몇 순위인지 알려주는 메소드이다.
     * 
-    * @param score
-    *            RankDao의 Rank들의 점수를 비교할 score 값이다.
+    * @param score RankDao의 Rank들의 점수를 비교할 score 값이다.
     * @return 사용자로부터 입력받은 score에 해당하는 순위를 반환한다.
     */
    public int getRanking(int score) {
@@ -171,7 +173,9 @@ public class RankDao {
 			   return ranks.get(i).getRanking();
 		   }
 	   }
-	   return -1;
+	   if(ranks.size() < 5)	// 랭크가 5개보다 작을 때는 마지막 순위로 삽입한다.
+		   return ranks.size()+1; 
+	   else return -1;
    }
 
    /**
