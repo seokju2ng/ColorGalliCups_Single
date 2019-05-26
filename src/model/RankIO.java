@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class RankIO {
 	/**
-	 * 읽고 쓸 파일의 경로를 dat 파일 형식으로 저장하고 있다.
+	 * Rank 데이터를 저장하고 불러올 파일의 경로를 저장하고 있는 변수이다.
 	 */
 	private final String rankPath = "data/ranks.dat";
 	
@@ -39,8 +39,8 @@ public class RankIO {
 		return true;
 	}
 	/**
-	 * 파일로부터 프로그램에 Rank정보를 저장하는 메소드이다.
-	 * @return Rank정보를 저장한 ArrayList를 반환한다.
+	 * ranks 데이터 파일에서 데이터를 불러와 프로그램에 Rank 정보를 컬렉션으로 만들어 반환하는 메소드이다.
+	 * @return Rank정보를 저장한 컬렉션 객체를 반환한다.
 	 */
 	public ArrayList<String> loadRank() {
 		ArrayList<String> load = new ArrayList<String>();
