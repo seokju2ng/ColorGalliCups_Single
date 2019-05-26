@@ -35,7 +35,7 @@ public class MouseEnteredHandler extends MouseAdapter {
 	/**mouse가 메뉴 선택UI의 메뉴 버튼에 진입시 메뉴 버튼 양 옆에 아이콘을 보여준다.
 	 * @param e 컴퍼넌트 내에서 마우스 액션이 발생한 것을 나타내는 이벤트이다. */
 	public void mouseEntered(MouseEvent e) {
-		System.out.println("mouse.cor전 = " + cor);
+//		System.out.println("mouse.cor전 = " + cor);
 		for (int i = 0; i < buttons.length; i++) {
 			if (e.getSource() == buttons[i]) {
 				ll[cor.getIndex()].setVisible(false);
@@ -46,6 +46,6 @@ public class MouseEnteredHandler extends MouseAdapter {
 				break;
 			}
 		}
-		System.out.println("mouse.cor후 = " + cor);
+//		System.out.println("mouse.cor후 = " + cor);
 	}
 }
