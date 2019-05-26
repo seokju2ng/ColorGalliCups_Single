@@ -44,6 +44,10 @@ public class ChangePanelService {
 	public void changePanel(String panelName) {
 		layout.show(mainPanel, panelName);
 		mainPanel.setFocusable(true);
+		if(panelName.equals("SingleMode") || panelName.equals("DualMode") ||panelName.equals("NetworkMode")){
+			Sound.stop();
+			Sound.playBgm("audio/gameModeBGM.wav");
+		}
 	}
 	/**전달받은 매개변수의 JPanel을 삭제하고 전달받은 이름에 해당하는 Component로 화면을 전환시켜주는 메서드이다.
 	 * @param panelName 전환할 Component가 갖는 name이다.
@@ -52,6 +56,14 @@ public class ChangePanelService {
 		removePanel(panel);
 		layout.show(mainPanel, panelName);
 		mainPanel.setFocusable(true);
+		if(panelName.equals("MainView")) {
+			Sound.stop();
+			Sound.playBgm("audio/mainBGM.wav");
+		}
+		else if(panelName.equals("SingleMode") || panelName.equals("DualMode") ||panelName.equals("NetworkMode")){
+			Sound.stop();
+			Sound.playBgm("audio/gameModeBGM.wav");
+		}
 	}
 	
 	/**패널과 그 패널의 name을 전달받아 메인화면에 add해주는 메서드이다
