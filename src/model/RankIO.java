@@ -14,14 +14,14 @@ import java.util.ArrayList;
  */
 public class RankIO {
 	/**
-	 * 읽고 쓸 파일의 경로를 저장하고 있다.
+	 * 읽고 쓸 파일의 경로를 dat 파일 형식으로 저장하고 있다.
 	 */
 	private final String rankPath = "data/ranks.dat";
 	
 	/**
-	 * 파일로부터 Rank정보를 저장하는 메소드이다.
-	 * @param rankInfo 파일에 저장 할 랭킹정보이다.
-	 * @return 파일로부터 Rank정보를 저장하면 true, 아니면 false를 리턴한다.
+	 * 프로그램에서 파일에 Rank정보를 저장하는 메소드이다.
+	 * @param rankInfo 파일에 저장할 랭킹정보이다.
+	 * @return 파일에 Rank정보를 저장하면 true, 실패하면 false를 리턴한다.
 	 */
 	public boolean saveRank(ArrayList<String> rankInfo) {
 		try(PrintWriter pw = new PrintWriter(new File(rankPath));) {
@@ -39,8 +39,8 @@ public class RankIO {
 		return true;
 	}
 	/**
-	 * 프로그램에서 파일에 Rank정보를 쓰는 메소드이다.
-	 * @return 파일에 Rank정보를 쓰면 true, 아니면 false를 리턴한다.
+	 * 파일로부터 프로그램에 Rank정보를 저장하는 메소드이다.
+	 * @return 프로그램에 Rank정보를 저장하면 true, 아니면 false를 리턴한다.
 	 */
 	public ArrayList<String> loadRank() {
 		ArrayList<String> load = new ArrayList<String>();
