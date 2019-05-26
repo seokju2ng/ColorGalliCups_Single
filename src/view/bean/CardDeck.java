@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import controller.CardController;
 
 /**
- * view에서 사용되는 카드들에 대한 정보를 저장하는 역할을 한다. 카드의 정보로는 카드 번호, 카드그림 경로, 카드   정답이 있다. 여러개의 카드에 대한 정보를 저장한다.
- * @author 김용희 
+ * view에서 사용되는 카드들에 대한 정보를 저장하는 역할을 한다. 카드의 정보로는 카드 번호, 카드그림 경로, 카드 정답이 있다. 여러개의
+ * 카드에 대한 정보를 저장한다.
+ * 
+ * @author 김용희
  */
 public class CardDeck {
 	/**
@@ -35,7 +37,7 @@ public class CardDeck {
 	public CardDeck(int cardNum) {
 		CardController controller = new CardController();
 		cards = controller.getCards(cardNum);
-		//goldCard = controller.getGoldCard();
+		// goldCard = controller.getGoldCard();
 
 	}
 
@@ -49,9 +51,11 @@ public class CardDeck {
 	 * @return 카드정답과 parameter의 answer를 비교하여 같다면 true, 다르다면 false를 리턴한다.
 	 */
 	public boolean isCorrect(int num, String answer) {
-		if(cards.get(num).getAnswer().equals(answer))
+		if (num >= cards.size()) //카드인덱스가 생성된 시스템카드덱의 수보다 크다면 틀린것.
+			return false;
+		if (cards.get(num).getAnswer().equals(answer))
 			return true;
-		else 
+		else
 			return false;
 	}
 
