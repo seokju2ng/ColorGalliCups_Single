@@ -99,7 +99,11 @@ public class Ranks {
 		ranks = rankController.getRanks();
 		return ranks;
 	}
-
+	/**
+	 * 사용자의 점수가 랭킹 5위안에 드는지 확인해주는 메소드이다.
+	 * @param score 사용자가 받은 점수이다.
+	 * @return 사용자의 점수가 5위안에 들면 true, 아니면 false를 리턴한다.
+	 */
 	public boolean isRanker(int score) {
 		if (ranks == null) {
 			return false;
