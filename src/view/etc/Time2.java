@@ -3,8 +3,6 @@ package view.etc;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -67,6 +65,9 @@ public class Time2 extends JPanel implements ActionListener {
 
 	public Timer getTimer() {
 		return this.timer;
+	}
+	public JLabel getTimeFlow() {
+		return this.timeflow;
 	}
 
 	// public static void main(String[] args) {
