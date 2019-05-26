@@ -7,6 +7,14 @@ package model;
  */
 public class Card {
 	/**
+	 * 모든 Card 데이터를 저장할 경로를 가진 상수이다.
+	 */
+	public static final String CARD_PATH = "data/cards.dat";
+	/**
+	 * Gold Card 데이터를 저장할 경로를 가진 상수이다.
+	 */
+	public static final String GCARD_PATH = "data/gcards.dat";
+	/**
 	 * 카드를 식별할 수 있는 번호를 저장하고 있다.
 	 */
 	private int num;

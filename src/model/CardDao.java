@@ -260,12 +260,13 @@ public class CardDao implements CardSelectable {
 	public boolean loadCard() {
 		if (cards == null)
 			return false;
-		ArrayList<String> load = new CardIO().loadCard();
-		if (load == null || load.size() == 0)
+		ArrayList<String> loadCards = new CardIO().loadCard(Card.CARD_PATH);
+		ArrayList<String> loadGCards = new CardIO().loadCard(Card.GCARD_PATH);
+		if (loadCards == null || loadCards.size() == 0)
 			return false;
-		int n = Integer.parseInt(load.get(0));
+		int n = Integer.parseInt(loadCards.get(0));
 		for (int i = 1; i <= n; i++) {
-			StringTokenizer st = new StringTokenizer(load.get(i), " ");
+			StringTokenizer st = new StringTokenizer(loadCards.get(i), " ");
 			int num = Integer.parseInt(st.nextToken());
 			String path = st.nextToken();
 			String answer = st.nextToken();
