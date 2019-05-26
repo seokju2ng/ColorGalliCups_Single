@@ -17,6 +17,7 @@ import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
+import view.bean.CardDeck;
 import view.etc.Board;
 import view.etc.Cards;
 import view.etc.ChangePanelService;
@@ -53,11 +54,11 @@ public class DualPlayMode extends JPanel implements ActionListener {
 
 	private Board board1, board2;
 
-	private JPanel cardPanel; // 카드번호를 나타내기 위한 패널
+	private JPanel cardIdxLabelPanel; // 카드번호를 나타내기 위한 패널
 	private Time2 timePanel;
 
-	private JLabel cardNum; // 카드번호를 나타내기 위함
-	private JPanel cardDeck; // 카드가 올라갈 패널
+	private JLabel cardIdxLabel; // 카드번호를 나타내기 위함
+	private JPanel cardPanel; // 카드가 올라갈 패널
 	private JButton bell; // 종
 
 	private JButton pause;
@@ -80,20 +81,26 @@ public class DualPlayMode extends JPanel implements ActionListener {
 
 	// 애니메이션//
 	private Timer tm = new Timer(10, this);
-	private int initX = 604, velX = 5; // 초기 카드위치와 카드가 움직이는 속도
+	private int initX = 604, velX = 10; // 초기 카드위치와 카드가 움직이는 속도
 	private boolean one_flag = false; // 1p의 정답여부
 	private boolean two_flag = false; // 2p의 정답여부
 	private int one_x, two_x; // 1p, 2p의 카드좌표
 	private int one_cnt, two_cnt; // 1p,2p의 정답개수
-	private Cards systemCardDeck;
+	private CardDeck cardDeck;
 	private int cardCnt; // 현재 시스템 카드덱의 카드가 몇번째 카드인지.
 	//////
+	/* 게임로직 관련 멤버 추가 0526 Edit by DK KIM */
+	private ArrayList<JLabel> cardDeckLabels;
+	private StringBuilder pOneAnswer;
+	private StringBuilder pTwoAnswer;
+	///////////////////////
 
 	// 여기서부터 카드 애니메이션 0518//
 
 	//////////////////////// 여기까지 카드 에니메이션/////////////
 
 	public DualPlayMode() {
+		tm.start();
 		this.setFocusTraversalKeysEnabled(false);
 		this.setLayout(null);
 		this.setBackground(Color.white);
@@ -131,14 +138,16 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		this.add(pauseBackground);
 
 		// 카드를 가장 먼저 붙임)(0518애니메이션)
-		systemCardDeck = new Cards();
-
-		for (int i = 0; i < systemCardDeck.card_arr.size(); i++) {
-			systemCardDeck.card_arr.get(i).setBounds(604, 41, 154, 238);
-			this.add(systemCardDeck.card_arr.get(i));
+		int cardNum = 10; // 옵션에서 정해줄 시스템 카드의 장수이다.
+		cardDeck = new CardDeck(cardNum); // 옵션에서 정해준 장수만큼 카드덱을 생성한다.
+		cardDeckLabels = new ArrayList<JLabel>();
+		for (int i = 0; i < cardNum; i++) {
+			cardDeckLabels.add(new JLabel(new ImageIcon(cardDeck.getImagePath(i))));
+			// System.out.println(cardDeck.getImagePath(i));
 		}
-		// this.add(card);
 
+		pOneAnswer = new StringBuilder();
+		pTwoAnswer = new StringBuilder();
 		showCenter();
 		showWest();
 		// showCenter();
@@ -187,33 +196,33 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		p1.setBounds(50, 0, width, height);
 		timePanel = new Time2(50, 20, 180, 100);
 		timePanel.setBorder(new LineBorder(Color.BLACK));
-		cardPanel = new JPanel(); // '카드번호'라벨과 실제 카드번호를 붙일 패널
-		cardPanel.setBorder(new LineBorder(Color.BLACK));
+		cardIdxLabelPanel = new JPanel(); // '카드번호'라벨과 실제 카드번호를 붙일 패널
+		cardIdxLabelPanel.setBorder(new LineBorder(Color.BLACK));
 		timePanel.setBackground(Color.white);
-		cardPanel.setBackground(Color.white);
-		cardPanel.setLayout(null);
+		cardIdxLabelPanel.setBackground(Color.white);
+		cardIdxLabelPanel.setLayout(null);
 
-		cardPanel.setBounds(270, 20, 180, 100);
+		cardIdxLabelPanel.setBounds(270, 20, 180, 100);
 
-		cardNum = new JLabel(cardCnt + "/" + systemCardDeck.card_arr.size(), SwingConstants.CENTER);
-		cardNum.setFont(new Font("배달의민족 한나는 열한살", Font.BOLD, 20));
+		cardIdxLabel = new JLabel(cardCnt + "/" + cardDeckLabels.size(), SwingConstants.CENTER);
+		cardIdxLabel.setFont(new Font("배달의민족 한나는 열한살", Font.BOLD, 20));
 		// timer.setBorder(new LineBorder(Color.red, 5));
-		// cardNum.setBorder(new LineBorder(Color.red, 5));
+		// cardIdxLabel.setBorder(new LineBorder(Color.red, 5));
 
 		cardText.setBounds(0, 0, 180, 50);
 
-		cardNum.setBounds(0, 50, 180, 50);
+		cardIdxLabel.setBounds(0, 50, 180, 50);
 
-		cardPanel.add(cardText);
-		cardPanel.add(cardNum);
+		cardIdxLabelPanel.add(cardText);
+		cardIdxLabelPanel.add(cardIdxLabel);
 
 		p1.add(timePanel);
-		p1.add(cardPanel);
+		p1.add(cardIdxLabelPanel);
 		p1.add(board1);
 		for (int i = 0; i < pointerOne.length; i++) {
 			p1.add(pointerOne[i]);
 		}
-		cardPanel.add(cardNum);
+		cardIdxLabelPanel.add(cardIdxLabel);
 		// 1p 덱에 카드추가(카드얻었을시)//
 		one_Deck = new ArrayList<>();
 
@@ -224,7 +233,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 	public void showEast() {
 		// 화살표 달아줌//
 		pointerTwo = new JLabel[5];
-		for (int i = 0; i < pointerOne.length; i++) {
+		for (int i = 0; i < pointerTwo.length; i++) {
 			pointerTwo[i] = new JLabel(new ImageIcon("image/point.png"));
 			pointerTwo[i].setBounds(65 + 80 * i, 600, 40, 40);
 			pointerTwo[i].setVisible(false);
@@ -275,7 +284,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 
 		exit.addMouseListener(mbh);
 		exit.addActionListener(new FocusBtnHandler(this));
-		exit.addActionListener(new ExitBtnHandler(this,this.tm,this.timePanel.getTimer()));
+		exit.addActionListener(new ExitBtnHandler(this, this.tm, this.timePanel.getTimer()));
 		p3.add(pause);
 		p3.add(exit);
 		p3.add(board2);
@@ -288,6 +297,13 @@ public class DualPlayMode extends JPanel implements ActionListener {
 
 	public void showCenter() {
 		this.p2 = new JPanel();
+		/* 카드 먼저 cardDeckPanel에 붙여준다.0526 Edit By DK KIM */
+		for (int i = 0; i < cardDeckLabels.size(); i++) {
+			cardDeckLabels.get(i).setBounds(604, 41, 154, 238);
+			this.add(cardDeckLabels.get(i));
+		}
+
+		///////
 
 		for (int i = 2; i < 4; i++) {
 			for (int j = 2; j < 4; j++) {
@@ -309,8 +325,8 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		p2.setBounds(500, 3, 360, 680);
 
 		this.add(p2);
-		this.cardDeck = new RoundedPanel(null, 120, Color.WHITE);
-		cardDeck.setBackground(Color.white);
+		this.cardPanel = new RoundedPanel(null, 120, Color.WHITE);
+		cardPanel.setBackground(Color.white);
 
 		ImageIcon img1 = new ImageIcon("image/dotdanbae2.png");
 		ImageIcon img2 = new ImageIcon("image/bell.png");
@@ -324,9 +340,9 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		// bell.setOpaque(false);
 
 		// this.add(card);
-		cardDeck.setLayout(null);
-		cardDeck.setBounds(40, 20, 278, 278);
-		p2.add(cardDeck);
+		cardPanel.setLayout(null);
+		cardPanel.setBounds(40, 20, 278, 278);
+		p2.add(cardPanel);
 		addKeyButtons();
 		p2.add(bell);
 		// p2.addKeyListener(new KeyHandler());
@@ -372,7 +388,9 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		if (one_flag == true) {
 			if (one_x > 150) {
 				// velX = -velX;
-				systemCardDeck.card_arr.get(cardCnt).setBounds(one_x, -(one_x / 7) + 128, 154, 238);
+				cardDeckLabels.get(cardCnt - 1).setBounds(one_x, -(one_x / 7) + 128, 154, 238);// 이미 cardCnt는 1증가되어있으므로
+																								// 이전의 cardCnt에 해당하는 카드를
+																								// 가져온다.
 				one_x = one_x - velX;
 				// card.setBounds(610,-(610/7)+45,154,238);
 
@@ -380,54 +398,66 @@ public class DualPlayMode extends JPanel implements ActionListener {
 			// x = x + velX;
 			// card.setBounds(x,x/7-45,154,238);
 			else if (one_x < 150) {
-				ImageIcon icon = (ImageIcon) systemCardDeck.card_arr.get(cardCnt).getIcon(); // 얻은 카드의 이미지를 따온다.
-				this.remove(systemCardDeck.card_arr.get(cardCnt)); // 카드를 지우고
+				ImageIcon icon = (ImageIcon) cardDeckLabels.get(cardCnt - 1).getIcon(); // 얻은 카드의 이미지를 따온다.
+				this.remove(cardDeckLabels.get(cardCnt - 1)); // 카드를 지우고
 				this.revalidate(); // 부모컨테이너를 새로고침한다
 				this.repaint(); // 새로고침.
 
 				one_Deck.add(new JLabel(KeyImage.resizeIcon(icon, 90, 140))); // 1p 사용자 카드덱에 카드추가
-				one_Deck.get(one_cnt).setBounds(50 + one_cnt * 10, 190, 90, 140); // 좌표는 나중에 수정
+				one_Deck.get(one_cnt - 1).setBounds(50 + (one_cnt - 1) * 10, 190, 90, 140); // 좌표는 나중에 수정
 				for (int i = one_Deck.size() - 1; i >= 0; i--) {
 					p1.add(one_Deck.get(i));
 				}
-				one_cnt++; // 1p정답갯수를 늘려준다.
+				// one_cnt++; // 1p정답갯수를 늘려준다.
+				// cardCnt++; // 시스템카드덱을 +1한다.
 				one_flag = false;
 				System.out.println("된다! one_cnt: " + one_cnt + ", arraylSize : " + one_Deck.size());
-				cardCnt++; // 시스템카드덱을 +1한다.
-				cardNum.setText(cardCnt + "/" + systemCardDeck.card_arr.size());
+
+				cardIdxLabel.setText(cardCnt + "/" + cardDeckLabels.size());
 			}
 		} else if (two_flag == true) {
 			if (two_x < 1100) {
-				systemCardDeck.card_arr.get(cardCnt).setBounds(two_x, two_x / 7 - 45, 154, 238); // 원래
+				cardDeckLabels.get(cardCnt - 1).setBounds(two_x, two_x / 7 - 45, 154, 238); // 원래
 				two_x = two_x + velX;
 
 			} else if (two_x > 1100) {
 				// try {
 				// Thread.sleep(1000); // 카드가 1초후 사라진다.
 				// } catch (InterruptedException e1) {
-				ImageIcon icon = (ImageIcon) systemCardDeck.card_arr.get(cardCnt).getIcon(); // 얻은 카드의 이미지를 따온다.
-				this.remove(systemCardDeck.card_arr.get(cardCnt)); // 카드를 지우고
+				ImageIcon icon = (ImageIcon) cardDeckLabels.get(cardCnt - 1).getIcon(); // 얻은 카드의 이미지를 따온다.
+				this.remove(cardDeckLabels.get(cardCnt - 1)); // 카드를 지우고
 				this.revalidate(); // 부모컨테이너를 새로고침한다
 				this.repaint(); // 새로고침.
 
 				two_Deck.add(new JLabel(KeyImage.resizeIcon(icon, 90, 140))); // 2p 사용자 카드덱에 카드추가
-				two_Deck.get(two_cnt).setBounds(350 - two_cnt * 10, 190, 90, 140); // 좌표는 나중에 수정
+				two_Deck.get(two_cnt - 1).setBounds(350 - (two_cnt - 1) * 10, 190, 90, 140); // 좌표는 나중에 수정
 				for (int i = two_Deck.size() - 1; i >= 0; i--) {
 					p3.add(two_Deck.get(i)); // 겹치는 순서 지키기위해 같은 것도 다시 add한다.
 				}
-				two_cnt++; // 2p정답갯수를 늘려준다.
+				// two_cnt++; // 2p정답갯수를 늘려준다.
 
 				System.out.println("된다! two_cnt: " + two_cnt + ", arraylSize : " + two_Deck.size());
 
 				two_flag = false;
-				cardCnt++;
-				cardNum.setText(cardCnt + "/" + systemCardDeck.card_arr.size());
+				// cardCnt++;
+				cardIdxLabel.setText(cardCnt + "/" + cardDeckLabels.size());
 			}
 		}
-		if (cardCnt == systemCardDeck.card_arr.size()) {
+		if (one_Deck.size() + two_Deck.size() == cardDeckLabels.size()) {
 			timePanel.getTimer().stop();
+
+			String winner;
+			if (one_cnt == two_cnt) {
+				winner = "무승부";
+			} else if (one_cnt > two_cnt) {
+				winner = "1p";
+			} else {
+				winner = "2p";
+			}
+			JOptionPane.showMessageDialog(null,
+					one_cnt + ":" + two_cnt + ", " + winner + "승리(게임 진행시간 : " + timePanel.getTimeFlow().getText() + ")",
+					"게임 종료", JOptionPane.CANCEL_OPTION);
 			tm.stop();
-			JOptionPane.showMessageDialog(null, "xx승리", "게임 종료", JOptionPane.CANCEL_OPTION);
 			ChangePanelService.getInstance().changePanel("MainView", DualPlayMode.this);
 		}
 	}
@@ -442,8 +472,8 @@ public class DualPlayMode extends JPanel implements ActionListener {
 				pauseBackground.setVisible(true);
 				pause.setVisible(false);
 				exit.setVisible(false);
-				for (int i = cardCnt; i < 38; i++)
-					systemCardDeck.card_arr.get(i).setVisible(false);
+				for (int i = cardCnt; i < cardDeckLabels.size(); i++)
+					cardDeckLabels.get(i).setVisible(false);
 				pause.requestFocusInWindow();
 				timePanel.getTimer().stop();
 
@@ -453,8 +483,8 @@ public class DualPlayMode extends JPanel implements ActionListener {
 				pauseBackground.setVisible(false);
 				pause.setVisible(true);
 				exit.setVisible(true);
-				for (int i = cardCnt; i < 38; i++)
-					systemCardDeck.card_arr.get(i).setVisible(true);
+				for (int i = cardCnt; i < cardDeckLabels.size(); i++)
+					cardDeckLabels.get(i).setVisible(true);
 				DualPlayMode.this.requestFocusInWindow();
 				timePanel.getTimer().start();
 
@@ -499,13 +529,19 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					if (index == 1 || handCheck[3] == true) {
 						return;
 					}
-					bell.setIcon(new ImageIcon("image/bell(push2).png"));
+					// if(cardCnt < cardDeckLabels.size())
+					bell.setIcon(new ImageIcon("image/bell(push_right).png"));
 					Sound.playSound("audio/bell.wav");
 					new HandVanish(3, hands, handCheck).start();
 					/////////////////////////// 손 나오는 부분 끝/////////////////
-					two_flag = true;
-					two_x = initX; // 엔터누를때 2p 카드의 초기위치 재설정.
-					tm.start();
+					System.out.println("2p 답 :" + pTwoAnswer);
+					if (cardDeck.isCorrect(cardCnt, new String(pTwoAnswer)) == true) {
+						two_flag = true;
+						cardCnt++; // 시스템카드덱을 +1한다.
+						two_cnt++; // 2p 정답수를 +1한다.
+						two_x = initX; // 엔터누를때 2p 카드의 초기위치 재설정.
+						// tm.start();
+					}
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 				int setCupFlag = 0;
@@ -519,15 +555,20 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					if (index == 1 || handCheck[2] == true) {
 						return;
 					}
-					bell.setIcon(new ImageIcon("image/bell(push).png"));
+					bell.setIcon(new ImageIcon("image/bell(push_left).png"));
 					Sound.playSound("audio/bell.wav");
 					new HandVanish(2, hands, handCheck).start();
 					// bell.setIcon(new ImageIcon("image/bell.png"));
 
 					/////////////////////////// 손 나오는 부분 끝/////////////////
-					one_flag = true;
-					one_x = initX;
-					tm.start();
+
+					if (cardDeck.isCorrect(cardCnt, new String(pOneAnswer)) == true) {
+						one_flag = true;
+						cardCnt++; // 시스템카드덱을 +1한다.
+						one_cnt++; // 1p 정답수를 +1한다.
+						one_x = initX;
+						// tm.start();
+					}
 				}
 			}
 		}
@@ -540,9 +581,9 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					colorFlag1p[0] = gamePanelIndex1p + 1;
 					// System.out.println(redCup1p+"," + gamePanelIndex1p +"," + gamePanelY1p);
 					board1.getCups(0, gamePanelIndex1p, 4 - gamePanelY1p).setVisible(true);
-
 					if (gamePanelY1p < 4)
 						gamePanelY1p++;
+					pOneAnswer.append("1");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_W) {
 				if (colorFlag1p[1] == 0) {
@@ -550,6 +591,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					board1.getCups(1, gamePanelIndex1p, 4 - gamePanelY1p).setVisible(true);
 					if (gamePanelY1p < 4)
 						gamePanelY1p++;
+					pOneAnswer.append("2");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_E) {
 				if (colorFlag1p[2] == 0) {
@@ -557,6 +599,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					board1.getCups(2, gamePanelIndex1p, 4 - gamePanelY1p).setVisible(true);
 					if (gamePanelY1p < 4)
 						gamePanelY1p++;
+					pOneAnswer.append("3");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_A) {
 				if (colorFlag1p[3] == 0) {
@@ -564,6 +607,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					board1.getCups(3, gamePanelIndex1p, 4 - gamePanelY1p).setVisible(true);
 					if (gamePanelY1p < 4)
 						gamePanelY1p++;
+					pOneAnswer.append("4");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_S) {
 				if (colorFlag1p[4] == 0) {
@@ -571,6 +615,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					board1.getCups(4, gamePanelIndex1p, 4 - gamePanelY1p).setVisible(true);
 					if (gamePanelY1p < 4)
 						gamePanelY1p++;
+					pOneAnswer.append("5");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 				bell.setIcon(new ImageIcon("image/bell.png"));
@@ -590,6 +635,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					gamePanelIndex1p = 0;
 					gamePanelY1p = 0;
 					pointerOne[0].setVisible(true);
+					pOneAnswer.delete(0, pOneAnswer.length()); // 스페이스 2번 누를 시 1P 정답 스트링 초기화
 					return;
 				}
 				int setCupFlag = 0;
@@ -598,6 +644,8 @@ public class DualPlayMode extends JPanel implements ActionListener {
 						setCupFlag++;
 					}
 				}
+				if (setCupFlag > 0 && setCupFlag < 5)
+					pOneAnswer.append("/");
 				if (setCupFlag < 5) {
 					boolean isEmptyPanel = true;
 					for (int i = 0; i < 5; i++) {
@@ -626,6 +674,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					board2.getCups(0, gamePanelIndex2p, 4 - gamePanelY2p).setVisible(true);
 					if (gamePanelY2p < 4)
 						gamePanelY2p++;
+					pTwoAnswer.append("1");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_O) {
 				if (colorFlag2p[1] == 0) {
@@ -633,6 +682,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					board2.getCups(1, gamePanelIndex2p, 4 - gamePanelY2p).setVisible(true);
 					if (gamePanelY2p < 4)
 						gamePanelY2p++;
+					pTwoAnswer.append("2");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_P) {
 				if (colorFlag2p[2] == 0) {
@@ -640,6 +690,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					board2.getCups(2, gamePanelIndex2p, 4 - gamePanelY2p).setVisible(true);
 					if (gamePanelY2p < 4)
 						gamePanelY2p++;
+					pTwoAnswer.append("3");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_K) {
 				if (colorFlag2p[3] == 0) {
@@ -647,6 +698,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					board2.getCups(3, gamePanelIndex2p, 4 - gamePanelY2p).setVisible(true);
 					if (gamePanelY2p < 4)
 						gamePanelY2p++;
+					pTwoAnswer.append("4");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_L) {
 				if (colorFlag2p[4] == 0) {
@@ -654,6 +706,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					board2.getCups(4, gamePanelIndex2p, 4 - gamePanelY2p).setVisible(true);
 					if (gamePanelY2p < 4)
 						gamePanelY2p++;
+					pTwoAnswer.append("5");
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				bell.setIcon(new ImageIcon("image/bell.png"));
@@ -672,6 +725,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					gamePanelIndex2p = 0;
 					gamePanelY2p = 0;
 					pointerTwo[0].setVisible(true);
+					pTwoAnswer.delete(0, pTwoAnswer.length()); // 스페이스 2번 누를 시 2P 정답 스트링 초기화
 					return;
 				}
 				int setCupFlag = 0;
@@ -680,6 +734,8 @@ public class DualPlayMode extends JPanel implements ActionListener {
 						setCupFlag++;
 					}
 				}
+				if (setCupFlag > 0 && setCupFlag < 5)
+					pTwoAnswer.append("/");
 				if (setCupFlag < 5) {
 					boolean isEmptyPanel = true;
 					for (int i = 0; i < 5; i++) {
