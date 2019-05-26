@@ -26,10 +26,11 @@ public class OptionService {
 		return op;
 	}
 
-	public void setOption(Option option) {
-		this.option.setBgm(option.isBgm());
-		this.option.setSound(option.isSound());
-		this.option.setCardNum(option.getCardNum());
+	public void setOption(ArrayList<String> option) {
+		if(this.option == null || option == null) return;
+		this.option.setBgm(option.get(0).equals("ON") ? true : false);
+		this.option.setSound(option.get(1).equals("ON") ? true : false);
+		this.option.setCardNum(Integer.parseInt(option.get(2)));
 	}
 	
 	public void setOption(boolean bgm, boolean sound, int cardNum) {

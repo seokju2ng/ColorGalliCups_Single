@@ -261,7 +261,7 @@ public class CardDao implements CardSelectable {
 		if (cards == null)
 			return false;
 		ArrayList<String> loadCards = new CardIO().loadCard(Card.CARD_PATH);
-		ArrayList<String> loadGCards = new CardIO().loadCard(Card.GCARD_PATH);
+		//ArrayList<String> loadGCards = new CardIO().loadCard(Card.GCARD_PATH);
 		if (loadCards == null || loadCards.size() == 0)
 			return false;
 		int n = Integer.parseInt(loadCards.get(0));

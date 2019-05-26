@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import view.etc.ChangePanelService;
+import view.etc.Sound;
 import view.handler.FocusHandler;
 import view.handler.KeyUpDownHandler;
 import view.handler.MouseEnteredHandler;
@@ -33,14 +34,14 @@ public class GameMode extends JPanel {
 	 * 현재 선택한 메뉴의 양 옆의 아이콘 index를 저정하는 MyIndex 객체이다.
 	 */
 	private MyIndex cor;
-	/**
-	 * 1p Mode를 선택하면 해당 게임모드로 패널을 변경해줄 수 있도록 DaulPlayMode 객체를 저장하고 있다.
-	 */
-	private SinglePlayMode singleMode;
-	/**
-	 * 2p Mode를 선택하면 해당 게임모드로 패널을 변경해줄 수 있도록 DaulPlayMode 객체를 저장하고 있다.
-	 */
-	private DualPlayMode dualMode;
+//	/**
+//	 * 1p Mode를 선택하면 해당 게임모드로 패널을 변경해줄 수 있도록 DaulPlayMode 객체를 저장하고 있다.
+//	 */
+//	private SinglePlayMode singleMode;
+//	/**
+//	 * 2p Mode를 선택하면 해당 게임모드로 패널을 변경해줄 수 있도록 DaulPlayMode 객체를 저장하고 있다.
+//	 */
+//	private DualPlayMode dualMode;
 
 	/**
 	 * null-parameter Constructor로 UI 화면을 보여준다.
@@ -126,15 +127,16 @@ public class GameMode extends JPanel {
 		 */
 		public void actionPerformed(ActionEvent e) {
 			ChangePanelService cps = ChangePanelService.getInstance();
+			Sound.playEffect("audio/enter.wav");
 			if (cor.getIndex() == 0) {
-				cps.removePanel(singleMode);
-				singleMode = new SinglePlayMode();
-				cps.addPanel("SingleMode", singleMode);
+				//cps.removePanel(singleMode);
+//				singleMode = new SinglePlayMode();
+				cps.addPanel("SingleMode", new SinglePlayMode());
 				cps.changePanel("SingleMode");
 			} else if (cor.getIndex() == 1) {
-				cps.removePanel(singleMode);
-				dualMode = new DualPlayMode();
-				cps.addPanel("DualMode", dualMode);
+				//cps.removePanel(singleMode);
+//				dualMode = new DualPlayMode();
+				cps.addPanel("DualMode", new DualPlayMode());
 				cps.changePanel("DualMode");
 			} else if (cor.getIndex() == 2)
 				cps.changePanel("NetworkMode");

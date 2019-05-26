@@ -54,7 +54,6 @@ public class CardController {
 		if(cardServiceManager == null) return null;
 		String[] str = cardServiceManager.getGoldCard();
 		CardBean card = new CardBean(Integer.valueOf(str[0]),str[1],str[2]);
-		
 		return card;
 	}
 }

@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import view.etc.ChangePanelService;
+import view.etc.Sound;
 import view.handler.FocusHandler;
 import view.handler.KeyUpDownHandler;
 import view.handler.MouseEnteredHandler;
@@ -105,10 +106,11 @@ public class Help extends JPanel {
 	class Handler extends KeyAdapter implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("enter");
+			Sound.playEffect("audio/enter.wav");
 			ChangePanelService cps = ChangePanelService.getInstance();
 			if (cor.getIndex() == 0)
 				cps.changePanel("KeyControl");
-			if (cor.getIndex() == 1)
+			else if (cor.getIndex() == 1)
 				cps.changePanel("Tutorial");
 			else if (cor.getIndex() == 2)
 				cps.changePanel("GameInfo");

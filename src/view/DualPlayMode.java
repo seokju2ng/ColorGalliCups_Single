@@ -603,7 +603,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					}
 					// if(cardCnt < cardDeckLabels.size())
 					bell.setIcon(new ImageIcon("image/bell(push_right).png"));
-					Sound.playSound("audio/bell.wav");
+					Sound.playEffect("audio/bell.wav");
 					new HandVanish(3, hands, handCheck).start();
 					/////////////////////////// 손 나오는 부분 끝/////////////////
 					System.out.println("2p 답 :" + pTwoAnswer);
@@ -628,7 +628,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 						return;
 					}
 					bell.setIcon(new ImageIcon("image/bell(push_left).png"));
-					Sound.playSound("audio/bell.wav");
+					Sound.playEffect("audio/bell.wav");
 					new HandVanish(2, hands, handCheck).start();
 					// bell.setIcon(new ImageIcon("image/bell.png"));
 

@@ -2,7 +2,6 @@ package controller;
 
 import java.util.ArrayList;
 
-import model.Option;
 import model.OptionService;
 import view.bean.OptionBean;
 
@@ -22,7 +21,11 @@ public class OptionController {
 
 	public void setOption(OptionBean option) {
 		if(optionService == null || option == null) return;
-		optionService.setOption(new Option(option.isBgm(), option.isSound(), option.getCardNum()));
+		ArrayList<String> op = new ArrayList<String>();
+		op.add(option.isBgm()?"ON":"OFF");
+		op.add(option.isSound()?"ON":"OFF");
+		op.add(option.getCardNum()+"");
+		optionService.setOption(op);
 	}
 	
 	public void setOption(boolean bgm, boolean sound, int cardNum) {

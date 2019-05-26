@@ -44,7 +44,11 @@ public class ChangePanelService {
 	public void changePanel(String panelName) {
 		layout.show(mainPanel, panelName);
 		mainPanel.setFocusable(true);
-		if(panelName.equals("SingleMode") || panelName.equals("DualMode") ||panelName.equals("NetworkMode")){
+//		if(panelName.equals("MainView")) {
+//			Sound.stop();
+//			Sound.playBgm("audio/mainBGM.wav");
+//		}
+		if(panelName.equals("SingleMode") || panelName.equals("DualMode") ||panelName.equals("NetworkPlayMode")){
 			Sound.stop();
 			Sound.playBgm("audio/gameModeBGM.wav");
 		}
@@ -56,13 +60,10 @@ public class ChangePanelService {
 		removePanel(panel);
 		layout.show(mainPanel, panelName);
 		mainPanel.setFocusable(true);
+		
 		if(panelName.equals("MainView")) {
 			Sound.stop();
 			Sound.playBgm("audio/mainBGM.wav");
-		}
-		else if(panelName.equals("SingleMode") || panelName.equals("DualMode") ||panelName.equals("NetworkMode")){
-			Sound.stop();
-			Sound.playBgm("audio/gameModeBGM.wav");
 		}
 	}
 	

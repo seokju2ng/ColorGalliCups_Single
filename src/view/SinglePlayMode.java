@@ -283,7 +283,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
       point[0].setVisible(true);
 
       // --------------------------------------------------------------
-      timePanel = new Time1(6, 15, 15, 252, 150);
+      timePanel = new Time1(30, 15, 15, 252, 150);
       timePanel.setBorder(new LineBorder(Color.gray, 1));
       west.add(timePanel);
 
@@ -406,14 +406,18 @@ public class SinglePlayMode extends JPanel implements ActionListener {
                   bellBtn.setIcon(new ImageIcon("image/bell(push).png"));
                   Sound.playEffect("audio/bell.wav");
                   if (cardDeck.isCorrect(cardCnt, new String(answer)) == true) {
-                     System.out.println("정답!");
-                     flag = true;
-                     cnt++;
-                     cardCnt++;
-                     correctCnt.setText(cnt + "");
-                     y = initY;
-                     // tm.start();
-                  }
+                      System.out.println("정답!");
+                      Sound.playEffect("audio/correct.wav");
+                      flag = true;
+                      cnt++;
+                      cardCnt++;
+                      correctCnt.setText(cnt + "");
+                      y = initY;
+                      // tm.start();
+                   } 
+                   else {
+                      Sound.playEffect("audio/wrong2.wav");
+                   }
                }
             }
          }

@@ -111,13 +111,13 @@ public class RankView extends JDialog {
 		check.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				ChangePanelService.getInstance().changePanel("MainView"); //확인 버튼 누르면 메인뷰로 돌아간다.
+				ChangePanelService.getInstance().changePanel("MainView", null); //확인 버튼 누르면 메인뷰로 돌아간다.
 			}
 		});
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 //				System.out.println("2");
-				ChangePanelService.getInstance().changePanel("MainView"); //X 버튼 누르면 메인뷰로 돌아간다.
+				ChangePanelService.getInstance().changePanel("MainView", null); //X 버튼 누르면 메인뷰로 돌아간다.
 			}
 		});
 

@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import view.etc.ChangePanelService;
+import view.etc.Sound;
 import view.handler.FocusHandler;
 import view.handler.KeyUpDownHandler;
 import view.handler.MouseEnteredHandler;
@@ -34,7 +35,7 @@ public class MainView extends JPanel {
 		this.addKeyListener(new Handler());
 		setLayout(new BorderLayout());
 		makeUI();
-		Sound.playBgm("audio/mainBGM.wav");
+//		Sound.playBgm("audio/mainBGM.wav");
 		//this.setSize(1363, 714);
 	}
 
@@ -93,7 +94,7 @@ public class MainView extends JPanel {
 		};
 		leftCursorArr[0].setVisible(true);
 		rightCursorArr[0].setVisible(true);
-
+		
 		// for(JLabel a : labelArr) {
 		// panel.add(a);
 		// //a.addKeyListener(new Handler());
@@ -112,6 +113,7 @@ public class MainView extends JPanel {
 	class Handler extends KeyAdapter implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			ChangePanelService cps = ChangePanelService.getInstance();
+			Sound.playEffect("audio/enter.wav");
 			if (cor.getIndex() == 0)
 				cps.changePanel("GameMode");
 			else if (cor.getIndex() == 1)
@@ -126,6 +128,7 @@ public class MainView extends JPanel {
 		}
 
 		public void keyPressed(KeyEvent e) {
+			
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				actionPerformed(new ActionEvent(e.getSource(), e.getID(), Character.toString(e.getKeyChar())));
 			}

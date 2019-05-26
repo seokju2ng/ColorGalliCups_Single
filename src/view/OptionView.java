@@ -17,7 +17,10 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import view.bean.OptionBean;
+import view.bean.Options;
 import view.etc.ChangePanelService;
+import view.etc.Sound;
 import view.handler.FocusHandler;
 
 public class OptionView extends JPanel {
@@ -27,15 +30,17 @@ public class OptionView extends JPanel {
    private int index;
    private GridBagLayout gbl;
    private GridBagConstraints gbc;
-   private int[] option;
+   private int[] optionValue;
    private JButton[][] btn;
    private JButton[] name;
    private JButton back;
    private JButton[] slash;
+   private Options option;
    
    public OptionView() {
       gbl = new GridBagLayout();
       gbc = new GridBagConstraints();
+      option = new Options();
       
       Font font=new Font("Nanum Brush Script", Font.BOLD, 50);
       Color bg = new Color(251,229,214);      // 배경 색
@@ -119,41 +124,14 @@ public class OptionView extends JPanel {
                btn[i][j].addActionListener(l);
             }
       }
-      option = new int[3];
-      option[2] = 1;
+      optionValue = new int[3];
+      optionValue[0] = option.getOption().isBgm() ? 0 : 1;
+      optionValue[1] = 0;
+      optionValue[2] = 1;
       
       btn[0][0].setForeground(fg);
       btn[1][0].setForeground(fg);
       btn[2][1].setForeground(fg);
-      
-//      for(int i = 0; i < buttons.length; i++) {
-//         buttons[i].setContentAreaFilled(false);
-//         buttons[i].setFocusPainted(false);
-//         buttons[i].setBorderPainted(false);
-//         buttons[i].setFont(font);
-//         buttons[i].addKeyListener(l);
-//         if(i==1 || i==4 || i==7) {
-//            continue;
-//         }
-//         else {
-//            buttons[i].addMouseListener(new MouseAdapter() {
-//               public void mousePressed(MouseEvent e) {
-//                  //e.getButton();
-//               }
-//            });
-//         }
-//      }
-      
-//      JLabel label0 = new JLabel("배경음");
-//      JLabel label1 = new JLabel("효과음");
-//      JLabel label2 = new JLabel("컵색깔");
-//      JLabel label3 = new JLabel("덱개수");
-      
-//      
-//      label0.setFont(font);
-//      label1.setFont(font);
-//      label2.setFont(font);
-//      label3.setFont(font);
       
       
       addGrid(rarrows[0], 0, 0, 1, 1);
@@ -215,22 +193,22 @@ public class OptionView extends JPanel {
                rarrows[index].setVisible(true);
             }
          } else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-               //System.out.println("left, option[index]="+option[index]);
-               if(index != 3 && option[index] != 0) {
+               //System.out.println("left, optionValue[index]="+optionValue[index]);
+               if(index != 3 && optionValue[index] != 0) {
 //                  System.out.println("left");
-                  btn[index][option[index]].setForeground(new Color(0, 0, 0));
-                  option[index] -= 1;
-                  btn[index][option[index]].setForeground(new Color(255, 80, 80));
+                  btn[index][optionValue[index]].setForeground(new Color(0, 0, 0));
+                  optionValue[index] -= 1;
+                  btn[index][optionValue[index]].setForeground(new Color(255, 80, 80));
 //                  Option.this.validate();
                }
          } else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-//               System.out.println("right, option[index]=" + option[index]);
+//               System.out.println("right, optionValue[index]=" + optionValue[index]);
 //               System.out.println("btn[index].length-1 = " + (btn[index].length -1));
-               if(index != 3 && option[index] != btn[index].length - 1) {
+               if(index != 3 && optionValue[index] != btn[index].length - 1) {
 //                  System.out.println("right");
-               btn[index][option[index]].setForeground(new Color(0, 0, 0));
-               option[index] += 1;
-               btn[index][option[index]].setForeground(new Color(255, 80, 80));
+               btn[index][optionValue[index]].setForeground(new Color(0, 0, 0));
+               optionValue[index] += 1;
+               btn[index][optionValue[index]].setForeground(new Color(255, 80, 80));
 //               Option.this.validate();
             }
          } else if(e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -240,17 +218,18 @@ public class OptionView extends JPanel {
       }
       public void actionPerformed(ActionEvent e) {
             if(e.getActionCommand().equals("\n") || index == 3){
-               ChangePanelService cps = ChangePanelService.getInstance();
-              cps.changePanel("MainView");
+            		Sound.playEffect("audio/enter.wav");
+            		ChangePanelService cps = ChangePanelService.getInstance();
+            		cps.changePanel("MainView");
             } else {
                for(int i = 0; i < btn.length; i++) {
                   for(int j = 0; j < btn[i].length; j++) {
                      if(e.getSource() == btn[i][j]) {
 //                        System.out.printf("btn[%d][%d]\n", i, j);
-//                        System.out.printf("option[%d]:%d", i, option[i]);
-                        btn[i][option[i]].setForeground(new Color(0, 0, 0));
+//                        System.out.printf("optionValue[%d]:%d", i, optionValue[i]);
+                        btn[i][optionValue[i]].setForeground(new Color(0, 0, 0));
                         btn[i][j].setForeground(new Color(255, 80, 80));
-                        option[i] = j;
+                        optionValue[i] = j;
 //                        Option.this.validate();
                      }
                   }
@@ -260,6 +239,7 @@ public class OptionView extends JPanel {
    }
    class MouseHandler extends MouseAdapter{
       public void mouseEntered(MouseEvent e) {
+    	  Sound.playEffect("audio/touch2.wav");
          for(int i = 0; i < btn.length; i++) {
             if(e.getSource() == name[i]) {
                changeIndex(i); return;
