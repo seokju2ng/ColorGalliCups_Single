@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.JLabel;
 
 import view.MyIndex;
+import view.etc.Sound;
 /**
  * 메뉴 선택 UI(MainView, GameMode, NetworkMode, Help)에서 키보드의 위, 아래 키 입력 시 화면에서 현재 메뉴를 표시하는 아이콘의 위치를 위, 아래로 변경한다.
  * @author cms<br>*/
@@ -38,9 +39,11 @@ public class KeyUpDownHandler extends KeyAdapter
 	 * @param e 키 입력시 발생하는 이벤트이다.
 	 * */
 	public void keyPressed(KeyEvent e) {
+		
 		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			
 			if (cor.getIndex() != num) {
+				Sound.playEffect("audio/touch2.wav");
 				leftCursorArr[cor.getIndex()].setVisible(false);
 				rightCursorArr[cor.getIndex()].setVisible(false);
 				cor.plus();
@@ -49,8 +52,10 @@ public class KeyUpDownHandler extends KeyAdapter
 			}
 			System.out.println("down"+cor);
 		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
+			
 			System.out.println("up");
 			if (cor.getIndex() != 0) {
+				Sound.playEffect("audio/touch2.wav");
 				leftCursorArr[cor.getIndex()].setVisible(false);
 				rightCursorArr[cor.getIndex()].setVisible(false);
 				cor.minus();
