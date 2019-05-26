@@ -40,7 +40,7 @@ public class RankIO {
 	}
 	/**
 	 * 파일로부터 프로그램에 Rank정보를 저장하는 메소드이다.
-	 * @return 프로그램에 Rank정보를 저장하면 true, 아니면 false를 리턴한다.
+	 * @return Rank정보를 저장한 ArrayList를 반환한다.
 	 */
 	public ArrayList<String> loadRank() {
 		ArrayList<String> load = new ArrayList<String>();
