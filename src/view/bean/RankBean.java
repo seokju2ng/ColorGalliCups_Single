@@ -87,6 +87,6 @@ public class RankBean {
 	 * @return 랭크정보 객체의 사용자의 순위, 이름, 점수를 String 타입으로 반환하여 리턴해준다.
 	 */
 	public String toString() {
-		return "Rank [ranking=" + ranking + ", name=" + name + ", score=" + score + "]";
+		return "RankBean[ranking=" + ranking + ", name=" + name + ", score=" + score + "]";
 	}	
 }
