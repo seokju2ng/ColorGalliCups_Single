@@ -32,7 +32,7 @@ public class Time1 extends JPanel implements ActionListener {
 		this.setLayout(null);
 		
 		time = new JLabel("남은시간", SwingConstants.CENTER);
-		timeflow = new JLabel("00:"+sec, SwingConstants.CENTER);
+		timeflow = new JLabel(""+sec, SwingConstants.CENTER);
 		this.setBounds(x, y, width, height);
 
 		time.setFont(new Font("배달의민족 한나는 열한살", Font.BOLD, 30));
@@ -62,13 +62,9 @@ public class Time1 extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		sec--;
+		
 		if (sec >= 0) {
-			if (sec >= 10)
-				timeflow.setText("00:" + sec);
-			else {
-				timeflow.setText("00:0" + sec);
-				//JOptionPane.showConfirmDialog(null, ")
-			}
+			timeflow.setText(sec+"");
 		}
 		else {
 			timer.stop();
