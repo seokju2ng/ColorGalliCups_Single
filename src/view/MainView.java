@@ -34,6 +34,7 @@ public class MainView extends JPanel {
 		this.addKeyListener(new Handler());
 		setLayout(new BorderLayout());
 		makeUI();
+		Sound.playBgm("audio/mainBGM.wav");
 		//this.setSize(1363, 714);
 	}
 
