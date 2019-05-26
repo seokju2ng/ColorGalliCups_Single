@@ -138,7 +138,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		this.add(pauseBackground);
 
 		// 카드를 가장 먼저 붙임)(0518애니메이션)
-		int cardNum = 10; // 옵션에서 정해줄 시스템 카드의 장수이다.
+		int cardNum = 4; // 옵션에서 정해줄 시스템 카드의 장수이다.
 		cardDeck = new CardDeck(cardNum); // 옵션에서 정해준 장수만큼 카드덱을 생성한다.
 		cardDeckLabels = new ArrayList<JLabel>();
 		for (int i = 0; i < cardNum; i++) {
@@ -499,24 +499,96 @@ public class DualPlayMode extends JPanel implements ActionListener {
 			// TODO Auto-generated method stub
 			if (e.getKeyCode() == KeyEvent.VK_Q) {
 				spaceFlag1p = false;
+				if (colorFlag1p[0] == 0) {
+					colorFlag1p[0] = gamePanelIndex1p + 1;
+					// System.out.println(redCup1p+"," + gamePanelIndex1p +"," + gamePanelY1p);
+					board1.getCups(0, gamePanelIndex1p, 4 - gamePanelY1p).setVisible(true);
+					if (gamePanelY1p < 4)
+						gamePanelY1p++;
+					pOneAnswer.append("1");
+				}
 			} else if (e.getKeyCode() == KeyEvent.VK_W) {
 				spaceFlag1p = false;
+				if (colorFlag1p[1] == 0) {
+					colorFlag1p[1] = gamePanelIndex1p + 1;
+					board1.getCups(1, gamePanelIndex1p, 4 - gamePanelY1p).setVisible(true);
+					if (gamePanelY1p < 4)
+						gamePanelY1p++;
+					pOneAnswer.append("2");
+				}
 			} else if (e.getKeyCode() == KeyEvent.VK_E) {
 				spaceFlag1p = false;
+				if (colorFlag1p[2] == 0) {
+					colorFlag1p[2] = gamePanelIndex1p + 1;
+					board1.getCups(2, gamePanelIndex1p, 4 - gamePanelY1p).setVisible(true);
+					if (gamePanelY1p < 4)
+						gamePanelY1p++;
+					pOneAnswer.append("3");
+				}
 			} else if (e.getKeyCode() == KeyEvent.VK_A) {
 				spaceFlag1p = false;
+				if (colorFlag1p[3] == 0) {
+					colorFlag1p[3] = gamePanelIndex1p + 1;
+					board1.getCups(3, gamePanelIndex1p, 4 - gamePanelY1p).setVisible(true);
+					if (gamePanelY1p < 4)
+						gamePanelY1p++;
+					pOneAnswer.append("4");
+				}
 			} else if (e.getKeyCode() == KeyEvent.VK_S) {
 				spaceFlag1p = false;
+				if (colorFlag1p[4] == 0) {
+					colorFlag1p[4] = gamePanelIndex1p + 1;
+					board1.getCups(4, gamePanelIndex1p, 4 - gamePanelY1p).setVisible(true);
+					if (gamePanelY1p < 4)
+						gamePanelY1p++;
+					pOneAnswer.append("5");
+				}
 			} else if (e.getKeyCode() == KeyEvent.VK_I) {
 				spaceFlag2p = false;
+				if (colorFlag2p[0] == 0) {
+					colorFlag2p[0] = gamePanelIndex2p + 1;
+					board2.getCups(0, gamePanelIndex2p, 4 - gamePanelY2p).setVisible(true);
+					if (gamePanelY2p < 4)
+						gamePanelY2p++;
+					pTwoAnswer.append("1");
+				}
 			} else if (e.getKeyCode() == KeyEvent.VK_O) {
 				spaceFlag2p = false;
+				if (colorFlag2p[1] == 0) {
+					colorFlag2p[1] = gamePanelIndex2p + 1;
+					board2.getCups(1, gamePanelIndex2p, 4 - gamePanelY2p).setVisible(true);
+					if (gamePanelY2p < 4)
+						gamePanelY2p++;
+					pTwoAnswer.append("2");
+				}
 			} else if (e.getKeyCode() == KeyEvent.VK_P) {
 				spaceFlag2p = false;
+				if (colorFlag2p[2] == 0) {
+					colorFlag2p[2] = gamePanelIndex2p + 1;
+					board2.getCups(2, gamePanelIndex2p, 4 - gamePanelY2p).setVisible(true);
+					if (gamePanelY2p < 4)
+						gamePanelY2p++;
+					pTwoAnswer.append("3");
+				}
 			} else if (e.getKeyCode() == KeyEvent.VK_K) {
 				spaceFlag2p = false;
+				if (colorFlag2p[3] == 0) {
+					colorFlag2p[3] = gamePanelIndex2p + 1;
+					board2.getCups(3, gamePanelIndex2p, 4 - gamePanelY2p).setVisible(true);
+					if (gamePanelY2p < 4)
+						gamePanelY2p++;
+					pTwoAnswer.append("4");
+				}
 			} else if (e.getKeyCode() == KeyEvent.VK_L) {
 				spaceFlag2p = false;
+				if (colorFlag2p[4] == 0) {
+					colorFlag2p[4] = gamePanelIndex2p + 1;
+					board2.getCups(4, gamePanelIndex2p, 4 - gamePanelY2p).setVisible(true);
+					if (gamePanelY2p < 4)
+						gamePanelY2p++;
+					pTwoAnswer.append("5");
+				}
+
 			} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				int setCupFlag = 0;
 				for (int i = 0; i < 5; i++) {
@@ -561,7 +633,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					// bell.setIcon(new ImageIcon("image/bell.png"));
 
 					/////////////////////////// 손 나오는 부분 끝/////////////////
-
+					// 여기 다시 해봐라!(if문 추가)
 					if (cardDeck.isCorrect(cardCnt, new String(pOneAnswer)) == true) {
 						one_flag = true;
 						cardCnt++; // 시스템카드덱을 +1한다.
@@ -577,46 +649,15 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		public void keyReleased(KeyEvent e) {
 			// TODO Auto-generated method stub
 			if (e.getKeyCode() == KeyEvent.VK_Q) {
-				if (colorFlag1p[0] == 0) {
-					colorFlag1p[0] = gamePanelIndex1p + 1;
-					// System.out.println(redCup1p+"," + gamePanelIndex1p +"," + gamePanelY1p);
-					board1.getCups(0, gamePanelIndex1p, 4 - gamePanelY1p).setVisible(true);
-					if (gamePanelY1p < 4)
-						gamePanelY1p++;
-					pOneAnswer.append("1");
-				}
+
 			} else if (e.getKeyCode() == KeyEvent.VK_W) {
-				if (colorFlag1p[1] == 0) {
-					colorFlag1p[1] = gamePanelIndex1p + 1;
-					board1.getCups(1, gamePanelIndex1p, 4 - gamePanelY1p).setVisible(true);
-					if (gamePanelY1p < 4)
-						gamePanelY1p++;
-					pOneAnswer.append("2");
-				}
+
 			} else if (e.getKeyCode() == KeyEvent.VK_E) {
-				if (colorFlag1p[2] == 0) {
-					colorFlag1p[2] = gamePanelIndex1p + 1;
-					board1.getCups(2, gamePanelIndex1p, 4 - gamePanelY1p).setVisible(true);
-					if (gamePanelY1p < 4)
-						gamePanelY1p++;
-					pOneAnswer.append("3");
-				}
+
 			} else if (e.getKeyCode() == KeyEvent.VK_A) {
-				if (colorFlag1p[3] == 0) {
-					colorFlag1p[3] = gamePanelIndex1p + 1;
-					board1.getCups(3, gamePanelIndex1p, 4 - gamePanelY1p).setVisible(true);
-					if (gamePanelY1p < 4)
-						gamePanelY1p++;
-					pOneAnswer.append("4");
-				}
+
 			} else if (e.getKeyCode() == KeyEvent.VK_S) {
-				if (colorFlag1p[4] == 0) {
-					colorFlag1p[4] = gamePanelIndex1p + 1;
-					board1.getCups(4, gamePanelIndex1p, 4 - gamePanelY1p).setVisible(true);
-					if (gamePanelY1p < 4)
-						gamePanelY1p++;
-					pOneAnswer.append("5");
-				}
+
 			} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 				bell.setIcon(new ImageIcon("image/bell.png"));
 
@@ -644,8 +685,10 @@ public class DualPlayMode extends JPanel implements ActionListener {
 						setCupFlag++;
 					}
 				}
-				if (setCupFlag > 0 && setCupFlag < 5)
-					pOneAnswer.append("/");
+				if (setCupFlag > 0 && setCupFlag < 5) {
+					if (pOneAnswer.charAt(pOneAnswer.length() - 1) != '/')
+						pOneAnswer.append("/");
+				}
 				if (setCupFlag < 5) {
 					boolean isEmptyPanel = true;
 					for (int i = 0; i < 5; i++) {
@@ -669,45 +712,15 @@ public class DualPlayMode extends JPanel implements ActionListener {
 
 			// 2p
 			else if (e.getKeyCode() == KeyEvent.VK_I) {
-				if (colorFlag2p[0] == 0) {
-					colorFlag2p[0] = gamePanelIndex2p + 1;
-					board2.getCups(0, gamePanelIndex2p, 4 - gamePanelY2p).setVisible(true);
-					if (gamePanelY2p < 4)
-						gamePanelY2p++;
-					pTwoAnswer.append("1");
-				}
+
 			} else if (e.getKeyCode() == KeyEvent.VK_O) {
-				if (colorFlag2p[1] == 0) {
-					colorFlag2p[1] = gamePanelIndex2p + 1;
-					board2.getCups(1, gamePanelIndex2p, 4 - gamePanelY2p).setVisible(true);
-					if (gamePanelY2p < 4)
-						gamePanelY2p++;
-					pTwoAnswer.append("2");
-				}
+
 			} else if (e.getKeyCode() == KeyEvent.VK_P) {
-				if (colorFlag2p[2] == 0) {
-					colorFlag2p[2] = gamePanelIndex2p + 1;
-					board2.getCups(2, gamePanelIndex2p, 4 - gamePanelY2p).setVisible(true);
-					if (gamePanelY2p < 4)
-						gamePanelY2p++;
-					pTwoAnswer.append("3");
-				}
+
 			} else if (e.getKeyCode() == KeyEvent.VK_K) {
-				if (colorFlag2p[3] == 0) {
-					colorFlag2p[3] = gamePanelIndex2p + 1;
-					board2.getCups(3, gamePanelIndex2p, 4 - gamePanelY2p).setVisible(true);
-					if (gamePanelY2p < 4)
-						gamePanelY2p++;
-					pTwoAnswer.append("4");
-				}
+
 			} else if (e.getKeyCode() == KeyEvent.VK_L) {
-				if (colorFlag2p[4] == 0) {
-					colorFlag2p[4] = gamePanelIndex2p + 1;
-					board2.getCups(4, gamePanelIndex2p, 4 - gamePanelY2p).setVisible(true);
-					if (gamePanelY2p < 4)
-						gamePanelY2p++;
-					pTwoAnswer.append("5");
-				}
+
 			} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				bell.setIcon(new ImageIcon("image/bell.png"));
 				if (spaceFlag2p == true) {
@@ -734,8 +747,10 @@ public class DualPlayMode extends JPanel implements ActionListener {
 						setCupFlag++;
 					}
 				}
-				if (setCupFlag > 0 && setCupFlag < 5)
-					pTwoAnswer.append("/");
+				if (setCupFlag > 0 && setCupFlag < 5) {
+					if (pTwoAnswer.charAt(pTwoAnswer.length() - 1) != '/')
+						pTwoAnswer.append("/");
+				}
 				if (setCupFlag < 5) {
 					boolean isEmptyPanel = true;
 					for (int i = 0; i < 5; i++) {
@@ -749,6 +764,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 						if (gamePanelIndex2p < 5) {
 							for (int i = 0; i < 5; i++)
 								pointerTwo[i].setVisible(false);
+
 							pointerTwo[gamePanelIndex2p].setVisible(true);
 						}
 
