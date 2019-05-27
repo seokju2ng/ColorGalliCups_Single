@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class OptionService {
 	private Option option;
-	private final String opPath = "data/option.dat";
+	private static final String opPath = "data/option.dat";
 	
 	public OptionService() {
 		option = new Option();

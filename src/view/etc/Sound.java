@@ -11,10 +11,10 @@ import javax.sound.sampled.Clip;
 public class Sound {
 		/**파일의 경로를 받아 해당 파일의 소리를 재생해주는 메소드이다.
 		 * @param fileName 게임에서 사용 하고싶은 소리의 파일 경로이다.*/
-		private boolean effectFlag;
-		private boolean bgmFlag;
-		public static AudioInputStream ais;
-		private static Clip BgmClip;
+		private boolean effect;
+		private boolean bgm;
+		private static AudioInputStream ais;
+		private static Clip bgmClip;
 		
 		public static void playEffect(String fileName) {
 		//if(effectFlag == true)
@@ -32,19 +32,19 @@ public class Sound {
 		public static void playBgm(String fileName) {
 			//if(bgmFlag == true) 
 		      try {
-		    	 ais = AudioSystem.getAudioInputStream(new File(fileName));
-		    	 BgmClip = AudioSystem.getClip();
-		    	 BgmClip.stop();
-		    	 BgmClip.open(ais);
-		    	 BgmClip.start();
-		    	 BgmClip.loop(-1);
+			    	 ais = AudioSystem.getAudioInputStream(new File(fileName));
+			    	 bgmClip = AudioSystem.getClip();
+			    	 bgmClip.stop();
+			    	 bgmClip.open(ais);
+			    	 bgmClip.start();
+			    	 bgmClip.loop(-1);
 		      } catch (Exception e) {
 		         e.printStackTrace();
 		      }
 		   }
 	   public static void stop() {
 		      try {
-		    	  BgmClip.stop();
+		    	  bgmClip.stop();
 
 		      } catch (Exception e) {
 		         e.printStackTrace();

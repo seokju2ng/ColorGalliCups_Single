@@ -60,7 +60,6 @@ public class ChangePanelService {
 		removePanel(panel);
 		layout.show(mainPanel, panelName);
 		mainPanel.setFocusable(true);
-		
 		if(panelName.equals("MainView")) {
 			Sound.stop();
 			Sound.playBgm("audio/mainBGM.wav");

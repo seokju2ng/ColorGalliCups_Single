@@ -32,7 +32,7 @@ public class MainView extends JPanel {
 	public MainView() {
 		cor = new MyIndex();
 		this.addComponentListener(new FocusHandler());
-		this.addKeyListener(new Handler());
+		
 		setLayout(new BorderLayout());
 		makeUI();
 //		Sound.playBgm("audio/mainBGM.wav");
@@ -70,6 +70,7 @@ public class MainView extends JPanel {
 		JPanel panel = new JPanel(new GridLayout(5, 0));
 		Handler l = new Handler();
 		MouseEnteredHandler ml = new MouseEnteredHandler(menuArr, leftCursorArr, rightCursorArr, cor);
+		KeyUpDownHandler kudh = new KeyUpDownHandler(cor, 4, leftCursorArr, rightCursorArr);
 		for (JButton b : menuArr) {
 			b.setBorderPainted(false);
 			b.setContentAreaFilled(false);
@@ -79,7 +80,7 @@ public class MainView extends JPanel {
 			b.addActionListener(l);
 			b.addKeyListener(l);
 			b.addMouseListener(ml);
-			b.addKeyListener(new KeyUpDownHandler(cor, 4, leftCursorArr, rightCursorArr));
+			b.addKeyListener(kudh);
 			panel.add(b);
 		}
 		ImageIcon img = new ImageIcon("image/MainBackground.png");
@@ -106,8 +107,9 @@ public class MainView extends JPanel {
 		background.setOpaque(false);
 		//panel.addKeyListener(new Handler());
 		//panel.addKeyListener(new KeyUpDownHandler(cor, 4, leftCursorArr, rightCursorArr));
-		this.addKeyListener(new KeyUpDownHandler(cor, 4, leftCursorArr, rightCursorArr));
+		this.addKeyListener(kudh);
 		this.add(background);
+		this.addKeyListener(l);
 	}
 
 	class Handler extends KeyAdapter implements ActionListener {

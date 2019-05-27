@@ -50,7 +50,7 @@ public class GameMode extends JPanel {
 		cor = new MyIndex();
 		this.addComponentListener(new FocusHandler());
 		this.setLayout(new BorderLayout());
-		this.addKeyListener(new Handler());
+		
 		this.makeUI();
 	}
 	/**
@@ -116,6 +116,7 @@ public class GameMode extends JPanel {
 		panel.addKeyListener(kudh);
 		this.add(background);
 		this.addKeyListener(new KeyUpDownHandler(cor, 3, leftCursorArr, rightCursorArr));
+		this.addKeyListener(l);
 	}
 	/**
 	 * 선택한 메뉴에 따라 패널을 바꿔주는 Handler 클래스이다.
