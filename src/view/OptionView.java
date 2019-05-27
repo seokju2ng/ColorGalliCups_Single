@@ -24,7 +24,7 @@ import view.etc.Sound;
 import view.handler.FocusHandler;
 
 public class OptionView extends JPanel {
-   private JButton[] buttons;
+//   private JButton[] buttons;
    private JLabel[] rarrows;
    private JLabel[] larrows;
    private int index;
@@ -124,14 +124,17 @@ public class OptionView extends JPanel {
                btn[i][j].addActionListener(l);
             }
       }
-      optionValue = new int[3];
-      optionValue[0] = option.getOption().isBgm() ? 0 : 1;
-      optionValue[1] = 0;
-      optionValue[2] = 1;
       
-      btn[0][0].setForeground(fg);
-      btn[1][0].setForeground(fg);
-      btn[2][1].setForeground(fg);
+      OptionBean ob = option.getOption();
+      optionValue = new int[3];
+      optionValue[0] = ob.isBgm() ? 0 : 1;
+      optionValue[1] = ob.isEffect() ? 0 : 1;
+      optionValue[2] = ob.getCardNum() == 10 ? 0 : ob.getCardNum() == 20 ? 1 : 2;
+      option.setOption(ob.isBgm(), ob.isEffect(), ob.getCardNum());
+      
+      btn[0][optionValue[0]].setForeground(fg);
+      btn[1][optionValue[1]].setForeground(fg);
+      btn[2][optionValue[2]].setForeground(fg);
       
       
       addGrid(rarrows[0], 0, 0, 1, 1);
@@ -217,24 +220,34 @@ public class OptionView extends JPanel {
          }
       }
       public void actionPerformed(ActionEvent e) {
-            if(e.getActionCommand().equals("\n") || index == 3){
-            		Sound.playEffect("audio/enter.wav");
-            		ChangePanelService cps = ChangePanelService.getInstance();
-            		cps.changePanel("MainView");
-            } else {
-               for(int i = 0; i < btn.length; i++) {
-                  for(int j = 0; j < btn[i].length; j++) {
-                     if(e.getSource() == btn[i][j]) {
+        if(e.getActionCommand().equals("\n") || index == 3){
+            	boolean bgm = optionValue[0] == 0 ? true : false;
+            	boolean effect = optionValue[1] == 0 ? true : false;
+            	int cardNum = optionValue[2] == 0 ? 10 : optionValue[2] == 1 ? 20 : 40;
+            	
+            	if(bgm) Sound.bgmOn("audio/mainBGM.wav");
+        		else Sound.bgmOff();
+            	
+        		option.setOption(bgm, effect, cardNum);
+        		option.saveOption();
+        		
+        		ChangePanelService cps = ChangePanelService.getInstance();
+        		cps.changePanel("MainView");
+        		Sound.playEffect("audio/enter.wav");
+        } else {
+           for(int i = 0; i < btn.length; i++) {
+              for(int j = 0; j < btn[i].length; j++) {
+                 if(e.getSource() == btn[i][j]) {
 //                        System.out.printf("btn[%d][%d]\n", i, j);
 //                        System.out.printf("optionValue[%d]:%d", i, optionValue[i]);
-                        btn[i][optionValue[i]].setForeground(new Color(0, 0, 0));
-                        btn[i][j].setForeground(new Color(255, 80, 80));
-                        optionValue[i] = j;
+                    btn[i][optionValue[i]].setForeground(new Color(0, 0, 0));
+                    btn[i][j].setForeground(new Color(255, 80, 80));
+                    optionValue[i] = j;
 //                        Option.this.validate();
-                     }
-                  }
-               }
-            }
+                 }
+              }
+           }
+        }
       }
    }
    class MouseHandler extends MouseAdapter{
