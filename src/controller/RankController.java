@@ -28,10 +28,10 @@ public class RankController {
 	 * @param score Ranks에서 받은 score을 저장하고 있다.
 	 * @return 삽입에 성공하면 true, 아니면 false를 리턴한다.
 	 */
-	public boolean insertRank(String name, int score) {
-		if(rankServiceManager == null) return false;
+	public String[] insertRank(String name, int score) {
+		if(rankServiceManager == null) return null;
 		if(name == null || name.equals("") || score < 0) {
-			return false;
+			return null;
 		}
 		
 		return rankServiceManager.insertRank(name, score);
