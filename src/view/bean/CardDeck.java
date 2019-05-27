@@ -1,6 +1,7 @@
 package view.bean;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import controller.CardController;
 
@@ -19,41 +20,56 @@ public class CardDeck {
 	 * DualPlayMode에서 무승부가 났을 경우 사용될 골드 카드이다. 한장을 저장하고 있다.
 	 */
 	private CardBean goldCard;
+	
+	private static CardDeck instance;
+	//private CardController controller;
+	
+	
 
 	/**
 	 * CardDeck 클래스의 Null Parameter Constructor이다.
 	 */
+	
+	static {
+		instance = new CardDeck();
+	}
 	public CardDeck() {
-		cards = new ArrayList<CardBean>();
-	}
-
-	/**
-	 * CardBean클래스의 오버로딩 생성자로 Controller를 통해 cardNum만큼의 카드덱과 골드카드를 필드로 가지는 CardBean
-	 * 객체를 할당한다.
-	 * 
-	 * @param cardNum
-	 *            원하는 카드의 개수 만큼 parameter로 전하여 사용할 수 있다.
-	 */
-	public CardDeck(int cardNum) {
+		//cards = new ArrayList<CardBean>();
 		CardController controller = new CardController();
-		cards = controller.getCards(cardNum);
-		// goldCard = controller.getGoldCard();
-
+		cards = controller.getCards(); //shallow copy
+		//goldCard = controller.getGoldCard(); //goldCard완성되면 주석풀기/
+	}
+	public static CardDeck getInstance() {
+		return instance;
 	}
 
+//	/**
+//	 * CardBean클래스의 오버로딩 생성자로 Controller를 통해 cardNum만큼의 카드덱과 골드카드를 필드로 가지는 CardBean
+//	 * 객체를 할당한다.
+//	 * 
+//	 * @param cardNum
+//	 *            원하는 카드의 개수 만큼 parameter로 전하여 사용할 수 있다.
+//	 */
+//	public CardDeck(int cardNum) {
+//		CardController controller = new CardController();
+//		cards = controller.getCards(cardNum);
+//		// goldCard = controller.getGoldCard();
+//
+//	}
+
 	/**
-	 * parameter로 받은 num에 해당하는 카드에 대한 정답과 answer를 비교하여 그결과를 boolean타입으로 리턴해준다.
+	 * parameter로 받은 index에 해당하는 카드에 대한 정답과 answer를 비교하여 그결과를 boolean타입으로 리턴해준다.
 	 * 
-	 * @param num
-	 *            카드번호에 해당하는 정보이다.
+	 * @param index
+	 *            카드인덱스에 해당하는 정보이다.
 	 * @param answer
 	 *            카드정답과 비교할 답의 정보이다.
 	 * @return 카드정답과 parameter의 answer를 비교하여 같다면 true, 다르다면 false를 리턴한다.
 	 */
-	public boolean isCorrect(int num, String answer) {
-		if (num >= cards.size()) //카드인덱스가 생성된 시스템카드덱의 수보다 크다면 틀린것.
+	public boolean isCorrect(int index, String answer) {
+		if (index >= cards.size()) //카드인덱스가 생성된 시스템카드덱의 수보다 크다면 틀린것.
 			return false;
-		if (cards.get(num).getAnswer().equals(answer))
+		if (cards.get(index).getAnswer().equals(answer))
 			return true;
 		else
 			return false;
@@ -78,6 +94,21 @@ public class CardDeck {
 	public String getImagePath(int index) {
 		System.out.println(cards.get(index).getPath());
 		return cards.get(index).getPath();
+	}
+	
+	public ArrayList<CardBean> selectCards(int num) {
+		if( num<0 || cards == null) return null;
+		ArrayList<CardBean> selectedCards = new ArrayList<>();
+		for(int i = 0 ; i < num ; i++) {
+			selectedCards.add(new CardBean(cards.get(i)));
+		}
+		
+		return cards;
+		
+	}
+	
+	public void shuffle() {
+		Collections.shuffle(cards);
 	}
 
 }
