@@ -16,7 +16,7 @@ public class ExitBtnHandler implements ActionListener {
 	private JPanel prevPanel;
 	/**게임 플레이 UI에 남는 시간 혹은 진행 시간을 나타내는 시간 정보이다.*/
 	private Timer tm;
-	/** tm2 게임 플레이 UI에 적용되는 애니메이션에 사용되는 시간 정보이다./
+	/** tm2 게임 플레이 UI에 적용되는 애니메이션에 사용되는 시간 정보이다.*/
 	private Timer tm2;
 	/**ExitBtnHandler의 생성자로 prevPanel,tm,tm2를 Parameter로 받아 객체를 할당해준다.
 	 * @param prevPanel 게임 종료가 될 게임 플레이 UI이다.
@@ -25,6 +25,7 @@ public class ExitBtnHandler implements ActionListener {
 	public ExitBtnHandler(JPanel prevPanel,Timer tm,Timer tm2) {
 		this.prevPanel=prevPanel;
 		this.tm = tm;
+		this.tm2 = tm2;
 	}
 	/**게임 종료 팝업창을 띄어주는 역할을 하고, 게임 종료시 게임 플레이 UI에 있는 모든 시간 정보들을 멈추어주고 MainView화면으로 전화시켜준다.
 	 * @param e 컴퍼넌트가 정의하는 액션이 발생하는 이벤트이다.
@@ -35,6 +36,7 @@ public class ExitBtnHandler implements ActionListener {
 		if (res == JOptionPane.YES_OPTION) {
 			ChangePanelService.getInstance().changePanel("MainView", prevPanel);
 			tm.stop();
+			tm2.stop();
 		}
 	}
 	// exit버튼에 액션핸들러 추가
