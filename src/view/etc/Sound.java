@@ -61,11 +61,19 @@ public class Sound {
 		}
 	}
 
+	public static void bgmOn(String fileName) {
+		if(bgm) return;
+		bgm = true;
+		playBgm(fileName);
+	}
 	public static void bgmOn() {
 		bgm = true;
 	}
 	public static void bgmOff() {
-		bgm = false;
+		if(bgm) {
+			bgm = false;
+			stop();
+		}
 	}
 	public static void effectOn() {
 		effect = true;
