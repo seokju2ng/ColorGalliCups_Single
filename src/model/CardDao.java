@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
  * 
  * @author 김용희
  */
-public class CardDao implements CardSelectable {
+public class CardDao  {
 	/**
 	 * Collection타입으로 Card여러개를 저장하고 있다.
 	 */
@@ -61,6 +61,17 @@ public class CardDao implements CardSelectable {
 		}
 		for (int i = 0; i < num; i++) {
 			select.add(new Card(cards.get(rnum[i])));
+		}
+		return select;
+	}
+	
+	//Edit BY DK KIM//
+	public ArrayList<Card> getCards() {
+		if(cards == null || goldCards == null)
+			return null;
+		ArrayList<Card> select = new ArrayList<>();
+		for(int i = 0 ; i < cards.size(); i++) {
+			select.add(new Card(cards.get(i)));
 		}
 		return select;
 	}
