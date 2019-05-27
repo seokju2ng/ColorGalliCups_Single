@@ -23,30 +23,32 @@ public class Sound {
 	private static Clip bgmClip;
 
 	public static void playEffect(String fileName) {
-		// if(effectFlag == true)
-		try {
-			AudioInputStream ais = AudioSystem.getAudioInputStream(new File(fileName));
-			Clip clip = AudioSystem.getClip();
-			clip.stop();
-			clip.open(ais);
-			clip.start();
+		if(effect) {
+			try {
+				AudioInputStream ais = AudioSystem.getAudioInputStream(new File(fileName));
+				Clip clip = AudioSystem.getClip();
+				clip.stop();
+				clip.open(ais);
+				clip.start();
 
-		} catch (Exception e) {
-			e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public static void playBgm(String fileName) {
-		// if(bgmFlag == true)
-		try {
-			ais = AudioSystem.getAudioInputStream(new File(fileName));
-			bgmClip = AudioSystem.getClip();
-			bgmClip.stop();
-			bgmClip.open(ais);
-			bgmClip.start();
-			bgmClip.loop(-1);
-		} catch (Exception e) {
-			e.printStackTrace();
+		if(bgm) {
+			try {
+				ais = AudioSystem.getAudioInputStream(new File(fileName));
+				bgmClip = AudioSystem.getClip();
+				bgmClip.stop();
+				bgmClip.open(ais);
+				bgmClip.start();
+				bgmClip.loop(-1);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
