@@ -10,23 +10,28 @@ public class RankAddService {
 	 */
 	private RankDao rankDao;
 	
+	
 	/**
 	 * null-parameter Constructor
 	 */
 	public RankAddService() {
 		rankDao=RankDao.getInstance();
 	}
+	
 	/**
 	 * RankDao에 Rank정보를 추가해주는 메소드이다.
 	 * @param name 사용자가 rankDao에 추가할 name의 값이다.
 	 * @param score 사용자가 rankDao에 추가할 score의 값이다.
 	 * @return 추가에 성공하면 true, 아니면 false를 리턴한다.
 	 */
-	public boolean insert(String name, int score) {
-		if(rankDao==null)
-			return false;
+	public String[] insertRank(String name, int score) {
+		if(rankDao==null) {
+			System.out.println("RankAddService의 insert에서 rankDao가 null");
+			return null;
+		}
 		if(name==null||score<0) {
-			return false;
+			System.out.println("RankAddService의 insert에서 parameter에서 error");
+			return null;
 		}
 		return rankDao.insert(name, score);
 	}
