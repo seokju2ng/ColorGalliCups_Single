@@ -28,13 +28,13 @@ public class RankController {
 	 * @param score Ranks에서 받은 score을 저장하고 있다.
 	 * @return 삽입에 성공하면 true, 아니면 false를 리턴한다.
 	 */
-	public boolean insert(String name, int score) {
+	public boolean insertRank(String name, int score) {
 		if(rankServiceManager == null) return false;
 		if(name == null || name.equals("") || score < 0) {
 			return false;
 		}
 		
-		return rankServiceManager.insert(name, score);
+		return rankServiceManager.insertRank(name, score);
 	}
 	/**
 	 * Ranks의 모든 RankBean를 초기화하는 메소드이다.
@@ -42,7 +42,7 @@ public class RankController {
 	 */
 	public boolean clearRanking() {
 		if(rankServiceManager == null) return false;
-		return rankServiceManager.clear();
+		return rankServiceManager.clearRanks();
 	}
 	/**
 	 * RankDao의 Rank 모든 정보를 가공하여 Ranks에 전달해주는 메소드이다.
