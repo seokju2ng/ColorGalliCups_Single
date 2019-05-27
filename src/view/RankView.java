@@ -52,10 +52,10 @@ public class RankView extends JDialog {
 		super.setTitle("Rank");
 		setLayout(null);
 
-		r = new Ranks();
+		r = Ranks.getInstance();
 		bgmFlag = false;
 		
-		Font cfont = new Font("배달의민족 한나체 Pro", Font.BOLD, 30);
+//		Font cfont = new Font("배달의민족 한나체 Pro", Font.BOLD, 30);
 		Font font = new Font("배달의민족 한나체 Pro", Font.PLAIN, 20);
 
 		JPanel panel = new JPanel(new GridLayout(0, 3, 0, 0));
@@ -79,7 +79,6 @@ public class RankView extends JDialog {
 		}
 		
 		for(int i = 0; i < r.getRanks().size(); i++) {
-//			ranks[i] = new JLabel[3];
 			RankBean rank = r.getRanks().get(i);
 			ranks[i][0].setText(rank.getRanking()+"");
 			ranks[i][1].setText(rank.getName());
@@ -125,7 +124,6 @@ public class RankView extends JDialog {
 		});
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-//				System.out.println("2");
 				if(bgmFlag)
 					ChangePanelService.getInstance().changePanel("MainView", null); //확인 버튼 누르면 메인뷰로 돌아간다.
 				else ChangePanelService.getInstance().changePanel("MainView");
@@ -152,8 +150,8 @@ public class RankView extends JDialog {
 	public RankView(String name,int score) {
 		this();
 		bgmFlag = true;
-		if(r.insert(name, score)) {
-			r = new Ranks();
+		if(r.insertRank(name, score)) {
+			r = Ranks.getInstance();
 		}
 		for(int i = 0; i < r.getRanks().size(); i++) {
 			RankBean rank = r.getRanks().get(i);
