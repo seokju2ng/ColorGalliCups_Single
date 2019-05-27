@@ -2,20 +2,23 @@ package view.bean;
 
 public class OptionBean {
 	private boolean bgm;
-	private boolean sound;
+	private boolean effect;
 	private int cardNum;
 	
 	public OptionBean() {
-		bgm = true; sound = true; cardNum = 20;
+		bgm = true; effect = true; cardNum = 20;
 	}
 	public OptionBean(OptionBean op) {
-		bgm = op.isBgm();
-		sound = op.isSound();
-		cardNum = op.getCardNum();
+		this();
+		if(op != null) {
+			bgm = op.isBgm();
+			effect = op.isEffect();
+			cardNum = op.getCardNum();
+		}
 	}
-	public OptionBean(boolean bgm, boolean sound, int cardNum) {
+	public OptionBean(boolean bgm, boolean effect, int cardNum) {
 		this.bgm = bgm;
-		this.sound = sound;
+		this.effect = effect;
 		this.cardNum = cardNum;
 	}
 
@@ -27,12 +30,12 @@ public class OptionBean {
 		this.bgm = bgm;
 	}
 
-	public boolean isSound() {
-		return sound;
+	public boolean isEffect() {
+		return effect;
 	}
 
-	public void setSound(boolean sound) {
-		this.sound = sound;
+	public void setEffect(boolean effect) {
+		this.effect = effect;
 	}
 
 	public int getCardNum() {
@@ -45,7 +48,7 @@ public class OptionBean {
 	
 	public String toString() {
 		return "OptionBean[bgm:"+(bgm?"ON":"OFF")+
-				"/sound:"+(sound?"ON":"OFF")+
+				"/effect:"+(effect?"ON":"OFF")+
 				"/cardNum:"+cardNum+"]";
 	}
 }

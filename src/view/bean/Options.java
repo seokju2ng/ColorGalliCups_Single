@@ -1,6 +1,7 @@
 package view.bean;
 
 import controller.OptionController;
+import view.etc.Sound;
 
 public class Options {
 	private OptionBean option;
@@ -17,37 +18,23 @@ public class Options {
 		if(option == null) option = opControl.getOption();
 		return option;
 	}
-
-	public void setOption(boolean bgm, boolean sound, int cardNum) {
-		this.option.setBgm(bgm);
-		this.option.setSound(sound);
-		this.option.setCardNum(cardNum);
-	}
 	
-//	public void bgmOn() {
-//		if(option == null) return;
-//		option.setBgm(true);
-//	}
-//	public void bgmOff() {
-//		if(option == null) return;
-//		option.setBgm(false);
-//	}
-//	public void soundOn() {
-//		if(option == null) return;
-//		option.setSound(true);
-//	}
-//	public void soundOff() {
-//		if(option == null) return;
-//		option.setSound(false);
-//	}
-//	public void setCardNum(int cardNum) {
-//		if(option == null) return;
-//		if(cardNum < 0) return;
-//		option.setCardNum(cardNum);
-//	}
+	public void setOption(boolean bgm, boolean effect, int cardNum) {
+		this.option.setBgm(bgm);
+		this.option.setEffect(effect);
+		this.option.setCardNum(cardNum);
+		if(bgm) Sound.bgmOn(); else Sound.bgmOff();
+		if(effect) Sound.effectOn(); else Sound.effectOff();
+//		DualPlayMode.setCardNum(cardNum);
+	}
+	public void setOption(OptionBean option) {
+		if(option == null) return;
+		this.setOption(option.isBgm(), option.isEffect(), option.getCardNum());
+	}
 	
 	public boolean saveOption() {
 		if(opControl == null) return false;
+		opControl.setOption(option);
 		return opControl.saveOption();
 	}
 }
