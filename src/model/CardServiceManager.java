@@ -36,4 +36,10 @@ public class CardServiceManager {
 		if(cardSelectService == null) return null;
 		return cardSelectService.getGoldCard();
 	}
+	
+	//0527 Edit By DK KIM//
+	public ArrayList<String[]> getCards(){
+		if(cardSelectService ==null) return null;
+		return cardSelectService.getCards();
+	}
 }
