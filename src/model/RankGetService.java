@@ -27,10 +27,10 @@ public class RankGetService {
 		if(rankDao==null)
 			return null;
 		ArrayList<String[]> ranks = new ArrayList<>();
-
-		for (int i = 0; i < rankDao.getRanks().size(); i++) {
-			String[] rank = new String[] { "" + rankDao.getRanks().get(i).getRanking(),
-					rankDao.getRanks().get(i).getName(), "" + rankDao.getRanks().get(i).getScore() };
+		ArrayList<Rank> rankD = rankDao.getRanks();
+		for (int i = 0; i <rankD.size(); i++) {
+			String[] rank = new String[] { "" + rankD.get(i).getRanking(),
+					rankD.get(i).getName(), "" + rankD.get(i).getScore() };
 			ranks.add(rank);
 		}
 		return ranks;
