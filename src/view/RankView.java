@@ -35,9 +35,15 @@ public class RankView extends JDialog {
 	 * 한 행에는 순위, 이름, 점수가 JLabel 텍스트로 가지고 있다.
 	 */
 	private JLabel[][] ranks;
+	/**
+	 * bgm을 바꿔야하는지 안바꿔도 되는지 체크할 flag 변수이다.
+	 */
+	private boolean bgmFlag;
+	
 	/* 
 	 * Edit by Seokju2ng 0525
 	 * */
+	
 	/**
 	 * Null-Parameter Constructor : MainView에서 RankView에 접근했을 때 팝업창을 보여주는 생성자이다.
 	 * Ranks 객체로 RankController를 통해 파일에 저장된 랭크 정보를 불러온다. 
@@ -47,6 +53,7 @@ public class RankView extends JDialog {
 		setLayout(null);
 
 		r = new Ranks();
+		bgmFlag = false;
 		
 		Font cfont = new Font("배달의민족 한나체 Pro", Font.BOLD, 30);
 		Font font = new Font("배달의민족 한나체 Pro", Font.PLAIN, 20);
@@ -111,13 +118,17 @@ public class RankView extends JDialog {
 		check.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				ChangePanelService.getInstance().changePanel("MainView", null); //확인 버튼 누르면 메인뷰로 돌아간다.
+				if(bgmFlag)
+					ChangePanelService.getInstance().changePanel("MainView", null); //확인 버튼 누르면 메인뷰로 돌아간다.
+				else ChangePanelService.getInstance().changePanel("MainView");
 			}
 		});
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 //				System.out.println("2");
-				ChangePanelService.getInstance().changePanel("MainView", null); //X 버튼 누르면 메인뷰로 돌아간다.
+				if(bgmFlag)
+					ChangePanelService.getInstance().changePanel("MainView", null); //확인 버튼 누르면 메인뷰로 돌아간다.
+				else ChangePanelService.getInstance().changePanel("MainView");
 			}
 		});
 
@@ -140,6 +151,7 @@ public class RankView extends JDialog {
 	 */
 	public RankView(String name,int score) {
 		this();
+		bgmFlag = true;
 		if(r.insert(name, score)) {
 			r = new Ranks();
 		}
