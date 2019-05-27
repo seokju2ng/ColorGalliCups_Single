@@ -24,7 +24,7 @@ public class CardController {
 	 * @param num 메소드 호출하는 측에서 리턴받고 싶어하는 카드의 장수에 해당되는 정보이다.
 	 * @return  CardSelectService로 부터 전달 받은 정보를 가공하여 CardDeck으로 리턴한다.
 	 */
-	public ArrayList<CardBean> getCards(int num){
+	public ArrayList<CardBean> selectCards(int num){
 		if(num < 0 || cardServiceManager == null) return null;
 		
 		ArrayList<CardBean> cards = new ArrayList<CardBean>();
@@ -34,6 +34,18 @@ public class CardController {
 			cards.add(new CardBean(Integer.valueOf(str[0]),str[1],str[2]));
 		}
 		
+		return cards;
+	}
+	
+	//0527 추가 Edit by DK KIM//
+	public ArrayList<CardBean> getCards() {
+		if(cardServiceManager == null) return null;
+		ArrayList<CardBean> cards = new ArrayList<CardBean>();
+		ArrayList<String[]> originalCards = cardServiceManager.getCards();
+		for(int i = 0 ; i <originalCards.size() ;i++) {
+			String [] str = originalCards.get(i);
+			cards.add(new CardBean(Integer.parseInt(str[0]),str[1],str[2]));
+		}
 		return cards;
 	}
 	/**
