@@ -60,7 +60,7 @@ public class Time1 extends JPanel implements ActionListener {
 
 	/**Timer에서 지정해주는 시간마다 1번 씩 남은 시간을 갱신해주는 메서드이다. 시간이 0이되면 타이머를 중지시킨다.*/
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed(ActionEvent e) {
 		sec--;
 		
 		if (sec >= 0) {
