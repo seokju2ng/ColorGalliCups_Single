@@ -272,7 +272,7 @@ public class CardDao  {
 		if (cards == null)
 			return false;
 		ArrayList<String> loadCards = new CardIO().loadCard(Card.CARD_PATH);
-		//ArrayList<String> loadGCards = new CardIO().loadCard(Card.GCARD_PATH);
+		ArrayList<String> loadGCards = new CardIO().loadCard(Card.GCARD_PATH);
 		if (loadCards == null || loadCards.size() == 0)
 			return false;
 		int n = Integer.parseInt(loadCards.get(0));
@@ -282,6 +282,16 @@ public class CardDao  {
 			String path = st.nextToken();
 			String answer = st.nextToken();
 			cards.add(new Card(num, path, answer));
+		}
+		if (loadGCards == null || loadGCards.size() == 0)
+			return false;
+		int m = Integer.parseInt(loadGCards.get(0));
+		for (int i = 1; i <= m; i++) {
+			StringTokenizer st = new StringTokenizer(loadGCards.get(i), " ");
+			int num = Integer.parseInt(st.nextToken());
+			String path = st.nextToken();
+			String answer = st.nextToken();
+			goldCards.add(new Card(num, path, answer));
 		}
 		return true;
 	}
@@ -316,10 +326,16 @@ public class CardDao  {
 
 	/**
 	 * goldCards element 중 랜덤하게 하나의 element를 뽑아서 리턴한다.
-	 * 
-	 * @return goldCards element 중 랜덤하게 하나의 element를 뽑아서 리턴한다.
+	 * EditByDK. goldCards elements를 깊은 복사하여 리턴한다.
+	 * @return goldCards 를 deep copy한 객체를 리턴한다.
 	 */
-	public Card getGoldCard() {
-		return new Card(goldCards.get(new Random().nextInt(goldCards.size())));
+	public ArrayList<Card> getGoldCards() {
+		if(goldCards == null || cards == null)
+			return null;
+		ArrayList<Card> gCards = new ArrayList<>();
+		for(int i = 0 ; i < goldCards.size(); i++) {
+			gCards.add(new Card(cards.get(i)));
+		}
+		return gCards;
 	}
 }
