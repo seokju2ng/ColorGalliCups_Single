@@ -21,6 +21,7 @@ public class CardIO {
 	 */
 	public boolean saveCard(ArrayList<String> cardInfo) {
 		try(PrintWriter pw = new PrintWriter(new File(Card.CARD_PATH));) {
+//		try(PrintWriter pw = new PrintWriter(new File("data/testcard.dat"));) {
 			for(int i = 0; i < cardInfo.size(); i++) {
 				pw.println(cardInfo.get(i));
 			}
@@ -36,7 +37,7 @@ public class CardIO {
 	}
 	/**
 	 * 저장된 파일로부터 카드정보를 읽어와 CardDao에 전달해준다.
-	 * @param path 읽어 올 파일의 경로이다. 
+	 * 
 	 * @return 저장된 파일로부터 카드정보들을 읽어오고, 읽어온 값을 리턴한다.
 	 */
 	public ArrayList<String> loadCard(String path) {
