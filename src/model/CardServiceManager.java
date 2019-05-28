@@ -32,9 +32,9 @@ public class CardServiceManager {
 	 * 무승부시 승부를 볼 골드카드를 한장 뽑아온다.
 	 * @return 랜덤하게 뽑은 골드카드 한장을 리턴한다.
 	 */
-	public String[] getGoldCard() {
+	public ArrayList<String[]> getGoldCards() {
 		if(cardSelectService == null) return null;
-		return cardSelectService.getGoldCard();
+		return cardSelectService.getGoldCards();
 	}
 	
 	//0527 Edit By DK KIM//
