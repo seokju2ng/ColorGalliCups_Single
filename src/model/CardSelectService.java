@@ -63,7 +63,7 @@ public class CardSelectService implements CardSelectable {
 			String[] str = new String[3];
 			str[0] = gCards.get(i).getNum() + "";
 			str[1] = gCards.get(i).getPath();
-			str[2] = gCards.get(i).getPath();
+			str[2] = gCards.get(i).getAnswer();
 			selectedGCards.add(str);
 		}
 		return selectedGCards;
