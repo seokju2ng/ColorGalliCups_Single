@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import view.MyIndex;
 import view.etc.Sound;
 /**
- * 메뉴 선택 UI(MainView, GameMode, NetworkMode, Help)에서 메뉴 버튼에 마우스 진입 시 현재 메뉴를 표시하는 아이콘의 위치를 마우스 위치에 해당하는 메뉴로 변경한다.
+ * 메뉴 선택 UI(MainView, GameMode, Help)에서 메뉴 버튼에 마우스 진입 시 현재 메뉴를 표시하는 아이콘의 위치를 마우스 위치에 해당하는 메뉴로 변경한다.
  * @author cms<br>*/
 public class MouseEnteredHandler extends MouseAdapter {
 	/**메뉴 선택 UI에서 메뉴 버튼에 대한 정보이다.*/

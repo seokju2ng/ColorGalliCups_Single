@@ -5,8 +5,8 @@ import java.awt.event.ComponentEvent;
 
 import javax.swing.JPanel;
 /**
- * 패널이 있는 UI(SinglePlayMode, DualPlayMode, NetworkPlayMode, NetworkMode, GameMode, OptionView, 
- * MainView, Help, GameInfo, KeyControl, Tutorial, WaitingRoomCrown, WaitingRoomNormal)
+ * 패널이 있는 UI(SinglePlayMode, DualPlayMode, GameMode, OptionView, 
+ * MainView, Help, GameInfo, KeyControl, Tutorial)
  * 의 패널이 변경되었을 때 변경된 패널에 초점을 맞춘다.
  * @author cms<br>*/
 public class FocusHandler extends ComponentAdapter {

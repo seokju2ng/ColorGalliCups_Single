@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import view.MyIndex;
 import view.etc.Sound;
 /**
- * 메뉴 선택 UI(MainView, GameMode, NetworkMode, Help)에서 키보드의 위, 아래 키 입력 시 화면에서 현재 메뉴를 표시하는 아이콘의 위치를 위, 아래로 변경한다.
+ * 메뉴 선택 UI(MainView, GameMode, Help)에서 키보드의 위, 아래 키 입력 시 화면에서 현재 메뉴를 표시하는 아이콘의 위치를 위, 아래로 변경한다.
  * @author cms<br>*/
 public class KeyUpDownHandler extends KeyAdapter
 {
@@ -21,7 +21,7 @@ public class KeyUpDownHandler extends KeyAdapter
 	/**메뉴 선택 UI에 있는 메뉴 개수에 대한 정보이다.*/
 	private int num;
 	/**
-	 * KeyUpDownHandler의 생성자로 cor,num,leftCursorArr,rightCursorArr를 Parameter로 받아 객체를 할당해준다.
+	 * KeyUpDownHandler의 생성자로 cor, num, leftCursorArr, rightCursorArr를 Parameter로 받아 객체를 할당해준다.
 	 * @param cor 메뉴 선택 UI의 메뉴 인덱스 정보를 저장한다.
 	 * @param num 메뉴 선택 UI에 있는 메뉴 개수에 대한 정보이다.
 	 * @param leftCursorArr 메뉴 선택 UI의 메뉴 왼쪽에 있는 JLabel에 대한 정보이다.

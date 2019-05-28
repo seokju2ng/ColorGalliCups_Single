@@ -9,7 +9,7 @@ import javax.swing.Timer;
 
 import view.etc.ChangePanelService;
 /**
- * 게임 플레이 UI(SinglePlayMode, DualPlayMode, NetworkPlayMode)에서  게임 종료 버튼 클릭 시 게임 종료 여부를 묻는 팝업창을 생성해준다. 
+ * 게임 플레이 UI(SinglePlayMode, DualPlayMode)에서  게임 종료 버튼 클릭 시 게임 종료 여부를 묻는 팝업창을 생성해준다. 
  * @author cms<br>*/
 public class ExitBtnHandler implements ActionListener {
 	/**게임 종료가 될 게임 플레이 UI이다.*/
