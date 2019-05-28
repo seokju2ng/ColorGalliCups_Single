@@ -151,7 +151,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		cardDeckLabels = new ArrayList<JLabel>();
 
 		// 0528 goldGame추가 Edit By DK KIM//
-		goldCardLabel = new JLabel(new ImageIcon("image/card(back).png"));
+		goldCardLabel = new JLabel(new ImageIcon("image/abtainGCard.png"));
 		goldCardLabel.setBounds(604, 41, 154, 238);
 		// this.add(goldCardLabel);
 		///////////////////////////
@@ -405,7 +405,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		//System.out.println("thread돌아감");
+		// System.out.println("thread돌아감");
 		if (one_Deck.size() + two_Deck.size() < cardDeckLabels.size()) {
 			if (one_flag == true) {
 				if (one_x > 150) {
@@ -473,18 +473,11 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		}
 		if (one_Deck.size() + two_Deck.size() >= cardDeckLabels.size() && goldFlag == false) {
 			// timePanel.getTimer().stop();
-
 			String winner;
 			if (one_cnt == two_cnt) {
 				JOptionPane.showMessageDialog(null, "무승부네요~ 골드게임 시작합니다!", "무승부", JOptionPane.OK_CANCEL_OPTION);
 				goldFlag = true;
-				// JLabel goldCardLabel = new JLabel(new
-				// ImageIcon(cardDeck.getGoldImagePath()));
-				// goldCardLabel.setBounds(604, 41, 154, 238);
-				// this.add(goldCardLabel);
-				// timePanel.getTimer().start();
 				goldCardLabel.setIcon(new ImageIcon(cardDeck.getGoldImagePath()));
-				System.out.println("골드게임!");
 			} else {
 				if (one_cnt > two_cnt) {
 					winner = "1p";
@@ -492,7 +485,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					winner = "2p";
 				}
 				timePanel.getTimer().stop();
-				
+
 				JOptionPane.showMessageDialog(null, one_cnt + ":" + two_cnt + ", " + winner + "승리(게임 진행시간 : "
 						+ timePanel.getTimeFlow().getText() + ")", "게임 종료", JOptionPane.CANCEL_OPTION);
 				tm.stop();
