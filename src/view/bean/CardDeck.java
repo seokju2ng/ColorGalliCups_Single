@@ -19,7 +19,7 @@ public class CardDeck {
 	/**
 	 * DualPlayMode에서 무승부가 났을 경우 사용될 골드 카드이다. 한장을 저장하고 있다.
 	 */
-	private CardBean goldCard;
+	private ArrayList<CardBean> goldCards;
 	
 	private static CardDeck instance;
 	//private CardController controller;
@@ -33,12 +33,13 @@ public class CardDeck {
 	static {
 		instance = new CardDeck();
 	}
-	public CardDeck() {
+	private CardDeck() {
 		//cards = new ArrayList<CardBean>();
 		CardController controller = new CardController();
 		cards = controller.getCards(); //shallow copy
-		//goldCard = controller.getGoldCard(); //goldCard완성되면 주석풀기/
+		goldCards = controller.getGoldCards(); //shallow copy
 	}
+	
 	public static CardDeck getInstance() {
 		return instance;
 	}
@@ -74,6 +75,13 @@ public class CardDeck {
 		else
 			return false;
 	}
+	
+	public boolean isGoldCorrect(String answer) {
+		if(goldCards.get(0).getAnswer().equals(answer))
+			return true;
+		else
+			return false;
+	}
 
 	/**
 	 * 무승부가 나서 goldCard가 필요할 경우 사용한다.
@@ -81,8 +89,10 @@ public class CardDeck {
 	 * @return goldCard의 값을 리턴해준다.
 	 */
 	public CardBean getGoldCard() {
-		return goldCard;
+		return goldCards.get(0);
 	}
+	
+	//getGdImagePath
 
 	/**
 	 * parameter로 받은 index에 해당하는 cards의 카드 그림 경로를 리턴한다.
@@ -96,6 +106,13 @@ public class CardDeck {
 		return cards.get(index).getPath();
 	}
 	
+	public String getGoldImagePath() {
+		System.out.println(goldCards.get(0).getPath());
+		return goldCards.get(0).getPath();
+	}
+	
+	
+	
 	public ArrayList<CardBean> selectCards(int num) {
 		if( num<0 || cards == null) return null;
 		ArrayList<CardBean> selectedCards = new ArrayList<>();
@@ -107,8 +124,16 @@ public class CardDeck {
 		
 	}
 	
+	
+	
 	public void shuffle() {
 		Collections.shuffle(cards);
 	}
+	
+	public void goldShuffle() {
+		Collections.shuffle(goldCards);
+	}
+	
+	
 
 }
