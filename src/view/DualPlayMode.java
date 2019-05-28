@@ -1,5 +1,6 @@
 package view;
 
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -19,7 +20,6 @@ import javax.swing.border.LineBorder;
 
 import view.bean.CardDeck;
 import view.etc.Board;
-import view.etc.Cards;
 import view.etc.ChangePanelService;
 import view.etc.HandVanish;
 import view.etc.KeyImage;
@@ -35,7 +35,8 @@ import view.handler.MouseBtnHandler;
 
 public class DualPlayMode extends JPanel implements ActionListener {
 	public static final int WIDTH = 1363, HEIGHT = 714;
-
+	private static int cardNum;
+	
 	// ********************************************************
 	// edit by minseongChoi
 	private int[] colorFlag1p;//
@@ -385,7 +386,9 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		addKeyListener(new Key1pHandler(one_buttons));
 		addKeyListener(new Key2pHandler(two_buttons));
 	}
-
+	public static void setCardNum(int cardNum) {
+		DualPlayMode.cardNum = cardNum;
+	}
 	public void actionPerformed(ActionEvent e) {
 		if (one_flag == true ) {
 			if (one_x > 150) {
