@@ -27,6 +27,10 @@ import view.etc.ChangePanelService;
  */
 public class RankView extends JDialog {
 	/**
+	 * 객체 직렬화를 위한 serialVersion의 ID이다.
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
 	 * 랭크 리스트 정보를 RankController를 통해 받아와 저장하는 view bean의 컬렉션 객체이다.
 	 */
 	private Ranks r;
