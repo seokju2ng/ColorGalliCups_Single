@@ -42,7 +42,7 @@ public class Cups {
 	/**모든 컵에 대하여 위치정보 및 크기를 설정하는 메소드이다.
 	 * @param x 컵의 x좌표이다.
 	 * @param y 컵의 y좌표이다.
-	 * @param area 컵의 넓이이다.
+	 * @param area 컵의 너비이다.
 	 * @param height 컵의 높이이다.
 	 * @param interval 쌓여지는 컵과 컵사이의 높이 간격이다.
 	 * */

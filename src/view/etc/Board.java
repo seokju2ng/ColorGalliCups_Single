@@ -3,15 +3,13 @@ package view.etc;
 import java.awt.Color;
 import java.awt.GridLayout;
 
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 /**
- * 게임 플레이 UI(SinglePlayMode, DualPlayMode, NetworkPlayMode)에서 사용되는 게임판에 대한 정보를 관리한다.
+ * 게임 플레이 UI(SinglePlayMode, DualPlayMode)에서 사용되는 게임판에 대한 정보를 관리한다.
  *@author cms<br> */
 public class Board extends JPanel {
-	//<<Member>>
 	/**게임플레이 UI에서 사용되는 게임판이다.*/
 	private JPanel [] cols; 
 	/**게임판의 칸 개수에 대한 정보이다.*/
@@ -20,7 +18,6 @@ public class Board extends JPanel {
 	private Cups cups;
 	/**게임판에서 사용되는 컵의 개수에 대한 정보이다.*/
 	private int cupCnt;
-	//<<Constructor>>
 	/**Board의 생성자로 cupCnt,colNum을 parameter로 받아 객체를 할당한다.
 	 * @param cupCnt 게임판에서 사용되는 컵의 개수에 대한 정보이다.
 	 * @param colNum 게임판의 칸 개수에 대한 정보이다.*/
@@ -36,11 +33,10 @@ public class Board extends JPanel {
 		}
 		cups =new Cups(cupCnt,colNum);
 	}
-	//<<Method>>
 	/**게임판에 사용되는 모든 컵에 대하여 위치정보 및 크기를 설정한다.
 	 * @param x 컵의 x좌표이다.
 	 * @param y 컵의 y좌표이다.
-	 * @param area 컵의 넓이이다.
+	 * @param area 컵의 너비이다.
 	 * @param height 컵의 높이이다.
 	 * @param interval 쌓여지는 컵과 컵사이의 높이 간격이다.
 	 * */
