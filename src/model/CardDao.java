@@ -334,7 +334,7 @@ public class CardDao  {
 			return null;
 		ArrayList<Card> gCards = new ArrayList<>();
 		for(int i = 0 ; i < goldCards.size(); i++) {
-			gCards.add(new Card(cards.get(i)));
+			gCards.add(new Card(goldCards.get(i)));
 		}
 		return gCards;
 	}
