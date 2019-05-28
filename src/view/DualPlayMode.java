@@ -405,6 +405,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		//System.out.println("thread돌아감");
 		if (one_Deck.size() + two_Deck.size() < cardDeckLabels.size()) {
 			if (one_flag == true) {
 				if (one_x > 150) {
@@ -428,7 +429,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					this.requestFocusInWindow();
 					bell.setIcon(new ImageIcon("image/bell.png"));
 					one_Deck.add(new JLabel(KeyImage.resizeIcon(icon, 90, 140))); // 1p 사용자 카드덱에 카드추가
-					one_Deck.get(one_cnt - 1).setBounds(50 + (one_cnt - 1) * 50, 190, 90, 140); // 좌표는 나중에 수정
+					one_Deck.get(one_cnt - 1).setBounds(50 + (one_cnt - 1) * 10, 190, 90, 140); // 좌표는 나중에 수정
 					for (int i = one_Deck.size() - 1; i >= 0; i--) {
 						p1.add(one_Deck.get(i));
 					}
@@ -495,6 +496,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 				JOptionPane.showMessageDialog(null, one_cnt + ":" + two_cnt + ", " + winner + "승리(게임 진행시간 : "
 						+ timePanel.getTimeFlow().getText() + ")", "게임 종료", JOptionPane.CANCEL_OPTION);
 				tm.stop();
+				timePanel.getTimer().stop();
 				ChangePanelService.getInstance().changePanel("MainView", DualPlayMode.this);
 			}
 		}
