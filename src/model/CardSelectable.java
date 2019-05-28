@@ -16,8 +16,8 @@ public interface CardSelectable {
 	//0527 EDIT BY DK KIM//
 	public ArrayList<String[]> getCards();
 	/**
-	 * goldCard 한장을 뽑아 리턴한다. interface를 구현한 클래스에서 메소드 바디부를 작성하여 사용한다.
-	 * @return goldCard 한장을 뽑아 리턴한다.
+	 * EditByDKKIm.  interface를 구현한 클래스에서 메소드 바디부를 작성하여 사용한다.
+	 * @return goldCards 뭉치를 뽑아 리턴한다.
 	 */
-	public String[] getGoldCard();
+	public ArrayList<String[]> getGoldCards();
 }
