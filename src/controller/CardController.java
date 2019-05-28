@@ -70,7 +70,7 @@ public class CardController {
 		
 		if(cardServiceManager == null) return null;
 		ArrayList<CardBean> cards = new ArrayList<CardBean>();
-		ArrayList<String[]> gCards = cardServiceManager.getCards();
+		ArrayList<String[]> gCards = cardServiceManager.getGoldCards();
 		for(int i = 0 ; i <gCards.size() ;i++) {
 			String [] str = gCards.get(i);
 			cards.add(new CardBean(Integer.parseInt(str[0]),str[1],str[2]));
