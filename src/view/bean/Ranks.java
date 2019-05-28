@@ -95,6 +95,9 @@ public class Ranks {
 		// }
 		// ranks.clear();
 		boolean res = rankController.clearRanking();
+		if(res) {
+			ranks.clear();
+		}
 		return res;
 	}
 
@@ -104,7 +107,6 @@ public class Ranks {
 	 * @return Ranks필드의 참조값을 리턴해준다.
 	 */
 	public ArrayList<RankBean> getRanks() {
-		ranks = rankController.getRanks();
 		return ranks;
 	}
 
