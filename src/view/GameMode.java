@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import view.etc.ChangePanelService;
+import view.etc.MyIndex;
 import view.etc.Sound;
 import view.handler.FocusHandler;
 import view.handler.KeyUpDownHandler;
@@ -50,25 +51,25 @@ public class GameMode extends JPanel {
 	 * GameMode 패널에 배경, 메뉴 텍스트 등을 넣어 패널을 꾸며준다.
 	 */
 	private void makeUI() {
-		JButton[] menuArr = new JButton[4];
+		JButton[] menuArr = new JButton[3];
 		menuArr[0] = new JButton("1p Mode");
 		menuArr[1] = new JButton("2p Mode");
-		menuArr[2] = new JButton("Network Mode");
-		menuArr[3] = new JButton("Back");
+//		menuArr[2] = new JButton("Network Mode");
+		menuArr[2] = new JButton("Back");
 
 		ImageIcon leftCursorImage = new ImageIcon("image/LeftCursor.png");
 		ImageIcon rightCursorImage = new ImageIcon("image/RightCursor.png");
 		JLabel[] leftCursorArr = new JLabel[] { new JLabel(leftCursorImage), new JLabel(leftCursorImage),
-				new JLabel(leftCursorImage), new JLabel(leftCursorImage) };
+				new JLabel(leftCursorImage)};
 		JLabel[] rightCursorArr = new JLabel[] { new JLabel(rightCursorImage), new JLabel(rightCursorImage),
-				new JLabel(rightCursorImage), new JLabel(rightCursorImage) };
+				new JLabel(rightCursorImage)};
 
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < leftCursorArr.length; i++) {
 			leftCursorArr[i].setBounds(450, 340 + 60 * i, 100, 100);
 			leftCursorArr[i].setVisible(false);
 			add(leftCursorArr[i]);
 		}
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < leftCursorArr.length; i++) {
 			rightCursorArr[i].setBounds(790, 340 + 60 * i, 100, 100);
 			rightCursorArr[i].setVisible(false);
 			add(rightCursorArr[i]);
@@ -132,9 +133,9 @@ public class GameMode extends JPanel {
 				cps.addPanel("DualMode", new DualPlayMode());
 				cps.changePanel("DualMode");
 			} else if (cor.getIndex() == 2)
-				cps.changePanel("NetworkMode");
-			else if (cor.getIndex() == 3)
 				cps.changePanel("MainView");
+//			else if (cor.getIndex() == 3)
+//				cps.changePanel("MainView");
 		}
 
 		/**

@@ -34,6 +34,7 @@ import view.etc.Time1;
 import view.handler.ExitBtnHandler;
 import view.handler.FocusBtnHandler;
 import view.handler.FocusHandler;
+import view.handler.Key1pHandler;
 import view.handler.MouseBtnHandler;
 
 /**
@@ -125,7 +126,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
       this.setFocusTraversalKeysEnabled(false);
       this.addComponentListener(new FocusHandler());
       // 카드를 가장 먼저 붙음 Edit by DK KIM//
-      cardDeck = new CardDeck();
+      cardDeck = CardDeck.getInstance();
       cardDeck.shuffle();
       one_Deck = new ArrayList<>();
 
@@ -209,7 +210,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
       // 카드 덱 -----------
       JPanel cardPanel = new RoundedPanel(null, 120, Color.WHITE);
       for (int i = 0; i < cardDeckLabels.size(); i++) {
-         cardDeckLabels.get(i).setBounds(73, 31, 154, 238);
+         cardDeckLabels.get(i).setBounds(68, 20, 164, 260);
          cardPanel.add(cardDeckLabels.get(i));
       }
       cardPanel.setBounds(50, 20, 300, 300);

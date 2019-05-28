@@ -215,7 +215,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 
 		// 0528 goldGame추가 Edit By DK KIM//
 		goldCardLabel = new JLabel(new ImageIcon("image/abtainGCard.png"));
-		goldCardLabel.setBounds(604, 41, 154, 238);
+		goldCardLabel.setBounds(595, 32, 164, 260);
 		// this.add(goldCardLabel);
 		///////////////////////////
 
@@ -382,7 +382,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		this.p2 = new JPanel();
 		/* 카드 먼저 cardDeckPanel에 붙여준다.0526 Edit By DK KIM */
 		for (int i = 0; i < cardDeckLabels.size(); i++) {
-			cardDeckLabels.get(i).setBounds(604, 41, 154, 238);
+			cardDeckLabels.get(i).setBounds(595, 32, 164, 260);
 			this.add(cardDeckLabels.get(i));
 		}
 		this.add(goldCardLabel);

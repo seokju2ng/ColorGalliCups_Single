@@ -39,9 +39,6 @@ public class ColorGalliCups extends JFrame {
 		changePanel.addPanel("Tutorial", new Tutorial());
 		changePanel.addPanel("GameInfo", new GameInfo());
 		changePanel.addPanel("KeyControl", new KeyControl());
-		// changePanel.addPanel("NetworkMode", new NetworkMode());
-		// changePanel.addPanel("NetworkPlayMode", new NetworkPlayMode());
-		// changePanel.addPanel("WaitingRoomCrown", new WaitingRoomCrown());
 
 		add(mainPanel);
 		layout.show(mainPanel, "MainView");
