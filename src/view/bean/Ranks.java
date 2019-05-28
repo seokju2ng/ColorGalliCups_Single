@@ -6,7 +6,7 @@ import controller.RankController;
 
 /**
  * View RankBean의 객체들을 Collection 타입으로 관리하는 클래스이다. RankBean에 관련된 Service에서 사용할
- * 랭크정보들을 저장하는 클래스이다.
+ * 랭크정보들을 저장하는 클래스이다. 싱글턴 패턴을 적용한 클래스이다.
  * 
  * @author seokjung
  */
@@ -26,7 +26,7 @@ public class Ranks {
 
 	/**
 	 * Null-Parameter Constructor : RankController를 통해 랭킹 정보를 담고 있는 File에서 랭킹정보를 읽어와
-	 * 저장한다.
+	 * 저장한다. 싱글턴 패턴을 적용한 클래스이므로 클래스 밖에서 생성자에 접근할 수 없다.
 	 */
 	private Ranks() {
 		rankController = new RankController();
@@ -58,6 +58,7 @@ public class Ranks {
 	 */
 	public boolean insertRank(String name, int score) {
 		String[] rankInfo = rankController.insertRank(name, score);
+		if(rankInfo == null) return false;
 		
 		int index = Integer.parseInt(rankInfo[0]);
 		int ranking = Integer.parseInt(rankInfo[1]);
@@ -129,7 +130,10 @@ public class Ranks {
 		}
 		return false;
 	}
-
+	/**
+	 * 싱글턴 패턴을 적용한 클래스이므로 getInstance() 메서드를 통해 인스턴스 객체를 반환받는다.
+	 * @return 인스턴스 객체를 반환한다.
+	 */
 	public static Ranks getInstance() {
 		if (instance == null) {
 			instance = new Ranks();
