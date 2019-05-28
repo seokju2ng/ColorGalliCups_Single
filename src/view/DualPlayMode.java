@@ -32,79 +32,142 @@ import view.handler.Key1pHandler;
 import view.handler.Key2pHandler;
 import view.handler.MouseBtnHandler;
 
+/**
+ * 2인용 게임모드를 제공하는 클래스이다.
+ * 
+ * @author 김도균
+ */
 public class DualPlayMode extends JPanel implements ActionListener {
-	public static final int WIDTH = 1363, HEIGHT = 714;
+	/**
+	 * 
+	 */
+	/** 객체직렬화를 위한 serialVersion의 ID이다. */
+	private static final long serialVersionUID = 1L;
+	/** 게임 화면의 너비이다. */
+	public static final int WIDTH = 1363;
+	/** 게임 화면의 높이이다. */
+	public static final int HEIGHT = 714;
+	/** 게임을 진행할때 필요한 기본카드의 갯수이다. */
 	private static int cardNum;
 
 	// ********************************************************
 	// edit by minseongChoi
-	private int[] colorFlag1p;//
-	private int[] colorFlag2p;//
+	/** 컵을 쌓을때 특정 색깔의 컵이 이미 쌓였는지 판별하기 위한 flag이다.(1p용) */
+	private int[] colorFlag1p;
+	/** 컵을 쌓을때 특정 색깔의 컵이 이미 쌓였는지 판별하기 위한 flag이다.(2p용) */
+	private int[] colorFlag2p;
+	/** 게임 보드에 컵을 쌓을때 몇번 째 칸에 쌓이는지를 저장하는 멤버이다.(1p용) */
 	private int gamePanelIndex1p;
+	/** 게임 보드에 컵을 쌓을때 몇번 째 칸에 쌓이는지를 저장하는 멤버이다.(2p용) */
 	private int gamePanelIndex2p;
+	/** 컵의 쌓여진 높이를 나타내는 멤버이다.(1p용) */
 	private int gamePanelY1p;
+	/** 컵의 쌓여진 높이를 나타내는 멤버이다.(2p용) */
 	private int gamePanelY2p;
+	/** 기능키(spacebar)가 연속 2번 이상 눌렸는지 판별하기 위한 flag이다. */
 	private boolean spaceFlag1p;
+	/** 기능키(enter)가 연속 2번 이상 눌렸는지 판별하기 위한 flag이다. */
 	private boolean spaceFlag2p;
 	// **********************************************************
 
+	/** 게임 화면 좌측부에 붙인 패널이다. */
 	private JPanel p1;
+	/** 게임 화면 중앙부에 붙인 패널이다. */
 	private JPanel p2;
+	/** 게임 화면 우측부에 붙인 패널이다. */
 	private JPanel p3;
+	/** 컵이 쌓이는 위치를 아이콘으로 표현하기 위한 JLabel이다.(1p용) */
 	private JLabel[] pointerOne; // 1p 화살표
+	/** 컵이 쌓이는 위치를 아이콘으로 표현하기 위한 JLabel이다.(2p용) */
 	private JLabel[] pointerTwo; // 2p 화살표
 
-	private Board board1, board2;
-
+	/** 컵이 쌓이는 게임 보드를 참조하기 위한 멤버이다.(1p용) */
+	private Board board1;
+	/** 컵이 쌓이는 게임 보드를 참조하기 위한 멤버이다.(2p용) */
+	private Board board2;
+	/** 현재 카드가 몇번째 카드인지 나타내기 위한 라벨을 부착할 패널이다. */
 	private JPanel cardIdxLabelPanel; // 카드번호를 나타내기 위한 패널
+	/** 진행 시간을 나타내는 패널이다. */
 	private Time2 timePanel;
 
+	/** 현재 카드가 몇 번째 카드인지 나타내는 라벨이다. */
 	private JLabel cardIdxLabel; // 카드번호를 나타내기 위함
+	/** 시스템 카드덱이 부착될 패널이다. */
 	private JPanel cardPanel; // 카드가 올라갈 패널
+	/** 게임 진행 시 사용될 종 모양의 Button이다. */
 	private JButton bell; // 종
-
+	/** 일시정지 버튼이다. */
 	private JButton pause;
+	/** 나가기 버튼이다. */
 	private JButton exit;
-
+	/** 1p사용자 카드덱을 나타낸다. 정답을 맞출때마다 사용자 카드덱에 시스템 카드덱의 카드가 추가된다. */
 	private ArrayList<JLabel> one_Deck; // 1p player가 맞춘 카드개수.
+	/** 2p사용자 카드덱을 나타낸다. 정답을 맞출때마다 사용자 카드덱에 시스템 카드덱의 카드가 추가된다. */
 	private ArrayList<JLabel> two_Deck; // 2p player가 맞춘 카드개수.
 	// private JLabel card; // 중앙 덱에 올라갈 카드
-
+	/** 1p 전용 키 버튼을 5색으로 나타내주는 라벨이다. */
 	private JLabel[] one_buttons; // 1p전용 키 버튼
+	/** 2p 전용 키 버튼을 5색으로 나타내주는 라벨이다. */
 	private JLabel[] two_buttons; // 2p전용 키 버튼
-
+	/** 일시정지 버튼 클릭 시 화면을 가득 채울 일시정지 화면 버튼이다. */
 	private JButton pauseBackground;
 	//////////////////////////////// 준희가 수정 //////////////////
+	/** 손 모양의 이미지를 저장하는 라벨이다. */
 	private JLabel[][] hands; // 손 이미지 저장하는 라벨
+	/** 손의 이미지이다. */
 	private ImageIcon[] img; // 손 이미지
+	/** 손 쌓는 층을 나타내는 index이다. */
 	private int index = 3; // 손쌓는 층 나타내는 index 0,1층만 있다
+	/** 한 사람이 연속으로 벨을 못누르게 하는 flag역할을 한다. */
 	private boolean[] handCheck; // 한사람이 연속으로 벨 못누른다 flag 역할
 	//////////////////////////////// 준희가 수정 끝//////////////////
 
 	// 애니메이션//
+	/** 카드가 움직이는 애니메이션을 구현하기 위한 멤버이다. */
 	private Timer tm = new Timer(10, this);
-	private int initX = 604, velX = 30; // 초기 카드위치와 카드가 움직이는 속도
+	/** 초기 카드의 위치를 나타내는 좌표이다. */
+	private int initX = 604;
+	/** 애니메이션 상에서 카드가 움직이는 속도이다. */
+	private int velX = 30;
+	/** 1p 사용자의 정답 여부이다. */
 	private boolean one_flag = false; // 1p의 정답여부
+	/** 2p 사용자의 정답 여부이다. */
 	private boolean two_flag = false; // 2p의 정답여부
-	private int one_x, two_x; // 1p, 2p의 카드좌표
-	private int one_cnt, two_cnt; // 1p,2p의 정답개수
+	/** 1p사용자의 카드 좌표이다. */
+	private int one_x;
+	/** 2p사용자의 카드 좌표이다. */
+	private int two_x; // 1p, 2p의 카드좌표
+	/** 1p사용자의 정답 갯수이다. */
+	private int one_cnt;
+	/** 2p사용자의 정답 갯수이다. */
+	private int two_cnt; // 1p,2p의 정답개수
+	/** 기본카드와 goldCard를 포함하고 있는 카드덱이다. */
 	private CardDeck cardDeck;
+	/** 현재 시스템 카드덱의 카드가 몇번째 카드인지 나타낸다. */
 	private int cardCnt; // 현재 시스템 카드덱의 카드가 몇번째 카드인지.
 	//////
 	/* 게임로직 관련 멤버 추가 0526 Edit by DK KIM */
+	/** 시스템 카드덱의 카드 그림을 보여주기 위한 라벨 list이다. */
 	private ArrayList<JLabel> cardDeckLabels;
+	/** 1인용 사용자가 입력하는 정답 문자열이다. */
 	private StringBuilder pOneAnswer;
+	/** 2인용 사용자가 입력하는 정답 문자열이다. */
 	private StringBuilder pTwoAnswer;
 	///////////////////////
 
 	/* 무승부를 판별하기 위한 flag */
+	/** 골드게임 실행여부(무승부 여부)를 판별하기 위한 flag이다. */
 	private boolean goldFlag = false;
-	JLabel goldCardLabel;// 골드카드 그림을 나타내는 라벨
+	/** 골드카드 그림을 나타내는 라벨이다. */
+	private JLabel goldCardLabel;// 골드카드 그림을 나타내는 라벨
 
 	// 여기서부터 카드 애니메이션 0518//
 
 	//////////////////////// 여기까지 카드 에니메이션/////////////
 
+	/**
+	 * 2인용 플레이모드가 시작될 때 처음 시작된 생성자이다. 진행 시간을 시작 및 게임에 필요한 UI들을 생성해준다.
+	 */
 	public DualPlayMode() {
 		tm.start();
 		this.setFocusTraversalKeysEnabled(false);
@@ -147,7 +210,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		int cardNum = 4; // 옵션에서 정해줄 시스템 카드의 장수이다.
 		cardDeck = CardDeck.getInstance(); // 옵션에서 정해준 장수만큼 카드덱을 생성한다.
 		cardDeck.shuffle();
-		cardDeck.goldShuffle(); // 골드카드를 섞어준다.
+		// cardDeck.goldShuffle(); // 골드카드를 섞어준다.
 		cardDeckLabels = new ArrayList<JLabel>();
 
 		// 0528 goldGame추가 Edit By DK KIM//
@@ -171,6 +234,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		setVisible(true);
 	}
 
+	/** 게임화면 좌측부를 나타내주기 위한 메서드이다. (진행시간 패널, 카드번호 패널,1p 사용자용 게임보드, 1p 사용자용 카드덱 */
 	public void showWest() {
 		// 화살표 달아줌//
 		pointerOne = new JLabel[5];
@@ -245,6 +309,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		this.add(p1);
 	}
 
+	/** 게임화면 우측부를 나타내주기 위한 메서드이다. (일시정지및 나가기 버튼, 2p 사용자용 게임보드, 2p 사용자용 카드덱 ) */
 	public void showEast() {
 		// 화살표 달아줌//
 		pointerTwo = new JLabel[5];
@@ -310,6 +375,9 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		two_Deck = new ArrayList<>();
 	}
 
+	/**
+	 * 게임화면 중앙부를 나타내주기 위한 메서드이다. (시스템 카드덱 그림, 시스템 카드덱 패널,1p 사용자용 키라벨, 2p 사용자용 키라벨
+	 */
 	public void showCenter() {
 		this.p2 = new JPanel();
 		/* 카드 먼저 cardDeckPanel에 붙여준다.0526 Edit By DK KIM */
@@ -318,6 +386,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 			this.add(cardDeckLabels.get(i));
 		}
 		this.add(goldCardLabel);
+		goldCardLabel.setVisible(false);
 
 		///////
 
@@ -366,6 +435,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 	}
 
 	/*------------ centerpane(p2)에 버튼10개 달아주는 메소드 ---------------*/
+	/** showCenter() 메서드에서 호출하는, 화면 중앙부에 1p,2p사용자용 키 라벨을 생성해주기 위한 메서드이다. */
 	public void addKeyButtons() {
 		p2.setLayout(null);
 		one_buttons = KeyImage.getKey("1P", 40, 40);
@@ -400,10 +470,15 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		addKeyListener(new Key2pHandler(two_buttons));
 	}
 
+	/** 옵션에서 설정한 카드 갯수 만큼 시스템 카드덱의 수를 설정해주기 위한 static 메서드이다. */
 	public static void setCardNum(int cardNum) {
 		DualPlayMode.cardNum = cardNum;
 	}
 
+	/**
+	 * 듀얼플레이화면의 Timer가 start() 될 때 주어진 시간마다 한 번씩 실행되는 메서드이다. 카드 애니메이션을 표현한다. 무승부가
+	 * 아니라면 승자를 알려주는 팝업을 띄우고, 무승부 시 골드게임을 시작하게 한다.
+	 */
 	public void actionPerformed(ActionEvent e) {
 		// System.out.println("thread돌아감");
 		if (one_Deck.size() + two_Deck.size() < cardDeckLabels.size()) {
@@ -475,8 +550,11 @@ public class DualPlayMode extends JPanel implements ActionListener {
 			// timePanel.getTimer().stop();
 			String winner;
 			if (one_cnt == two_cnt) {
+				goldCardLabel.setVisible(true);
+				cardDeck.goldShuffle(); // 골드카드를 섞어준다.
 				JOptionPane.showMessageDialog(null, "무승부네요~ 골드게임 시작합니다!", "무승부", JOptionPane.OK_CANCEL_OPTION);
 				goldFlag = true;
+				
 				goldCardLabel.setIcon(new ImageIcon(cardDeck.getGoldImagePath()));
 			} else {
 				if (one_cnt > two_cnt) {
@@ -495,6 +573,11 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		}
 	}
 
+	/**
+	 * 일시정지 버튼을 클릭하고 다시 화면을 클릭했을 때 각각의 효과를 발생시킨다. 1. 일시정지 버튼을 클릭한 경우 - 일시정지 화면으로 전환,
+	 * Time2을 통한 진행시간 정지, 조작키 비활성화한다. 2. 일시정지 화면을 클릭한 경우 - 게임화면으로 전환, Time2을 통한 진행
+	 * 시간 재개, 조작키 활성화한다.
+	 */
 	private class ActionHandler implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -525,6 +608,12 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		}
 	}
 
+	/**
+	 * 키를 누르고 뗐을 때, 각각의 조건에 따른 효과를 발생시킨다. 1. 색상키를 누르면 board에 해당 색상 컵을 쌓는다. 2-1. 컵이
+	 * 5개 쌓이기 전 기능키를 한번 누른 경우: 다음 칸으로 이동한다. 2-2 컵이 5개 쌓이기 전 기능키를2번 연속 누른 경우: 배치된 컵을
+	 * 초기화한다. 3. 컵이 5개가 쌓인 뒤 기능키를 누른 경우 정답을 제출하고 Sound 클래스의 playSound() 메서드를 통해 벨소리를
+	 * 울린다. 4. 제출한 답이 정답인 경우 문제카드를 맞힌 사용자에게 이동하고 맞힌 문제 수를 증가시킨다.
+	 */
 	private class KeyHandler extends KeyAdapter {
 
 		@Override
