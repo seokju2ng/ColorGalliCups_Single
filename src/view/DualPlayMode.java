@@ -29,6 +29,8 @@ import view.etc.Time2;
 import view.handler.ExitBtnHandler;
 import view.handler.FocusBtnHandler;
 import view.handler.FocusHandler;
+import view.handler.Key1pHandler;
+import view.handler.Key2pHandler;
 import view.handler.MouseBtnHandler;
 
 public class DualPlayMode extends JPanel implements ActionListener {
@@ -81,7 +83,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 
 	// 애니메이션//
 	private Timer tm = new Timer(10, this);
-	private int initX = 604, velX = 10; // 초기 카드위치와 카드가 움직이는 속도
+	private int initX = 604, velX = 15; // 초기 카드위치와 카드가 움직이는 속도
 	private boolean one_flag = false; // 1p의 정답여부
 	private boolean two_flag = false; // 2p의 정답여부
 	private int one_x, two_x; // 1p, 2p의 카드좌표
@@ -138,8 +140,8 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		this.add(pauseBackground);
 
 		// 카드를 가장 먼저 붙임)(0518애니메이션)
-		int cardNum = 4; // 옵션에서 정해줄 시스템 카드의 장수이다.
-		cardDeck = new CardDeck(cardNum); // 옵션에서 정해준 장수만큼 카드덱을 생성한다.
+		int cardNum = 10; // 옵션에서 정해줄 시스템 카드의 장수이다.
+		cardDeck = new CardDeck(); // 옵션에서 정해준 장수만큼 카드덱을 생성한다.
 		cardDeckLabels = new ArrayList<JLabel>();
 		for (int i = 0; i < cardNum; i++) {
 			cardDeckLabels.add(new JLabel(new ImageIcon(cardDeck.getImagePath(i))));
@@ -385,15 +387,15 @@ public class DualPlayMode extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (one_flag == true) {
+		if (one_flag == true ) {
 			if (one_x > 150) {
 				// velX = -velX;
 				cardDeckLabels.get(cardCnt - 1).setBounds(one_x, -(one_x / 7) + 128, 154, 238);// 이미 cardCnt는 1증가되어있으므로
-																								// 이전의 cardCnt에 해당하는 카드를
-																								// 가져온다.
+				board1.requestFocusInWindow();														// 이전의 cardCnt에 해당하는 카드를
+										// 가져온다.
 				one_x = one_x - velX;
 				// card.setBounds(610,-(610/7)+45,154,238);
-
+		
 			}
 			// x = x + velX;
 			// card.setBounds(x,x/7-45,154,238);
@@ -402,7 +404,8 @@ public class DualPlayMode extends JPanel implements ActionListener {
 				this.remove(cardDeckLabels.get(cardCnt - 1)); // 카드를 지우고
 				this.revalidate(); // 부모컨테이너를 새로고침한다
 				this.repaint(); // 새로고침.
-
+				this.requestFocusInWindow();	
+				bell.setIcon(new ImageIcon("image/bell.png"));
 				one_Deck.add(new JLabel(KeyImage.resizeIcon(icon, 90, 140))); // 1p 사용자 카드덱에 카드추가
 				one_Deck.get(one_cnt - 1).setBounds(50 + (one_cnt - 1) * 10, 190, 90, 140); // 좌표는 나중에 수정
 				for (int i = one_Deck.size() - 1; i >= 0; i--) {
@@ -415,11 +418,11 @@ public class DualPlayMode extends JPanel implements ActionListener {
 
 				cardIdxLabel.setText(cardCnt + "/" + cardDeckLabels.size());
 			}
-		} else if (two_flag == true) {
+		} else if (two_flag == true ) {
 			if (two_x < 1100) {
 				cardDeckLabels.get(cardCnt - 1).setBounds(two_x, two_x / 7 - 45, 154, 238); // 원래
 				two_x = two_x + velX;
-
+				board1.requestFocusInWindow();	
 			} else if (two_x > 1100) {
 				// try {
 				// Thread.sleep(1000); // 카드가 1초후 사라진다.
@@ -428,7 +431,8 @@ public class DualPlayMode extends JPanel implements ActionListener {
 				this.remove(cardDeckLabels.get(cardCnt - 1)); // 카드를 지우고
 				this.revalidate(); // 부모컨테이너를 새로고침한다
 				this.repaint(); // 새로고침.
-
+				this.requestFocusInWindow();
+				bell.setIcon(new ImageIcon("image/bell.png"));
 				two_Deck.add(new JLabel(KeyImage.resizeIcon(icon, 90, 140))); // 2p 사용자 카드덱에 카드추가
 				two_Deck.get(two_cnt - 1).setBounds(350 - (two_cnt - 1) * 10, 190, 90, 140); // 좌표는 나중에 수정
 				for (int i = two_Deck.size() - 1; i >= 0; i--) {
@@ -607,7 +611,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					new HandVanish(3, hands, handCheck).start();
 					/////////////////////////// 손 나오는 부분 끝/////////////////
 					System.out.println("2p 답 :" + pTwoAnswer);
-					if (cardDeck.isCorrect(cardCnt, new String(pTwoAnswer)) == true) {
+					if ((cardDeck.isCorrect(cardCnt, new String(pTwoAnswer)) == true) && one_flag == false) {
 						two_flag = true;
 						cardCnt++; // 시스템카드덱을 +1한다.
 						two_cnt++; // 2p 정답수를 +1한다.
@@ -634,7 +638,8 @@ public class DualPlayMode extends JPanel implements ActionListener {
 
 					/////////////////////////// 손 나오는 부분 끝/////////////////
 					// 여기 다시 해봐라!(if문 추가)
-					if (cardDeck.isCorrect(cardCnt, new String(pOneAnswer)) == true) {
+					//1p,2p 동싴 ㅣ입력시 버그 해결을 위해 && 이용함
+					if ((cardDeck.isCorrect(cardCnt, new String(pOneAnswer)) == true) && (two_flag == false)) {
 						one_flag = true;
 						cardCnt++; // 시스템카드덱을 +1한다.
 						one_cnt++; // 1p 정답수를 +1한다.
