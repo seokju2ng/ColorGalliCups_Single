@@ -21,7 +21,7 @@ import view.handler.KeyUpDownHandler;
 import view.handler.MouseEnteredHandler;
 
 /**
- * Help 메뉴를 선택하면 나오는 Help 패널를 보여주는 Help 클래스이다.
+ * Help 메뉴들을 보여주는 Help 클래스이다.
  * 
  * @author 송준희
  */
@@ -31,24 +31,24 @@ public class Help extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * 
+	 * Help 메뉴에 있는 메뉴들을 저장한다.
 	 */
 	private JButton[] b;
 	/**
-	 * 
+	 * 선택한 메뉴에 따른 index값을 저장한다.
 	 */
 	private MyIndex cor;
 	/**
-	 * 
+	 * 왼쪽에서 메뉴를 가리키는 화살표를 저장한다.
 	 */
 	private JLabel[] ll;
 	/**
-	 * 
+	 * 오른쪽에서 메뉴를 가리키는 화살표를 저장한다.
 	 */
 	private JLabel[] rl;
 
 	/**
-	 * 
+	 * null parameter constructor로 Help 패널을 만들어 사용자에게 보여준다.
 	 */
 	public Help() {
 		cor = new MyIndex();
@@ -58,6 +58,9 @@ public class Help extends JPanel {
 		this.setSize(1363, 714);
 	}
 
+	/**
+	 * Help의 패널에 배경, 메뉴 텍스트 등을 넣어 패널을 꾸며준다.
+	 */
 	private void makeUI() {
 		setLayout(new BorderLayout());
 		JPanel p = new JPanel();
@@ -115,9 +118,16 @@ public class Help extends JPanel {
 		this.addKeyListener(l);
 	}
 
+	/**
+	 * Help의 Inner Class로 패널에 이벤트가 발생했을 때, 그 이벤트를 처리해주는 Handler 클래스이다. *
+	 * 
+	 * @author 송준희
+	 */
 	class Handler extends KeyAdapter implements ActionListener {
+		/**
+		 * 사용자가 메뉴를 선택하면, 선택한 메뉴로 패널을 교체한다.
+		 */
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("enter");
 			Sound.playEffect("audio/enter.wav");
 			ChangePanelService cps = ChangePanelService.getInstance();
 			if (cor.getIndex() == 0)
@@ -130,6 +140,9 @@ public class Help extends JPanel {
 				cps.changePanel("MainView");
 		}
 
+		/**
+		 * 사용자가 엔터키를 입력했을 때 actionPerformed 메소드를 발생시킨다.
+		 */
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				actionPerformed(new ActionEvent(e.getSource(), e.getID(), Character.toString(e.getKeyChar())));

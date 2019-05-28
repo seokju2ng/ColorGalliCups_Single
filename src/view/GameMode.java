@@ -32,12 +32,12 @@ public class GameMode extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
-	 * 현재 선택한 메뉴의 양 옆의 아이콘 index를 저정하는 MyIndex 객체이다.
+	 * 선택한 메뉴에 따른 index값을 저장한다.
 	 */
 	private MyIndex cor;
 
 	/**
-	 * null-parameter Constructor로 UI 화면을 보여준다.
+	 * null parameter constructor로 GameMode 패널을 만들어 사용자에게 보여준다.
 	 */
 	public GameMode() {
 		cor = new MyIndex();
@@ -47,7 +47,7 @@ public class GameMode extends JPanel {
 	}
 
 	/**
-	 * Component들을 생성하고 JPanel에 붙여주는 메소드이다.
+	 * GameMode 패널에 배경, 메뉴 텍스트 등을 넣어 패널을 꾸며준다.
 	 */
 	private void makeUI() {
 		JButton[] menuArr = new JButton[4];
@@ -114,13 +114,13 @@ public class GameMode extends JPanel {
 	}
 
 	/**
-	 * 선택한 메뉴에 따라 패널을 바꿔주는 Handler 클래스이다.
+	 * GameMode의 Inner Class로 패널에 이벤트가 발생했을 때, 그 이벤트를 처리해주는 Handler 클래스이다. *
 	 * 
 	 * @author 송준희
 	 */
 	class Handler extends KeyAdapter implements ActionListener {
 		/**
-		 * 이벤트가 발생 했을 때 현재 패널을 지우고 선택한 메뉴에 해당하는 객체를 생성하고 그 객체의 패널로 바꿔준다.
+		 * 사용자가 메뉴를 선택하면, 선택한 메뉴로 패널을 교체한다.
 		 */
 		public void actionPerformed(ActionEvent e) {
 			ChangePanelService cps = ChangePanelService.getInstance();
@@ -138,7 +138,7 @@ public class GameMode extends JPanel {
 		}
 
 		/**
-		 * 엔터키를 눌렀을 때 이벤트를 발생시킨다.
+		 * 사용자가 엔터키를 입력했을 때 actionPerformed 메소드를 발생시킨다.
 		 */
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
