@@ -20,17 +20,40 @@ import view.handler.FocusHandler;
 import view.handler.KeyUpDownHandler;
 import view.handler.MouseEnteredHandler;
 
+/**
+ * Help 메뉴를 선택하면 나오는 Help 패널를 보여주는 Help 클래스이다.
+ * 
+ * @author 송준희
+ */
 public class Help extends JPanel {
+	/**
+	 * 객체 직렬화를 위한 serialVersion의 ID이다.
+	 */
 	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
 	private JButton[] b;
+	/**
+	 * 
+	 */
 	private MyIndex cor;
+	/**
+	 * 
+	 */
 	private JLabel[] ll;
+	/**
+	 * 
+	 */
 	private JLabel[] rl;
 
+	/**
+	 * 
+	 */
 	public Help() {
 		cor = new MyIndex();
-		this.addComponentListener(new FocusHandler());
 		this.makeUI();
+		this.addComponentListener(new FocusHandler());
 		this.addKeyListener(new KeyUpDownHandler(cor, 3, ll, rl));
 		this.setSize(1363, 714);
 	}
@@ -50,10 +73,8 @@ public class Help extends JPanel {
 
 		b = new JButton[4];
 		Font font = new Font("Nanum Brush Script", Font.BOLD, 40);
-		KeyUpDownHandler kudh = new KeyUpDownHandler(cor, 3, ll, rl);
+
 		Handler l = new Handler();
-		// p.addKeyListener(l);
-		// p2.addKeyListener(l);
 		for (int i = 0; i < 4; i++) {
 			b[i] = new JButton();
 			b[i].setBorderPainted(false);
@@ -62,8 +83,6 @@ public class Help extends JPanel {
 			b[i].setFont(font);
 			b[i].setForeground(fg);
 			b[i].addActionListener(l);
-			b[i].addKeyListener(l);
-			b[i].addKeyListener(kudh);
 		}
 		b[0].setText("조작키");
 		b[1].setText("게임설명");
@@ -82,25 +101,18 @@ public class Help extends JPanel {
 			p2.add(b[i]);
 			p2.add(rl[i]);
 			ll[i].setVisible(false);
-			// ll[i].addKeyListener(l);
 			rl[i].setVisible(false);
-			// rl[i].addKeyListener(l);
 		}
 		ll[0].setVisible(true);
 		rl[0].setVisible(true);
-
 		MouseEnteredHandler ml = new MouseEnteredHandler(b, ll, rl, cor);
 
 		for (int i = 0; i < 4; i++) {
 			b[i].addMouseListener(ml);
 		}
-
 		add(p);
-		p.addKeyListener(l);
-		p.addKeyListener(kudh);
 		setFocusable(true);
-		addKeyListener(l);
-
+		this.addKeyListener(l);
 	}
 
 	class Handler extends KeyAdapter implements ActionListener {
