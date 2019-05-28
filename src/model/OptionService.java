@@ -21,7 +21,7 @@ public class OptionService {
 		if(option == null) option = new Option();
 		ArrayList<String> op = new ArrayList<String>();
 		op.add(option.isBgm()?"ON":"OFF");
-		op.add(option.isSound()?"ON":"OFF");
+		op.add(option.isEffect()?"ON":"OFF");
 		op.add(option.getCardNum()+"");
 		return op;
 	}
@@ -29,13 +29,13 @@ public class OptionService {
 	public void setOption(ArrayList<String> option) {
 		if(this.option == null || option == null) return;
 		this.option.setBgm(option.get(0).equals("ON") ? true : false);
-		this.option.setSound(option.get(1).equals("ON") ? true : false);
+		this.option.setEffect(option.get(1).equals("ON") ? true : false);
 		this.option.setCardNum(Integer.parseInt(option.get(2)));
 	}
 	
-	public void setOption(boolean bgm, boolean sound, int cardNum) {
+	public void setOption(boolean bgm, boolean effect, int cardNum) {
 		this.option.setBgm(bgm);
-		this.option.setSound(sound);
+		this.option.setEffect(effect);
 		this.option.setCardNum(cardNum);
 	}
 	
@@ -47,13 +47,13 @@ public class OptionService {
 		if(option == null) return;
 		option.setBgm(false);
 	}
-	public void soundOn() {
+	public void effectOn() {
 		if(option == null) return;
-		option.setSound(true);
+		option.setEffect(true);
 	}
-	public void soundOff() {
+	public void effectOff() {
 		if(option == null) return;
-		option.setSound(false);
+		option.setEffect(false);
 	}
 	public void setCardNum(int cardNum) {
 		if(option == null) return;
@@ -64,10 +64,10 @@ public class OptionService {
 	public boolean loadOption() {
 		try(BufferedReader br = new BufferedReader(new FileReader(opPath))){
 			boolean bgm = Integer.parseInt(br.readLine()) == 1 ? true:false;
-			boolean sound = Integer.parseInt(br.readLine()) == 1 ? true:false;
+			boolean effect = Integer.parseInt(br.readLine()) == 1 ? true:false;
 			int cardNum = Integer.parseInt(br.readLine());
 			this.option.setBgm(bgm);
-			this.option.setSound(sound);
+			this.option.setEffect(effect);
 			this.option.setCardNum(cardNum);
 		} catch(Exception e) { 
 			System.err.println(e); return false;
@@ -78,7 +78,7 @@ public class OptionService {
 	public boolean saveOption() {
 		try(PrintWriter pw = new PrintWriter(new File(opPath));) {
 			pw.println(option.isBgm()?1:0);
-			pw.println(option.isSound()?1:0);
+			pw.println(option.isEffect()?1:0);
 			pw.println(option.getCardNum());
 		} catch (FileNotFoundException e) {
 			System.err.println(e);

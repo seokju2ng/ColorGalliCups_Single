@@ -2,20 +2,20 @@ package model;
 
 public class Option {
 	private boolean bgm;
-	private boolean sound;
+	private boolean effect;
 	private int cardNum;
 	
 	public Option() {
-		bgm = true; sound = true; cardNum = 20;
+		bgm = true; effect = true; cardNum = 20;
 	}
 	public Option(Option op) {
 		bgm = op.isBgm();
-		sound = op.isSound();
+		effect = op.isEffect();
 		cardNum = op.getCardNum();
 	}
-	public Option(boolean bgm, boolean sound, int cardNum) {
+	public Option(boolean bgm, boolean effect, int cardNum) {
 		this.bgm = bgm;
-		this.sound = sound;
+		this.effect = effect;
 		this.cardNum = cardNum;
 	}
 
@@ -27,12 +27,12 @@ public class Option {
 		this.bgm = bgm;
 	}
 
-	public boolean isSound() {
-		return sound;
+	public boolean isEffect() {
+		return effect;
 	}
 
-	public void setSound(boolean sound) {
-		this.sound = sound;
+	public void setEffect(boolean effect) {
+		this.effect = effect;
 	}
 
 	public int getCardNum() {
@@ -45,7 +45,7 @@ public class Option {
 	
 	public String toString() {
 		return "Option[bgm:"+(bgm?"ON":"OFF")+
-				"/sound:"+(sound?"ON":"OFF")+
+				"/effect:"+(effect?"ON":"OFF")+
 				"/cardNum:"+cardNum+"]";
 	}
 }
