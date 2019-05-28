@@ -14,6 +14,8 @@ import javax.swing.JPanel;
 import view.etc.KeyImage;
 import view.handler.BackHelpHandler;
 import view.handler.FocusHandler;
+import view.handler.Key1pHandler;
+import view.handler.Key2pHandler;
 
 /**
  * Help 메뉴의 조작키 메뉴를 선택했을 때 사용자에게 조작키를 보여주는 KeyControl 클래스이다.
