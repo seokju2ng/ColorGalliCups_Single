@@ -36,7 +36,7 @@ public class CardIO {
 	}
 	/**
 	 * 저장된 파일로부터 카드정보를 읽어와 CardDao에 전달해준다.
-	 * 
+	 * @param path 읽어 올 파일의 경로이다. 
 	 * @return 저장된 파일로부터 카드정보들을 읽어오고, 읽어온 값을 리턴한다.
 	 */
 	public ArrayList<String> loadCard(String path) {
