@@ -228,12 +228,14 @@ public class OptionView extends JPanel {
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 				if (index == 3) {
+					Sound.playEffect("audio/touch2.wav");
 					larrows[index].setVisible(false);
 					rarrows[index].setVisible(false);
 					index = 0;
 					larrows[index].setVisible(true);
 					rarrows[index].setVisible(true);
 				} else if (index != 3) {
+					Sound.playEffect("audio/touch2.wav");
 					larrows[index].setVisible(false);
 					rarrows[index].setVisible(false);
 					index += 1;
@@ -242,12 +244,14 @@ public class OptionView extends JPanel {
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_UP) {
 				if (index == 0) {
+					Sound.playEffect("audio/touch2.wav");
 					larrows[index].setVisible(false);
 					rarrows[index].setVisible(false);
 					index = 3;
 					larrows[index].setVisible(true);
 					rarrows[index].setVisible(true);
 				} else if (index != 0) {
+					Sound.playEffect("audio/touch2.wav");
 					larrows[index].setVisible(false);
 					rarrows[index].setVisible(false);
 					index -= 1;
@@ -256,12 +260,14 @@ public class OptionView extends JPanel {
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 				if (index != 3 && optionValue[index] != 0) {
+					Sound.playEffect("audio/touch2.wav");
 					btn[index][optionValue[index]].setForeground(new Color(0, 0, 0));
 					optionValue[index] -= 1;
 					btn[index][optionValue[index]].setForeground(new Color(255, 80, 80));
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 				if (index != 3 && optionValue[index] != btn[index].length - 1) {
+					Sound.playEffect("audio/touch2.wav");
 					btn[index][optionValue[index]].setForeground(new Color(0, 0, 0));
 					optionValue[index] += 1;
 					btn[index][optionValue[index]].setForeground(new Color(255, 80, 80));
