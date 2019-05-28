@@ -58,14 +58,23 @@ public class CardController {
 	public boolean isCorrect(int num, String answer) {
 		return true;
 	}
-	/**
+	/**EditBYDKKIM
 	 * CardDeck으로부터 요청을 받아 goldCard를 CardSelectService에 요청하여 전달 받은 정보를 가공하여 CardDeck으로 리턴한다.
 	 * @return CardSelectService로 부터 전달 받은 정보를 가공하여 CardDeck으로 리턴한다.
 	 */
-	public CardBean getGoldCard() {
+	public ArrayList<CardBean> getGoldCards() {
+//		if(cardServiceManager == null) return null;
+//		ArrayList<String[]> str = cardServiceManager.getGoldCards();
+//		CardBean card = new CardBean(Integer.valueOf(str[0]),str[1],str[2]);
+//		return card;
+		
 		if(cardServiceManager == null) return null;
-		String[] str = cardServiceManager.getGoldCard();
-		CardBean card = new CardBean(Integer.valueOf(str[0]),str[1],str[2]);
-		return card;
+		ArrayList<CardBean> cards = new ArrayList<CardBean>();
+		ArrayList<String[]> gCards = cardServiceManager.getCards();
+		for(int i = 0 ; i <gCards.size() ;i++) {
+			String [] str = gCards.get(i);
+			cards.add(new CardBean(Integer.parseInt(str[0]),str[1],str[2]));
+		}
+		return cards;
 	}
 }
