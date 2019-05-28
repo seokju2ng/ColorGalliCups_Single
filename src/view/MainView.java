@@ -22,6 +22,7 @@ import view.handler.KeyUpDownHandler;
 import view.handler.MouseEnteredHandler;
 
 /**
+ * MainView 메뉴들을 보여주는 MainView 클래스이다.
  * 
  * @author 송준희
  */
