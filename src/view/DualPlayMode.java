@@ -128,7 +128,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 	/** 초기 카드의 위치를 나타내는 좌표이다. */
 	private int initX = 604;
 	/** 애니메이션 상에서 카드가 움직이는 속도이다. */
-	private int velX = 30;
+	private int velX = 15;
 	/** 1p 사용자의 정답 여부이다. */
 	private boolean one_flag = false; // 1p의 정답여부
 	/** 2p 사용자의 정답 여부이다. */
@@ -160,6 +160,9 @@ public class DualPlayMode extends JPanel implements ActionListener {
 	private boolean goldFlag = false;
 	/** 골드카드 그림을 나타내는 라벨이다. */
 	private JLabel goldCardLabel;// 골드카드 그림을 나타내는 라벨
+	
+	/*0529추가  시스템 카드덱이 넘어갈시 뒷면을 보여주기 위한 LABEL*/
+	private JLabel backLabel;
 
 	// 여기서부터 카드 애니메이션 0518//
 
@@ -169,6 +172,12 @@ public class DualPlayMode extends JPanel implements ActionListener {
 	 * 2인용 플레이모드가 시작될 때 처음 시작된 생성자이다. 진행 시간을 시작 및 게임에 필요한 UI들을 생성해준다.
 	 */
 	public DualPlayMode() {
+		backLabel = new JLabel(new ImageIcon("image/card(back).png"));
+		backLabel = new JLabel(KeyImage.resizeIcon(new ImageIcon("image/card(back).png"),164, 260));
+		backLabel.setVisible(false);
+		//KeyImage.resizeIcon(new ImageIcon("image/card(back).png"),164, 260)
+		backLabel.setBounds(595, 32, 164, 260);
+		this.add(backLabel);
 		tm.start();
 		this.setFocusTraversalKeysEnabled(false);
 		this.setLayout(null);
@@ -207,7 +216,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		this.add(pauseBackground);
 
 		// 카드를 가장 먼저 붙임)(0518애니메이션)
-		int cardNum = 4; // 옵션에서 정해줄 시스템 카드의 장수이다.
+		//int cardNum = 4; // 옵션에서 정해줄 시스템 카드의 장수이다.
 		cardDeck = CardDeck.getInstance(); // 옵션에서 정해준 장수만큼 카드덱을 생성한다.
 		cardDeck.shuffle();
 		// cardDeck.goldShuffle(); // 골드카드를 섞어준다.
@@ -481,6 +490,8 @@ public class DualPlayMode extends JPanel implements ActionListener {
 	 */
 	public void actionPerformed(ActionEvent e) {
 		// System.out.println("thread돌아감");
+		ImageIcon icon = new ImageIcon("image/card(back).png"); 
+		
 		if (one_Deck.size() + two_Deck.size() < cardDeckLabels.size()) {
 			if (one_flag == true) {
 				if (one_x > 150) {
@@ -497,7 +508,8 @@ public class DualPlayMode extends JPanel implements ActionListener {
 				// x = x + velX;
 				// card.setBounds(x,x/7-45,154,238);
 				else if (one_x < 150) {
-					ImageIcon icon = (ImageIcon) cardDeckLabels.get(cardCnt - 1).getIcon(); // 얻은 카드의 이미지를 따온다.
+					//ImageIcon icon = (ImageIcon) cardDeckLabels.get(cardCnt - 1).getIcon(); // 얻은 카드의 이미지를 따온다.
+					//ImageIcon icon = new ImageIcon("image/card(back).png"); 
 					this.remove(cardDeckLabels.get(cardCnt - 1)); // 카드를 지우고
 					this.revalidate(); // 부모컨테이너를 새로고침한다
 					this.repaint(); // 새로고침.
@@ -512,8 +524,8 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					// cardCnt++; // 시스템카드덱을 +1한다.
 					one_flag = false;
 					System.out.println("된다! one_cnt: " + one_cnt + ", arraylSize : " + one_Deck.size());
-
 					cardIdxLabel.setText(cardCnt + "/" + cardDeckLabels.size());
+					backLabel.setVisible(false);
 				}
 			} else if (two_flag == true) {
 				if (two_x < 1100) {
@@ -525,7 +537,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					// try {
 					// Thread.sleep(1000); // 카드가 1초후 사라진다.
 					// } catch (InterruptedException e1) {
-					ImageIcon icon = (ImageIcon) cardDeckLabels.get(cardCnt - 1).getIcon(); // 얻은 카드의 이미지를 따온다.
+					//ImageIcon icon = (ImageIcon) cardDeckLabels.get(cardCnt - 1).getIcon(); // 얻은 카드의 이미지를 따온다.
 					this.remove(cardDeckLabels.get(cardCnt - 1)); // 카드를 지우고
 					this.revalidate(); // 부모컨테이너를 새로고침한다
 					this.repaint(); // 새로고침.
@@ -543,6 +555,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					two_flag = false;
 					// cardCnt++;
 					cardIdxLabel.setText(cardCnt + "/" + cardDeckLabels.size());
+					backLabel.setVisible(false);
 				}
 			}
 		}
@@ -743,6 +756,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					System.out.println("2p 답 :" + pTwoAnswer);
 					if (goldFlag == false) {
 						if ((cardDeck.isCorrect(cardCnt, new String(pTwoAnswer)) == true) && one_flag == false) {
+							backLabel.setVisible(true);
 							two_flag = true;
 							cardCnt++; // 시스템카드덱을 +1한다.
 							two_cnt++; // 2p 정답수를 +1한다.
@@ -783,6 +797,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					// 1p,2p 동싴 ㅣ입력시 버그 해결을 위해 && 이용함
 					if (goldFlag == false) {
 						if ((cardDeck.isCorrect(cardCnt, new String(pOneAnswer)) == true) && (two_flag == false)) {
+							backLabel.setVisible(true);
 							one_flag = true;
 							cardCnt++; // 시스템카드덱을 +1한다.
 							one_cnt++; // 1p 정답수를 +1한다.
@@ -794,6 +809,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 						System.out.println("사용자 :" + pOneAnswer + "/ 정답 : " + cardDeck.getGoldCard().getAnswer() + "진짜경로"
 								+ cardDeck.getGoldCard().getPath());
 						if ((cardDeck.isGoldCorrect(new String(pOneAnswer)) == true) && two_flag == false) {
+							//backLabel.setVisible(true);
 							System.out.println("1p골드카드 진짜맞춤");
 							one_flag = true;
 							// cardCnt++;
