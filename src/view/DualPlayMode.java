@@ -163,6 +163,8 @@ public class DualPlayMode extends JPanel implements ActionListener {
 	
 	/*0529추가  시스템 카드덱이 넘어갈시 뒷면을 보여주기 위한 LABEL*/
 	private JLabel backLabel;
+	private JLabel crownOne;
+	private JLabel crownTwo;
 
 	// 여기서부터 카드 애니메이션 0518//
 
@@ -172,12 +174,23 @@ public class DualPlayMode extends JPanel implements ActionListener {
 	 * 2인용 플레이모드가 시작될 때 처음 시작된 생성자이다. 진행 시간을 시작 및 게임에 필요한 UI들을 생성해준다.
 	 */
 	public DualPlayMode() {
-		backLabel = new JLabel(new ImageIcon("image/card(back).png"));
+		//backLabel = new JLabel(new ImageIcon("image/card(back).png"));
 		backLabel = new JLabel(KeyImage.resizeIcon(new ImageIcon("image/card(back).png"),164, 260));
 		backLabel.setVisible(false);
 		//KeyImage.resizeIcon(new ImageIcon("image/card(back).png"),164, 260)
-		backLabel.setBounds(592, 32, 170, 260);
+		backLabel.setBounds(595, 32, 164, 260);
 		this.add(backLabel);
+		//이겼을때 보여줄 왕관 0529 Edit By DK KIM//
+		crownOne = new JLabel(KeyImage.resizeIcon(new ImageIcon("image/crown.png"), 268, 269));
+		crownOne.setBounds(160, 320, 268, 269);
+		this.add(crownOne);
+		crownOne.setVisible(false);
+		
+		crownTwo = new JLabel(KeyImage.resizeIcon(new ImageIcon("image/crown.png"), 268, 269));
+		crownTwo.setBounds(972, 320, 268, 269);
+		this.add(crownTwo);
+		crownTwo.setVisible(false);
+		//////////////////////////////////////
 		tm.start();
 		this.setFocusTraversalKeysEnabled(false);
 		this.setLayout(null);
@@ -216,7 +229,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		this.add(pauseBackground);
 
 		// 카드를 가장 먼저 붙임)(0518애니메이션)
-		//int cardNum = 4; // 옵션에서 정해줄 시스템 카드의 장수이다.
+		int cardNum = 4; // 옵션에서 정해줄 시스템 카드의 장수이다.
 		cardDeck = CardDeck.getInstance(); // 옵션에서 정해준 장수만큼 카드덱을 생성한다.
 		cardDeck.shuffle();
 		// cardDeck.goldShuffle(); // 골드카드를 섞어준다.
@@ -516,7 +529,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					this.requestFocusInWindow();
 					bell.setIcon(new ImageIcon("image/bell.png"));
 					one_Deck.add(new JLabel(KeyImage.resizeIcon(icon, 90, 140))); // 1p 사용자 카드덱에 카드추가
-					one_Deck.get(one_cnt - 1).setBounds(50 + (one_cnt - 1) * 5, 190, 90, 140); // 좌표는 나중에 수정
+					one_Deck.get(one_cnt - 1).setBounds(50 + (one_cnt - 1) * 10, 190, 90, 140); // 좌표는 나중에 수정
 					for (int i = one_Deck.size() - 1; i >= 0; i--) {
 						p1.add(one_Deck.get(i));
 					}
@@ -544,7 +557,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					this.requestFocusInWindow();
 					bell.setIcon(new ImageIcon("image/bell.png"));
 					two_Deck.add(new JLabel(KeyImage.resizeIcon(icon, 90, 140))); // 2p 사용자 카드덱에 카드추가
-					two_Deck.get(two_cnt - 1).setBounds(350 - (two_cnt - 1) * 5, 190, 90, 140); // 좌표는 나중에 수정
+					two_Deck.get(two_cnt - 1).setBounds(350 - (two_cnt - 1) * 10, 190, 90, 140); // 좌표는 나중에 수정
 					for (int i = two_Deck.size() - 1; i >= 0; i--) {
 						p3.add(two_Deck.get(i)); // 겹치는 순서 지키기위해 같은 것도 다시 add한다.
 					}
@@ -575,8 +588,27 @@ public class DualPlayMode extends JPanel implements ActionListener {
 				} else {
 					winner = "2p";
 				}
+				
+				if(winner.equals("1p")) {
+					crownOne.setVisible(true);
+				}else {
+					crownTwo.setVisible(true);
+				}
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 				timePanel.getTimer().stop();
 
+//				try {
+//					Thread.sleep(2000);
+//				} catch (InterruptedException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
 				JOptionPane.showMessageDialog(null, one_cnt + ":" + two_cnt + ", " + winner + "승리(게임 진행시간 : "
 						+ timePanel.getTimeFlow().getText() + ")", "게임 종료", JOptionPane.CANCEL_OPTION);
 				tm.stop();
