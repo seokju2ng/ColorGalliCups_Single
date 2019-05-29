@@ -54,15 +54,15 @@ public class GameMode extends JPanel {
 		JButton[] menuArr = new JButton[3];
 		menuArr[0] = new JButton("1p Mode");
 		menuArr[1] = new JButton("2p Mode");
-//		menuArr[2] = new JButton("Network Mode");
+		// menuArr[2] = new JButton("Network Mode");
 		menuArr[2] = new JButton("Back");
 
 		ImageIcon leftCursorImage = new ImageIcon("image/LeftCursor.png");
 		ImageIcon rightCursorImage = new ImageIcon("image/RightCursor.png");
 		JLabel[] leftCursorArr = new JLabel[] { new JLabel(leftCursorImage), new JLabel(leftCursorImage),
-				new JLabel(leftCursorImage)};
+				new JLabel(leftCursorImage) };
 		JLabel[] rightCursorArr = new JLabel[] { new JLabel(rightCursorImage), new JLabel(rightCursorImage),
-				new JLabel(rightCursorImage)};
+				new JLabel(rightCursorImage) };
 
 		for (int i = 0; i < leftCursorArr.length; i++) {
 			leftCursorArr[i].setBounds(450, 340 + 60 * i, 100, 100);
@@ -78,7 +78,7 @@ public class GameMode extends JPanel {
 		Font font = new Font("Nanum Brush Script", Font.PLAIN, 60);
 		JPanel panel = new JPanel(new GridLayout(5, 0));
 		Handler l = new Handler();
-		KeyUpDownHandler kudh = new KeyUpDownHandler(cor, 3, leftCursorArr, rightCursorArr);
+		KeyUpDownHandler kudh = new KeyUpDownHandler(cor, leftCursorArr.length - 1, leftCursorArr, rightCursorArr);
 		for (JButton b : menuArr) {
 			b.setBorderPainted(false);
 			b.setContentAreaFilled(false);
@@ -134,8 +134,8 @@ public class GameMode extends JPanel {
 				cps.changePanel("DualMode");
 			} else if (cor.getIndex() == 2)
 				cps.changePanel("MainView");
-//			else if (cor.getIndex() == 3)
-//				cps.changePanel("MainView");
+			// else if (cor.getIndex() == 3)
+			// cps.changePanel("MainView");
 		}
 
 		/**
