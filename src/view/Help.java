@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import view.etc.ChangePanelService;
+import view.etc.MyIndex;
 import view.etc.Sound;
 import view.handler.FocusHandler;
 import view.handler.KeyUpDownHandler;
