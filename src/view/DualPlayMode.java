@@ -176,7 +176,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		backLabel = new JLabel(KeyImage.resizeIcon(new ImageIcon("image/card(back).png"),164, 260));
 		backLabel.setVisible(false);
 		//KeyImage.resizeIcon(new ImageIcon("image/card(back).png"),164, 260)
-		backLabel.setBounds(595, 32, 164, 260);
+		backLabel.setBounds(592, 32, 170, 260);
 		this.add(backLabel);
 		tm.start();
 		this.setFocusTraversalKeysEnabled(false);
@@ -516,7 +516,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					this.requestFocusInWindow();
 					bell.setIcon(new ImageIcon("image/bell.png"));
 					one_Deck.add(new JLabel(KeyImage.resizeIcon(icon, 90, 140))); // 1p 사용자 카드덱에 카드추가
-					one_Deck.get(one_cnt - 1).setBounds(50 + (one_cnt - 1) * 10, 190, 90, 140); // 좌표는 나중에 수정
+					one_Deck.get(one_cnt - 1).setBounds(50 + (one_cnt - 1) * 5, 190, 90, 140); // 좌표는 나중에 수정
 					for (int i = one_Deck.size() - 1; i >= 0; i--) {
 						p1.add(one_Deck.get(i));
 					}
@@ -544,7 +544,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 					this.requestFocusInWindow();
 					bell.setIcon(new ImageIcon("image/bell.png"));
 					two_Deck.add(new JLabel(KeyImage.resizeIcon(icon, 90, 140))); // 2p 사용자 카드덱에 카드추가
-					two_Deck.get(two_cnt - 1).setBounds(350 - (two_cnt - 1) * 10, 190, 90, 140); // 좌표는 나중에 수정
+					two_Deck.get(two_cnt - 1).setBounds(350 - (two_cnt - 1) * 5, 190, 90, 140); // 좌표는 나중에 수정
 					for (int i = two_Deck.size() - 1; i >= 0; i--) {
 						p3.add(two_Deck.get(i)); // 겹치는 순서 지키기위해 같은 것도 다시 add한다.
 					}
