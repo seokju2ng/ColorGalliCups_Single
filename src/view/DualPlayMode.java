@@ -435,7 +435,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 		this.cardPanel = new RoundedPanel(null, 120, Color.WHITE);
 		cardPanel.setBackground(Color.white);
 
-		ImageIcon img1 = new ImageIcon("image/dotdanbae2.png");
+		//ImageIcon img1 = new ImageIcon("image/dotdanbae2.png");
 		ImageIcon img2 = new ImageIcon("image/bell.png");
 
 		this.bell = new JButton(img2);
