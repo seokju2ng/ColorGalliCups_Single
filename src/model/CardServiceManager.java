@@ -38,6 +38,10 @@ public class CardServiceManager {
    }
    
    //0527 Edit By DK KIM//
+   /**
+    * Card Select Service Class로부터 받은 ArrayList&lt;String[]&gt; 타입으로 카드덱을 받아와 반환한다. 
+    * @return ArrayList&lt;String[]&gt; 타입으로 카드덱을 리턴한다.
+    */
    public ArrayList<String[]> getCards(){
       if(cardSelectService ==null) return null;
       return cardSelectService.getCards();
