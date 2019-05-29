@@ -14,9 +14,13 @@ public interface CardSelectable {
    public ArrayList<String[]> selectCards(int num);
    
    //0527 EDIT BY DK KIM//
+   /**
+    * Card DAO Class로부터 받은 ArrayList&lt;Card&gt; 타입의 카드덱을 ArrayList&lt;String[]&gt; 타입으로 변환하여 반환한다. 
+    * @return ArrayList&lt;String[]&gt; 타입으로 변환한 카드덱을 리턴한다.
+    */
    public ArrayList<String[]> getCards();
    /**
-    * EditByDKKIm.  interface를 구현한 클래스에서 메소드 바디부를 작성하여 사용한다.
+    * interface를 구현한 클래스에서 메소드 바디부를 작성하여 사용한다.
     * @return goldCards 뭉치를 뽑아 리턴한다.
     */
    public ArrayList<String[]> getGoldCards();
