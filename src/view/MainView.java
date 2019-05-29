@@ -43,6 +43,7 @@ public class MainView extends JPanel {
 	public MainView() {
 		cor = new MyIndex();
 		this.addComponentListener(new FocusHandler());
+		this.setFocusTraversalKeysEnabled(false);
 		setLayout(new BorderLayout());
 		makeUI();
 	}
