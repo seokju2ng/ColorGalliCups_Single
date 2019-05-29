@@ -624,6 +624,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 			if (e.getKeyCode() == KeyEvent.VK_Q) {
 				spaceFlag1p = false;
 				if (colorFlag1p[0] == 0) {
+					Sound.playEffect("audio/stack.wav");
 					colorFlag1p[0] = gamePanelIndex1p + 1;
 					// System.out.println(redCup1p+"," + gamePanelIndex1p +"," + gamePanelY1p);
 					board1.getCups(0, gamePanelIndex1p, 4 - gamePanelY1p).setVisible(true);
@@ -634,6 +635,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 			} else if (e.getKeyCode() == KeyEvent.VK_W) {
 				spaceFlag1p = false;
 				if (colorFlag1p[1] == 0) {
+					Sound.playEffect("audio/stack.wav");
 					colorFlag1p[1] = gamePanelIndex1p + 1;
 					board1.getCups(1, gamePanelIndex1p, 4 - gamePanelY1p).setVisible(true);
 					if (gamePanelY1p < 4)
@@ -643,6 +645,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 			} else if (e.getKeyCode() == KeyEvent.VK_E) {
 				spaceFlag1p = false;
 				if (colorFlag1p[2] == 0) {
+					Sound.playEffect("audio/stack.wav");
 					colorFlag1p[2] = gamePanelIndex1p + 1;
 					board1.getCups(2, gamePanelIndex1p, 4 - gamePanelY1p).setVisible(true);
 					if (gamePanelY1p < 4)
@@ -652,6 +655,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 			} else if (e.getKeyCode() == KeyEvent.VK_A) {
 				spaceFlag1p = false;
 				if (colorFlag1p[3] == 0) {
+					Sound.playEffect("audio/stack.wav");
 					colorFlag1p[3] = gamePanelIndex1p + 1;
 					board1.getCups(3, gamePanelIndex1p, 4 - gamePanelY1p).setVisible(true);
 					if (gamePanelY1p < 4)
@@ -661,6 +665,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 			} else if (e.getKeyCode() == KeyEvent.VK_S) {
 				spaceFlag1p = false;
 				if (colorFlag1p[4] == 0) {
+					Sound.playEffect("audio/stack.wav");
 					colorFlag1p[4] = gamePanelIndex1p + 1;
 					board1.getCups(4, gamePanelIndex1p, 4 - gamePanelY1p).setVisible(true);
 					if (gamePanelY1p < 4)
@@ -670,6 +675,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 			} else if (e.getKeyCode() == KeyEvent.VK_I) {
 				spaceFlag2p = false;
 				if (colorFlag2p[0] == 0) {
+					Sound.playEffect("audio/stack.wav");
 					colorFlag2p[0] = gamePanelIndex2p + 1;
 					board2.getCups(0, gamePanelIndex2p, 4 - gamePanelY2p).setVisible(true);
 					if (gamePanelY2p < 4)
@@ -679,6 +685,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 			} else if (e.getKeyCode() == KeyEvent.VK_O) {
 				spaceFlag2p = false;
 				if (colorFlag2p[1] == 0) {
+					Sound.playEffect("audio/stack.wav");
 					colorFlag2p[1] = gamePanelIndex2p + 1;
 					board2.getCups(1, gamePanelIndex2p, 4 - gamePanelY2p).setVisible(true);
 					if (gamePanelY2p < 4)
@@ -688,6 +695,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 			} else if (e.getKeyCode() == KeyEvent.VK_P) {
 				spaceFlag2p = false;
 				if (colorFlag2p[2] == 0) {
+					Sound.playEffect("audio/stack.wav");
 					colorFlag2p[2] = gamePanelIndex2p + 1;
 					board2.getCups(2, gamePanelIndex2p, 4 - gamePanelY2p).setVisible(true);
 					if (gamePanelY2p < 4)
@@ -697,6 +705,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 			} else if (e.getKeyCode() == KeyEvent.VK_K) {
 				spaceFlag2p = false;
 				if (colorFlag2p[3] == 0) {
+					Sound.playEffect("audio/stack.wav");
 					colorFlag2p[3] = gamePanelIndex2p + 1;
 					board2.getCups(3, gamePanelIndex2p, 4 - gamePanelY2p).setVisible(true);
 					if (gamePanelY2p < 4)
@@ -706,6 +715,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 			} else if (e.getKeyCode() == KeyEvent.VK_L) {
 				spaceFlag2p = false;
 				if (colorFlag2p[4] == 0) {
+					Sound.playEffect("audio/stack.wav");
 					colorFlag2p[4] = gamePanelIndex2p + 1;
 					board2.getCups(4, gamePanelIndex2p, 4 - gamePanelY2p).setVisible(true);
 					if (gamePanelY2p < 4)
@@ -781,7 +791,7 @@ public class DualPlayMode extends JPanel implements ActionListener {
 						}
 					} else {
 						System.out.println("1p골드카드 맞춤들어옴");
-						System.out.println(pOneAnswer + "진짜답 : " + cardDeck.getGoldCard().getAnswer() + "진짜경로"
+						System.out.println("사용자 :" + pOneAnswer + "/ 정답 : " + cardDeck.getGoldCard().getAnswer() + "진짜경로"
 								+ cardDeck.getGoldCard().getPath());
 						if ((cardDeck.isGoldCorrect(new String(pOneAnswer)) == true) && two_flag == false) {
 							System.out.println("1p골드카드 진짜맞춤");
