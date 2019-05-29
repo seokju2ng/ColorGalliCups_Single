@@ -68,6 +68,7 @@ public class Sound {
 	 * 재생되는 소리를 중단하는 메소드이다.
 	 */
 	public static void stop() {
+		if(bgmClip == null) return;
 		try {
 			bgmClip.stop();
 
