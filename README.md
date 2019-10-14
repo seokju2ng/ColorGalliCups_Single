@@ -26,8 +26,8 @@ A stand-alone game with the board game Harley-Galley Cubs motif.
   
   
 - 팀 정보
-  - 팀장 : 김석중(@seokju2ng)
-  - 부팀장 : 김용희(@DragonHee)
-  - 팀원 : 김도균(@ddochi93), 최민성(@chlalstjd430), 송준희(@mornings9047)
+  - 팀장 : 김석중([@seokju2ng](https://github.com/seokju2ng))
+  - 부팀장 : 김용희([@DragonHee](https://github.com/DragonHee))
+  - 팀원 : 김도균([@ddochi93](https://github.com/ddochi93)), 최민성([@chlalstjd430](https://github.com/chlalstjd430)), 송준희([@mornings9047](https://github.com/mornings9047))
   
   <p align="center">Copyright&copy; 2019. Team PerfectColor. All rights reserved.</p>
