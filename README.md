@@ -30,8 +30,9 @@ A stand-alone game with the board game Halli-Galli Cups motif.
   - 조작키 설명
     ![](/screenshot/control-key.png "조작키 설명 화면")
   - 게임 설명
-    - 플레이하는 방법 설명.
+    - 플레이하는 방법 설명. (gif파일 재생)
     ![](/screenshot/way-to-play.png "플레이 방법 화면")
+    ![](/image/tutorial.gif "튜토리얼 동영상")
   - 게임 정보
     - Made by Java Swing
     ![](/screenshot/game-info.png "게임 정보 화면")
