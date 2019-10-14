@@ -1,5 +1,5 @@
 # ColorGalliCups_Single
-A stand-alone game with the board game Harley-Galley Cubs motif.
+A stand-alone game with the board game Halli-Galli Cups motif.
 
 
 - 싱글게임
