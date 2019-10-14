@@ -23,6 +23,7 @@ A stand-alone game with the board game Halli-Galli Cups motif.
   - 게임 설명
     - 플레이하는 방법 설명.
   - 게임 정보
+    - Made by Java Swing
   
   
 - 팀 정보
