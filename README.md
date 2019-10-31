@@ -44,4 +44,6 @@ A stand-alone game with the board game Halli-Galli Cups motif.
   - 부팀장 : 김용희([@DragonHee](https://github.com/DragonHee))
   - 팀원 : 김도균([@ddochi93](https://github.com/ddochi93)), 최민성([@chlalstjd430](https://github.com/chlalstjd430)), 송준희([@mornings9047](https://github.com/mornings9047))
   
+  ---
+  
   <p align="center">Copyright&copy; 2019. Team PerfectColor. All rights reserved.</p>
