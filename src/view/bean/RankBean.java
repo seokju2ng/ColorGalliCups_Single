@@ -24,7 +24,9 @@ public class RankBean {
 	 * RankBean 클래스의 생성자로 사용자의 순위, 이름, 점수를 default값으로 초기화한 랭크정보 객체를 할당해준다.
 	 */
 	public RankBean() {
-		
+		this.ranking = 0;
+		this.name = "???";
+		this.score = 0;
 	}
 	/**
 	 * RankBean 클래스의 생성자로 해당 순위, 이름, 점수에 해당하는 새로운 성적정보 객체를 할당해준다.
@@ -33,7 +35,9 @@ public class RankBean {
 	 * @param score 랭크정보 클래스에서 사용자의 점수에 해당하는 값이다.
 	 */
 	public RankBean(int ranking, String name, int score) {
-		
+		this.ranking = ranking;
+		this.name = name;
+		this.score = score;
 	}
 	/**
 	 * 랭크정보 클래스에서 ranking 필드의 참조값을 리턴해주는 getter() 메소드이다.
@@ -82,6 +86,6 @@ public class RankBean {
 	 * @return 랭크정보 객체의 사용자의 순위, 이름, 점수를 String 타입으로 반환하여 리턴해준다.
 	 */
 	public String toString() {
-		return "Rank [ranking=" + ranking + ", name=" + name + ", score=" + score + "]";
+		return "RankBean[ranking=" + ranking + ", name=" + name + ", score=" + score + "]";
 	}	
 }

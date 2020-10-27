@@ -96,6 +96,6 @@ public class CardBean {
 	 * @return 카드번호, 카드그림 경로, 카드 정답의 값을 리턴한다.
 	 */
 	public String toString() {
-		return "Card[card_num:"+num+"/img_path:"+path+"/answer:"+answer+"]";
+		return "CardBean[card_num:"+num+"/img_path:"+path+"/answer:"+answer+"]";
 	}
 }

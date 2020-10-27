@@ -25,6 +25,7 @@ import view.etc.RoundedPanel;
 import view.etc.Sound;
 import view.handler.FocusBtnHandler;
 import view.handler.FocusHandler;
+import view.handler.Key1pHandler;
 import view.handler.MouseBtnHandler;
 
 public class NetworkPlayMode extends JPanel {
@@ -373,7 +374,7 @@ public class NetworkPlayMode extends JPanel {
 						return;
 					}
 					bell.setIcon(new ImageIcon("image/bell(Network).png"));
-					Sound.playSound("audio/bell.wav");
+					Sound.playEffect("audio/bell.wav");
 					new HandVanish(0, hands, handCheck).start();
 				}
 			}
@@ -384,21 +385,21 @@ public class NetworkPlayMode extends JPanel {
 					return;
 				}
 				bell.setIcon(new ImageIcon("image/bell(Network).png"));
-				Sound.playSound("audio/bell.wav");
+				Sound.playEffect("audio/bell.wav");
 				new HandVanish(1, hands, handCheck).start();
 			} else if (e.getKeyChar() == KeyEvent.VK_2) {
 				if (index == -1 || handCheck[2] == true) {
 					return;
 				}
 				bell.setIcon(new ImageIcon("image/bell(Network).png"));
-				Sound.playSound("audio/bell.wav");
+				Sound.playEffect("audio/bell.wav");
 				new HandVanish(2, hands, handCheck).start();
 			} else if (e.getKeyChar() == KeyEvent.VK_3) {
 				if (index == -1 || handCheck[3] == true) {
 					return;
 				}
 				bell.setIcon(new ImageIcon("image/bell(Network).png"));
-				Sound.playSound("audio/bell.wav");
+				Sound.playEffect("audio/bell.wav");
 				new HandVanish(3, hands, handCheck).start();
 			}
 			/////////////////////// 추가 끝 ////////////////////

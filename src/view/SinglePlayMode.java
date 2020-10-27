@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -23,8 +24,8 @@ import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
 import view.bean.CardDeck;
+import view.bean.Ranks;
 import view.etc.Board;
-import view.etc.Cards;
 import view.etc.ChangePanelService;
 import view.etc.KeyImage;
 import view.etc.RoundedPanel;
@@ -33,11 +34,11 @@ import view.etc.Time1;
 import view.handler.ExitBtnHandler;
 import view.handler.FocusBtnHandler;
 import view.handler.FocusHandler;
+import view.handler.Key1pHandler;
 import view.handler.MouseBtnHandler;
 
 /**
- *   1인용 게임모드를 제공하는 클래스이다.
- *
+ * 1인용 게임모드를 제공하는 클래스이다.
  */
 public class SinglePlayMode extends JPanel implements ActionListener {
 	/** 객체직렬화를 위한 serialVersion의 ID이다. */
@@ -74,7 +75,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 
 	// ***********************************************************
 	// 버튼
-	/** 벨 모양을 나타내기 위한 버튼이다. */
+	/** 벨 모양을 나타내기 위한 라벨이다. */
 	private JLabel bellBtn;
 	/** 게임을 종료시키는 버튼이다. */
 	private JButton exitBtn;
@@ -92,7 +93,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 	 * 카드가 움직이는 애니메이션을 구현하기 위한 멤버이다. 첫번째 인자로 ms단위의 수를 입력받아 해당 시간에 1번씩
 	 * actionPerformed를 발생시킨다.
 	 */
-	private Timer tm = new Timer(1, this);
+	private Timer tm = new Timer(10, this);
 	/** 초기 카드의 위치와 카드 에니메이션이 움직이는 속도를 나타내기 위한 멤버이다. */
 	private int initY = 31, velY = 10; // 초기 카드위치와 카드가 움직이는 속도
 	/** 사용자가 제출한 답이 정답인지 오답인지 나타내기 위한 멤버이다.(정답일 경우:true,오답일경우:false) */
@@ -102,25 +103,46 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 	/** 사용자가 현재까지 맞힌 정답의 갯수이다. */
 	private int cnt; // 사용자의 정답개수
 	/** 시스템 카드덱에 카드를 깔아주기 위한 멤버이다. */
-	private Cards systemCardDeck;
+	private CardDeck cardDeck;
 	/** 사용자 카드덱을 나타낸다. 정답을 맞출때마다 사용자 카드덱에 시스템 카드덱의 카드가 추가된다. */
 	private ArrayList<JLabel> one_Deck;
 	/** 현재 플레이어에게 보여지는 카드가 시스템 카드덱의 몇 번째 카드인지 알려주기 위한 멤버이다. */
 	private int cardCnt; // 현재 시스템 카드덱의 카드가 몇번째 카드인지
+	///// 0525추가 Edit By DK//
+	/** 사용자가 입력하는 정답이다. */
+	private StringBuilder answer; // 사용자가 입력하는 정답이다
+	/** 카드패널에 실제로 깔리게 되는 카드그림을 포함한 라벨이다. */
+	private ArrayList<JLabel> cardDeckLabels;
 
-	// *************여기까지 에니메이션**********************////////
+	//private JLabel backLabel;
+
 	/**
 	 * 1인용 플레이 모드가 시작될때 처음 시작되는 생성자이다. 남은 시간 카운트다운을 시작하며, 시스템 카드덱과 사용자 카드덱을 생성해주며,게임
 	 * 화면에 {@link Component}를 표기하기 위한 Panel들을 생성해준다
 	 */
 	public SinglePlayMode() {
+//		backLabel = new JLabel(new ImageIcon("image/card(back).png"));
+//		backLabel = new JLabel(KeyImage.resizeIcon(new ImageIcon("image/card(back).png"), 164, 260));
+//		//
+//		backLabel.setVisible(false);
+//		backLabel.setBounds(595, 32, 164, 260);
+//		this.add(backLabel);
+
+		answer = new StringBuilder();
+		int cardNumber = 30; // 임시
 		tm.start(); // Timer를 가장 먼저 실행시켜준다. (0522)
 		this.setFocusTraversalKeysEnabled(false);
 		this.addComponentListener(new FocusHandler());
 		// 카드를 가장 먼저 붙음 Edit by DK KIM//
-		systemCardDeck = new Cards();
+		cardDeck = CardDeck.getInstance();
+		cardDeck.shuffle();
 		one_Deck = new ArrayList<>();
-		////////////////////////////////////
+
+		cardDeckLabels = new ArrayList<>();
+		for (int i = 0; i < cardNumber; i++) {
+			cardDeckLabels.add(new JLabel(new ImageIcon(cardDeck.getImagePath(i))));
+			// System.out.println(cardDeck.getImagePath(i));
+		}
 
 		colorFlag = new int[5];
 		spaceFlag = false;
@@ -143,22 +165,28 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 		addKeyListener(new KeyHandler());// listener
 		addKeyListener(new Key1pHandler(controllKey));
 		MouseBtnHandler mbh = new MouseBtnHandler(exitBtn, pauseBtn);
+		FocusBtnHandler fbh = new FocusBtnHandler(this);
 		exitBtn.addMouseListener(mbh);
-		exitBtn.addActionListener(new FocusBtnHandler(this));
+		exitBtn.addActionListener(fbh);
 		pauseBtn.addMouseListener(mbh);
 		pauseBackground.addActionListener(new ClickHandler());
-		pauseBackground.addActionListener(new FocusBtnHandler(this));
-		// this.setSize(1363, 714);
-		// this.setVisible(true);
-
+		pauseBackground.addActionListener(fbh);
 	}
 
-	/** 게임 화면을 구성하는 {@link Component}들을 지정된 비율대로 배치하기 위한 메서드이다.
-	 * @param c 싱글플레이 화면에 부착할 Component이다.
-	 * @param x 부착할 Component의 x좌표이다.
-	 * @param y 부착할 Component의 y좌표이다.
-	 * @param w 부착할 Component의 폭이다.
-	 * @param h 부착할 Component의 높이이다. */
+	/**
+	 * 게임 화면을 구성하는 {@link Component}들을 지정된 비율대로 배치하기 위한 메서드이다.
+	 * 
+	 * @param c
+	 *            싱글플레이 화면에 부착할 Component이다.
+	 * @param x
+	 *            부착할 Component의 x좌표이다.
+	 * @param y
+	 *            부착할 Component의 y좌표이다.
+	 * @param w
+	 *            부착할 Component의 폭이다.
+	 * @param h
+	 *            부착할 Component의 높이이다.
+	 */
 	private void make(JComponent c, int x, int y, int w, int h) {
 		gbc.gridx = x;
 		gbc.gridy = y;
@@ -187,18 +215,16 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 		// 컴포넌트 생성 --------------------------------------------------------------
 		east = new JPanel();
 		east.setLayout(null);
-
 		// 카드 덱 -----------
-		JPanel cardDeck = new RoundedPanel(null, 120, Color.WHITE);
-		for (int i = 0; i < systemCardDeck.card_arr.size(); i++) {
-			systemCardDeck.card_arr.get(i).setBounds(73, 31, 154, 238);
-			cardDeck.add(systemCardDeck.card_arr.get(i));
-
+		JPanel cardPanel = new RoundedPanel(null, 120, Color.WHITE);
+		for (int i = 0; i < cardDeckLabels.size(); i++) {
+			cardDeckLabels.get(i).setBounds(68, 20, 164, 260);
+			cardPanel.add(cardDeckLabels.get(i));
 		}
-		cardDeck.setBounds(50, 20, 300, 300);
+		cardPanel.setBounds(50, 20, 300, 300);
+		east.add(cardPanel);
 
-		east.add(cardDeck);
-
+		ClickHandler ch = new ClickHandler();
 		// 종 버튼 --------------------------------------------------------------
 		bellBtn = new JLabel(new ImageIcon("image/bell.png"));
 		bellBtn.setBounds(192, 380, 165, 140);
@@ -210,7 +236,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 		exitBtn.setContentAreaFilled(false);
 		exitBtn.setFocusPainted(false);
 		exitBtn.setBorderPainted(false);
-		exitBtn.addActionListener(new ClickHandler());
+		exitBtn.addActionListener(ch);
 		exitBtn.addActionListener(new ExitBtnHandler(this, this.tm, this.timePanel.getTimer()));
 		east.add(exitBtn);
 
@@ -220,20 +246,17 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 		pauseBtn.setContentAreaFilled(false);
 		pauseBtn.setFocusPainted(false);
 		pauseBtn.setBorderPainted(false);
-		pauseBtn.addActionListener(new ClickHandler());
-
+		pauseBtn.addActionListener(ch);
 		east.add(pauseBtn);
 
 		// 키보드 아이콘 --------------------------------------------------------------
 		controllKey = KeyImage.getKey("1P", 75, 75);
-
 		for (int i = 0; i < 5; i++) {
 			controllKey[i].setBounds(65 + i * 85, 550, 75, 75);
 			controllKey[i + 5].setBounds(65 + i * 85, 550, 75, 75);
 			east.add(controllKey[i]);
 			east.add(controllKey[i + 5]);
 		}
-
 		gbc.weightx = 0.4;
 		make(east, 1, 0, 1, 1);
 	}
@@ -270,7 +293,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 		point[0].setVisible(true);
 
 		// --------------------------------------------------------------
-		timePanel = new Time1(30, 15, 15, 252, 150);
+		timePanel = new Time1(60, 15, 15, 252, 150);
 		timePanel.setBorder(new LineBorder(Color.gray, 1));
 		west.add(timePanel);
 
@@ -295,16 +318,14 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 
 		gbc.weightx = 0.6;
 		make(west, 0, 0, 1, 1);
-
 	}
 
 	/**
-	 * 일시정지 버튼을 클릭하고 다시 화면을 클릭했을 때의 효과를 발생시키기 위한 InnerClass이다. 1. 일시정지 버튼을
-	 * 클릭한 경우:일시정지 화면으로 전환, Timer1을 통한 남은시간 정지, 조작키 비활성화한다. 2. 일시정지 화면을 클릭한 경우-
-	 * 게임화면으로 전환, Timer1을 통한 남은시간 재개, 조작키 활성화한다.
+	 * 일시정지 버튼을 클릭하고 다시 화면을 클릭했을 때의 효과를 발생시기 위한 InnerClass 이다. 1. 일시정지 버튼을 클릭한
+	 * 경우:일시정지 화면으로 전환, Timer1을 통한 남은시간 정지, 조작키 비활성화한다. 2. 일시정지 화면을 클릭한 경우- 게임화면으로
+	 * 전환, Timer1을 통한 남은시간 재개, 조작키 활성화한다.
 	 */
 	private class ClickHandler implements ActionListener {
-
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(pauseBtn)) {
 				pauseBackground.setVisible(true);
@@ -319,24 +340,69 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * 키를 누르고 뗐을 때, 각각의 조건에 따른 효과를 발생시키기 위한 InnerClass이다. 1. 색상키를 누르면 board에 해당 색상 컵을 쌓는다. 2-1. 컵이
-	 * 5개 쌓이기 전 기능키를 한번 누른 경우: 다음 칸으로 이동한다. 2-2 컵이 5개 쌓이기 전 기능키를2번 연속 누른 경우: 배치된 컵을
-	 * 초기화한다. 3. 컵이 5개가 쌓인 뒤 기능키를 누른 경우 정답을 제출하고 Sound 클래스의 playSound() 메서드를 통해 벨소리를
-	 * 울린다. 4. 제출한 답이 정답인 경우 문제카드를 맞힌 사용자에게 이동하고 맞힌 문제 수를 증가시킨다.
+	 * 키를 누르고 뗐을 때, 각각의 조건에 따른 효과를 발생시키위한 InnerClass이다. 1. 색상키를 누르면 board에 해당 색상 컵을
+	 * 쌓는다. 2-1. 컵이 5개 쌓이기 전 기능키를 한번 누른 경우: 다음 칸으로 이동한다. 2-2 컵이 5개 쌓이기 전 기능키를2번 연속
+	 * 누른 경우: 배치된 컵을 초기화한다. 3. 컵이 5개가 쌓인 뒤 기능키를 누른 경우 정답을 제출하고 Sound 클래스의
+	 * playSound() 메서드를 통해 벨소리를 울린다. 4. 제출한 답이 정답인 경우 문제카드를 맞힌 사용자에게 이동하고 맞힌 문제 수를
+	 * 증가시킨다.
 	 */
 	private class KeyHandler extends KeyAdapter {
-
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_Q) {
 				spaceFlag = false;
+				// spaceFlag = false;
+				if (colorFlag[0] == 0) {
+					Sound.playEffect("audio/stack.wav");
+					colorFlag[0] = gamePanelIndex + 1;
+					board.getCups(0, gamePanelIndex, 4 - gamePanelY).setVisible(true);
+					if (gamePanelY < 4)
+						gamePanelY++;
+					answer.append("1");
+				}
 			} else if (e.getKeyCode() == KeyEvent.VK_W) {
 				spaceFlag = false;
+				spaceFlag = false;
+				if (colorFlag[1] == 0) {
+					Sound.playEffect("audio/stack.wav");
+					colorFlag[1] = gamePanelIndex + 1;
+					board.getCups(1, gamePanelIndex, 4 - gamePanelY).setVisible(true);
+					if (gamePanelY < 4)
+						gamePanelY++;
+					answer.append("2");
+				}
 			} else if (e.getKeyCode() == KeyEvent.VK_E) {
 				spaceFlag = false;
+				spaceFlag = false;
+				if (colorFlag[2] == 0) {
+					Sound.playEffect("audio/stack.wav");
+					colorFlag[2] = gamePanelIndex + 1;
+					board.getCups(2, gamePanelIndex, 4 - gamePanelY).setVisible(true);
+					if (gamePanelY < 4)
+						gamePanelY++;
+					answer.append("3");
+				}
 			} else if (e.getKeyCode() == KeyEvent.VK_A) {
 				spaceFlag = false;
+				spaceFlag = false;
+				if (colorFlag[3] == 0) {
+					Sound.playEffect("audio/stack.wav");
+					colorFlag[3] = gamePanelIndex + 1;
+					board.getCups(3, gamePanelIndex, 4 - gamePanelY).setVisible(true);
+					if (gamePanelY < 4)
+						gamePanelY++;
+					answer.append("4");
+				}
 			} else if (e.getKeyCode() == KeyEvent.VK_S) {
 				spaceFlag = false;
+				spaceFlag = false;
+				if (colorFlag[4] == 0) {
+					Sound.playEffect("audio/stack.wav");
+					colorFlag[4] = gamePanelIndex + 1;
+					board.getCups(4, gamePanelIndex, 4 - gamePanelY).setVisible(true);
+					if (gamePanelY < 4)
+						gamePanelY++;
+					answer.append("5");
+				}
 			} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 				int setCupFlag = 0;
 				for (int i = 0; i < 5; i++) {
@@ -346,57 +412,31 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 				}
 				// (gamePanelIndex >= 4 &&setCupFlag == 5) ||
 				if (setCupFlag == 5 && spaceFlag == false) {
-					bellBtn.setIcon(new ImageIcon("image/bell(push).png"));
-					Sound.playSound("audio/bell.wav");
-					flag = true;
-					y = initY;
-					tm.start();
+					if (cardCnt < cardDeckLabels.size()) {
+						bellBtn.setIcon(new ImageIcon("image/bell(push).png"));
+						Sound.playEffect("audio/bell.wav");
+						if (cardDeck.isCorrect(cardCnt, new String(answer)) == true) {
+							System.out.println("정답!");
+							Sound.playEffect("audio/correct.wav");
+							flag = true;
+							cnt++;
+							cardCnt++;
+							correctCnt.setText(cnt + "");
+							y = initY;
+							// tm.start();
+						} else {
+							Sound.playEffect("audio/wrong2.wav");
+						}
+					}
 				}
-
 			}
-
 		}
 
 		@Override
 		// q:r, w:y, e:g, a:blue, s:black
 		public void keyReleased(KeyEvent e) {
-			// TODO Auto-generated method stub
-			if (e.getKeyCode() == KeyEvent.VK_Q) {
-				if (colorFlag[0] == 0) {
-					colorFlag[0] = gamePanelIndex + 1;
-					board.getCups(0, gamePanelIndex, 4 - gamePanelY).setVisible(true);
-					if (gamePanelY < 4)
-						gamePanelY++;
-				}
-			} else if (e.getKeyCode() == KeyEvent.VK_W) {
-				if (colorFlag[1] == 0) {
-					colorFlag[1] = gamePanelIndex + 1;
-					board.getCups(1, gamePanelIndex, 4 - gamePanelY).setVisible(true);
-					if (gamePanelY < 4)
-						gamePanelY++;
-				}
-			} else if (e.getKeyCode() == KeyEvent.VK_E) {
-				if (colorFlag[2] == 0) {
-					colorFlag[2] = gamePanelIndex + 1;
-					board.getCups(2, gamePanelIndex, 4 - gamePanelY).setVisible(true);
-					if (gamePanelY < 4)
-						gamePanelY++;
-				}
-			} else if (e.getKeyCode() == KeyEvent.VK_A) {
-				if (colorFlag[3] == 0) {
-					colorFlag[3] = gamePanelIndex + 1;
-					board.getCups(3, gamePanelIndex, 4 - gamePanelY).setVisible(true);
-					if (gamePanelY < 4)
-						gamePanelY++;
-				}
-			} else if (e.getKeyCode() == KeyEvent.VK_S) {
-				if (colorFlag[4] == 0) {
-					colorFlag[4] = gamePanelIndex + 1;
-					board.getCups(4, gamePanelIndex, 4 - gamePanelY).setVisible(true);
-					if (gamePanelY < 4)
-						gamePanelY++;
-				}
-			} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+				// answer.append("/");
 				bellBtn.setIcon(new ImageIcon("image/bell.png"));
 				if (spaceFlag == true) {
 					for (int i = 0; i < 5; i++) {
@@ -413,6 +453,7 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 					gamePanelIndex = 0;
 					gamePanelY = 0;
 					point[0].setVisible(true);
+					answer.delete(0, answer.length()); // 스페이스 2번 누를 시 정답 스트링 초기화.
 					return;
 				}
 				int setCupFlag = 0;
@@ -421,6 +462,11 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 						setCupFlag++;
 					}
 				}
+				if (setCupFlag > 0 && setCupFlag < 5) {
+					if (answer.charAt(answer.length() - 1) != '/')
+						answer.append("/");
+				}
+
 				if (setCupFlag < 5) {
 					boolean isEmptyPanel = true;
 					for (int i = 0; i < 5; i++) {
@@ -436,50 +482,104 @@ public class SinglePlayMode extends JPanel implements ActionListener {
 								point[i].setVisible(false);
 							point[gamePanelIndex].setVisible(true);
 						}
-
 					}
 				}
 				spaceFlag = true;
 			}
-
 		}
-
 	}
 
-	/**싱글플레이화면의 Timer가 start()될 때 주어진 시간마다 한 번씩 실행되는 메서드이다. 카드가 움직이는 애니메이션을 표현하고, 남은시간이 0초가 되면 팝업을 띄워 정답 갯수를
-	 * 알려준다. 상위 5위안에 들었을 시 닉네임을 입력 받아 랭킹 등록을 할 수 있다.*/
+	/**
+	 * 싱글플레이화면의 Timer가 start()될 때 주어진 시간마다 한 번씩 실행되는 메서드이다. 카드가 움직이는 애니메이션을 표현하고,
+	 * 남은시간이 0초가 되면 팝업을 띄워 정답 갯수를 알려준다. 상위 5위안에 들었을 시 닉네임을 입력 받아 랭킹 등록을 할 수 있다.
+	 */
 	public void actionPerformed(ActionEvent e) {
+		System.out.println(answer);
 		// 카드갯수가 시스템 카드덱의 카드개수보다 작을때만 실행.
-		if (cardCnt < systemCardDeck.card_arr.size()) {
+		if (cardCnt <= cardDeckLabels.size()) {
 			if (flag == true) {
 				if (y > -300) {
-					systemCardDeck.card_arr.get(cardCnt).setBounds(73, y, 154, 238);
+					cardDeckLabels.get(cardCnt - 1).setBounds(73, y, 154, 238);
 					y = y - velY;
 				} else if (y < -300) {
-					System.out.println("뭐가");
-
-					ImageIcon icon = (ImageIcon) systemCardDeck.card_arr.get(cardCnt).getIcon();
+					//ImageIcon icon = (ImageIcon) cardDeckLabels.get(cardCnt - 1).getIcon();
+					ImageIcon icon = new ImageIcon("image/card(back).png");
 					one_Deck.add(new JLabel(KeyImage.resizeIcon(icon, 90, 140)));
-					one_Deck.get(cnt).setBounds(549 + cnt * 30, 15, 90, 150);
+					one_Deck.get(cnt - 1).setBounds(549 + (cnt - 1) * 5, 15, 90, 150);
 					west.setBorder(new LineBorder(Color.gray, 0));
 					for (int i = one_Deck.size() - 1; i >= 0; i--) {
 						west.add(one_Deck.get(i));
 					}
-
-					cnt++;
+					// cnt++;
 					flag = false;
-					cardCnt++;
-					correctCnt.setText("" + cnt);
+					// cardCnt++;
+					// correctCnt.setText("" + cnt);
 				}
 			}
 		}
-		// System.out.println(timePanel.getTimer().isRunning());
-		// 시간이 다되면 JDialog띄우고 종료
-		if (!timePanel.getTimer().isRunning()) {
+		// if (timePanel.getSec() == 0) {
+		// tm.stop();
+		// if (cnt == 0) {
+		//// JOptionPane.showMessageDialog(null, "0개 실화데스까?", "게임 종료",
+		// JOptionPane.CANCEL_OPTION);
+		//// ChangePanelService.getInstance().changePanel("MainView",
+		// SinglePlayMode.this);
+		// } else if (new Ranks().isRanker(cnt)) {
+		// String name = JOptionPane.showInputDialog(cnt + "개 맞췄습니다. 이름을 입력하세요 : \n(이름
+		// 유효조건 : 1~10글자)");
+		// if (name != null) {
+		// while (name.length() < 1 || name.length() >= 11) {
+		// name = JOptionPane.showInputDialog("이름이 유효조건에 어긋납니다. 다시 입력해주세요.\n(이름 유효조건 :
+		// 1~10글자)");
+		// if (name == null) {
+		// ChangePanelService.getInstance().changePanel("MainView",
+		// SinglePlayMode.this);
+		// return;
+		// }
+		// }
+		// new RankView(name, cnt);
+		// } else {
+		// ChangePanelService.getInstance().changePanel("MainView",
+		// SinglePlayMode.this);
+		// }
+		// } else {
+		// JOptionPane.showMessageDialog(null, cnt + "개 맞췄습니다. 분발하세요.", "게임 종료",
+		// JOptionPane.CANCEL_OPTION);
+		// ChangePanelService.getInstance().changePanel("MainView",
+		// SinglePlayMode.this);
+		// }
+		// // ChangePanelService.getInstance().changePanel("MainView",
+		// // SinglePlayMode.this);
+		// }
+		if (timePanel.getSec() == 0) {
 			tm.stop();
-			JOptionPane.showMessageDialog(null, cnt + "개 맞춤", "게임 종료", JOptionPane.CANCEL_OPTION);
-			ChangePanelService.getInstance().changePanel("MainView", SinglePlayMode.this);
+			if (cnt == 0) {
+				JDialog dialog = new JOptionPane("0개 실화데스까?", JOptionPane.INFORMATION_MESSAGE).createDialog("게임 종료");
+				dialog.setLocationRelativeTo(this); // 상대참조
+				dialog.setVisible(true);
 
+				ChangePanelService.getInstance().changePanel("MainView", SinglePlayMode.this);
+
+			} else if (Ranks.getInstance().isRanker(cnt)) {
+				String name = JOptionPane.showInputDialog(cnt + "개 맞췄습니다. 이름을 입력하세요 : \n(이름 유효조건 : 1~10글자)");
+				if (name != null) {
+					while (name.length() < 1 || name.length() >= 11) {
+						name = JOptionPane.showInputDialog("이름이 유효조건에 어긋납니다. 다시 입력해주세요.\n(이름 유효조건 : 1~10글자)");
+						if (name == null) {
+							ChangePanelService.getInstance().changePanel("MainView", SinglePlayMode.this);
+							return;
+						}
+					}
+					new RankView(name, cnt);
+				} else {
+					ChangePanelService.getInstance().changePanel("MainView", SinglePlayMode.this);
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, cnt + "개 맞췄습니다. 분발하세요.", "게임 종료", JOptionPane.CANCEL_OPTION);
+				ChangePanelService.getInstance().changePanel("MainView", SinglePlayMode.this);
+			}
+			// ChangePanelService.getInstance().changePanel("MainView",
+			// SinglePlayMode.this);
 		}
 	}
 }

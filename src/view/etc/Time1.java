@@ -21,7 +21,7 @@ public class Time1 extends JPanel implements ActionListener {
 	private Timer timer;
 	/**남은시간을 나타내는 멤버이다.*/
 	private int sec;
-	/** 전달받은 시간만큼 시간을 재주는 타이머를 생성한다. 전달받는 좌표와 크기로 Time1객체를 배치한다.
+	/**전달받은 시간만큼 시간을 재주는 타이머를 생성한다. 전달받는 좌표와 크기로 Time1객체를 배치한다.
 	 * @param sec 타임어택 시간을 설정할 변수이다.
 	 * @param x Time1의 x 좌표이다.
 	 * @param y Time1의 y 좌표이다.
@@ -32,13 +32,13 @@ public class Time1 extends JPanel implements ActionListener {
 		this.setLayout(null);
 		
 		time = new JLabel("남은시간", SwingConstants.CENTER);
-		timeflow = new JLabel("00:30", SwingConstants.CENTER);
+		timeflow = new JLabel(""+sec, SwingConstants.CENTER);
 		this.setBounds(x, y, width, height);
 
 		time.setFont(new Font("배달의민족 한나는 열한살", Font.BOLD, 30));
 		timeflow.setFont(new Font("배달의민족 한나는 열한살", Font.BOLD, 36));
 
-		timer = new Timer(10, this);
+		timer = new Timer(1000, this);
 		this.add(time);
 		this.add(timeflow);
 		
@@ -62,13 +62,9 @@ public class Time1 extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		sec--;
+		
 		if (sec >= 0) {
-			if (sec >= 10)
-				timeflow.setText("00:" + sec);
-			else {
-				timeflow.setText("00:0" + sec);
-				//JOptionPane.showConfirmDialog(null, ")
-			}
+			timeflow.setText(sec+"");
 		}
 		else {
 			timer.stop();

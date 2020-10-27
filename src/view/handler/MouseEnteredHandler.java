@@ -6,7 +6,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
-import view.MyIndex;
+import view.etc.MyIndex;
+import view.etc.Sound;
 /**
  * 메뉴 선택 UI(MainView, GameMode, NetworkMode, Help)에서 메뉴 버튼에 마우스 진입 시 현재 메뉴를 표시하는 아이콘의 위치를 마우스 위치에 해당하는 메뉴로 변경한다.
  * @author cms<br>*/
@@ -35,9 +36,10 @@ public class MouseEnteredHandler extends MouseAdapter {
 	/**mouse가 메뉴 선택UI의 메뉴 버튼에 진입시 메뉴 버튼 양 옆에 아이콘을 보여준다.
 	 * @param e 컴퍼넌트 내에서 마우스 액션이 발생한 것을 나타내는 이벤트이다. */
 	public void mouseEntered(MouseEvent e) {
-		System.out.println("mouse.cor전 = " + cor);
+//		System.out.println("mouse.cor전 = " + cor);
 		for (int i = 0; i < buttons.length; i++) {
 			if (e.getSource() == buttons[i]) {
+				Sound.playEffect("audio/touch2.wav");
 				ll[cor.getIndex()].setVisible(false);
 				rl[cor.getIndex()].setVisible(false);
 				ll[i].setVisible(true);
@@ -46,6 +48,6 @@ public class MouseEnteredHandler extends MouseAdapter {
 				break;
 			}
 		}
-		System.out.println("mouse.cor후 = " + cor);
+//		System.out.println("mouse.cor후 = " + cor);
 	}
 }
